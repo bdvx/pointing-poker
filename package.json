@@ -1,0 +1,23 @@
+{
+  "name": "pointing-poker",
+  "version": "1.0.0",
+  "description": "| Deadline         |\r | ---------------- |\r | 29.09.2021 23:59 |",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bdvx/pointing-poker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bdvx/pointing-poker/issues"
+  },
+  "homepage": "https://github.com/bdvx/pointing-poker#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
