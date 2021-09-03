@@ -4,7 +4,8 @@
   "description": "| Deadline         |\r | ---------------- |\r | 29.09.2021 23:59 |",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "build": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
