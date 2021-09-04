@@ -5,10 +5,11 @@ const http = require('http');
 const webSocket = require('ws');
 const server = http.createServer(app);
 const wsServer = new webSocket.Server({server});
+const port = process.env.PORT || 3000;
 
-let connectUsers:Array<ClientModel>=[];
+let connectUsers:Array<ClientModel> = [];
 
-server.listen(5000, () => console.log("Server started"))
+server.listen(port, () => console.log("Server started"))
 
 setInterval(() => {
   connectUsers.forEach((client) => {
@@ -26,7 +27,7 @@ function addUser(ws:WebSocket){
   console.log('add user');
 }
 
-function closeConnection(ws:WebSocket,info:string){
+function closeConnection(ws:WebSocket, info:string){
   connectUsers = connectUsers.filter((user)=>user.ws !== ws);
   ws.close();
 }
