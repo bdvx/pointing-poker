@@ -9,7 +9,6 @@ const app = express();
 const users: Array<RegistrationModel> = [];
 
 function regNewUser(req:Request, res:Response) {
-  console.log(req)
   const info = (JSON.parse(req.body) as RegistrationModel);
 
   try {//успешная регистрация
@@ -47,6 +46,7 @@ function signIn(req:Request, res:Response) {
       }
     }
   }
+
   res.send({statusCode:404, message:"user is not found"});
 }
 
