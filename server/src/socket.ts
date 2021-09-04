@@ -24,6 +24,8 @@ setInterval(() => {
 function addUser(ws:WebSocket){
   let client:ClientModel = { ws:ws };
   connectUsers.push(client);
+
+  ws.send("success");
   console.log('add user');
 }
 
