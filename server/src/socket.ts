@@ -11,7 +11,7 @@ let connectUsers:Array<ClientModel>=[];
 server.listen(5000, () => console.log("Server started"))
 
 setInterval(() => {
-  connectUsers.forEach((client)=>{
+  connectUsers.forEach((client) => {
     if (!client.ws.isAlive) return closeConnection(client.ws,'pong');
 
     client.ws.isAlive = false;
@@ -30,7 +30,6 @@ function closeConnection(ws:WebSocket,info:string){
   connectUsers = connectUsers.filter((user)=>user.ws !== ws);
   ws.close();
 }
-
 
 export {
   wsServer,

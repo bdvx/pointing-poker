@@ -1,16 +1,17 @@
 import { wsServer, addUser } from "./src/socket";
-import { app, fc } from "./src/http";
+import { app, regNewUser, signIn } from "./src/http";
 import { QueryModel } from "./src/models/queryModel";
 
 
-app.get('/url', fc);
+app.get('/regNewUser', regNewUser);
+app.get('/singIn', signIn);
 
 
 wsServer.on('connection', (clientWs:any) => {
   clientWs.isAlive = true;
   
   clientWs.on('message', (m:string) =>{ 
-    messageHandler(m,clientWs);
+    messageHandler(m, clientWs);
   })
 
   clientWs.on('pong', () => {
@@ -21,11 +22,11 @@ wsServer.on('connection', (clientWs:any) => {
 });
 
 
-function messageHandler(m:string, clientWs:WebSocket){
+function messageHandler(m:string, clientWs:WebSocket) {
   let event = (JSON.parse(m) as QueryModel).event;
   let info = (JSON.parse(m) as QueryModel).info;
 
-  switch(event){
+  switch(event) {
     case 'connection':
       addUser(clientWs);
       break;
