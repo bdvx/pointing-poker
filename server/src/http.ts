@@ -15,18 +15,15 @@ function regNewUser(req:Request, res:Response) {
     users.push(info);
 
     const resInfo:ResponseModel = {
-      //!Код успеха :)
-      statusCode: 200,
       message: "success"
     }
     res.send(resInfo);
   }
   catch(e) { //ошибка
     const resInfo:ResponseModel = {
-      //!Код ошибок
-      statusCode: 500,
       message: "error"
     }
+    res.statusCode = 500;
     res.send(resInfo);
   }
 }
@@ -38,16 +35,20 @@ function signIn(req:Request, res:Response) {
   for(let i=0; i<users.length-1; i++) {
     if(users[i].login === login) {
       if(users[i].password === password) {
-        res.send({statusCose:200, message:"success"});
+        res.statusCode = 200;
+        res.send({message:"success"});
         return;
       } else {
-        res.send({statusCode:400, message:"wrong Password"});
+        //! Поменять код ошибки
+        res.statusCode = 404;
+        res.send({message:"wrong Password"});
         return;
       }
     }
   }
 
-  res.send({statusCode:404, message:"user is not found"});
+  res.statusCode = 404;
+  res.send({message:"user is not found"});
 }
 
 export {
