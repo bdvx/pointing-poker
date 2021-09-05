@@ -1,22 +1,23 @@
 import { createTheme } from '@material-ui/core';
+// import '@material-ui/lab/themeAugmentation';
 
 declare module '@material-ui/core/styles' {
   interface Theme {
     sizes: {
-      wrapper: number;
+      wrapper: React.CSSProperties['width'];
     };
     gutters: {
-      'desktop-wrapper-gutter': number;
-      'mobile-wrapper-gutter': number;
+      'desktop-wrapper-gutter': React.CSSProperties['width'];
+      'mobile-wrapper-gutter': React.CSSProperties['width'];
     }
   }
   interface ThemeOptions {
     sizes?: {
-      wrapper?: number;
+      wrapper?: React.CSSProperties['width'];
     };
     gutters?: {
-      'desktop-wrapper-gutter'?: number;
-      'mobile-wrapper-gutter'?: number;
+      'desktop-wrapper-gutter'?: React.CSSProperties['width'];
+      'mobile-wrapper-gutter'?: React.CSSProperties['width'];
     }
   }
 }
@@ -28,16 +29,16 @@ declare module "@material-ui/core/styles/createBreakpoints" {
     md: false;
     lg: false;
     xl: false;
-    'phone-sm': true,
-    'phone-md': true,
-    'phone-lg': true,
-    'phone-xl': true,
-    phone: true,
-    tablet: true,
-    lap: true,
-    desk: true,
-    widescreen: true,
-    fullhd: true
+    'phone-sm': true;
+    'phone-md': true;
+    'phone-lg': true;
+    'phone-xl': true;
+    phone: true;
+    tablet: true;
+    lap: true;
+    desk: true;
+    widescreen: true;
+    fullhd: true;
   }
 }
 
@@ -72,3 +73,5 @@ export const theme = createTheme({
     }
   }
 });
+
+export const bp = theme.breakpoints;
