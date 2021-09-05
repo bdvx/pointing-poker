@@ -1,7 +1,6 @@
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
 import { Request, Response } from 'express';
-import { ResponseModel } from "./models/responseModel";
 import DataService from "./dataService";
 
 const express = require('express');
@@ -12,14 +11,14 @@ const testUserReg:RegistrationModel = {
   firstName:'fName',
   jobPosition:"JOb",
   lastName:"lName",
-  login:"login",
+  login:"login1",
   password:"hash123",
   role:"role",
   avatar:"avatar",
   id:123
 } 
 const testUserSign: SignInModel = {
-  login:"login",
+  login:"login1",
   password:"hash123"
 }
 
