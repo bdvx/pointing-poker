@@ -8,7 +8,7 @@ const express = require('express');
 const app = express();
 
 const users: Array<RegistrationModel> = [];
-const testUser:RegistrationModel = {
+const testUserReg:RegistrationModel = {
   firstName:'fName',
   jobPosition:"JOb",
   lastName:"lName",
@@ -18,43 +18,43 @@ const testUser:RegistrationModel = {
   avatar:"avatar",
   id:123
 } 
+const testUserSign: SignInModel = {
+  login:"login",
+  password:"hash12"
+}
 
 async function regNewUser(req:Request, res:Response) {
-  const user = (JSON.parse(req.body) as RegistrationModel) || testUser;
+/*   const user = (JSON.parse(req.body) as RegistrationModel); */
+  const user = testUserReg;
 
   const isSuccess = await DataService.addNewUser(user);
-  if(isSuccess) {
-    const resInfo:ResponseModel = { message: "success" };
+  if(isSuccess === 'success') {
+    const resInfo:ResponseModel = { message: "reg success" };
+    res.statusCode = 200;
     res.send(resInfo);
 
   } else {
-    const resInfo:ResponseModel = { message: "error" };
+    const resInfo:ResponseModel = { message: "regError" };
     res.statusCode = 500;
     res.send(resInfo);
   }
 }
 
-function signIn(req:Request, res:Response) {
-  console.log('sign')
-  const {password, login} = (JSON.parse(req.body) as SignInModel);
+async function signIn(req:Request, res:Response) {
+/*   const userInfo = (JSON.parse(req.body) as SignInModel); */
+  const userInfo = testUserSign;
+  const isSuccess = await DataService.signInUser(userInfo);
 
-  for(let i=0; i<users.length-1; i++) {
-    if(users[i].login === login) {
-      if(users[i].password === password) {
-        res.statusCode = 200;
-        res.send({message:"success"});
-        return;
-      } else {
-        //! Поменять код ошибки
-        res.statusCode = 404;
-        res.send({message:"wrong Password"});
-        return;
-      }
-    }
+  if(isSuccess === 'success') {
+    const resInfo:ResponseModel = { message: "Sign in success" };
+    res.statusCode = 200;
+    res.send(resInfo);
+  } else {
+    const resInfo:ResponseModel = { message: "signInError" };
+    res.statusCode = 404;
+    res.send(resInfo);
   }
 
-  res.statusCode = 404;
-  res.send({message:"user is not found"});
 }
 
 export {
