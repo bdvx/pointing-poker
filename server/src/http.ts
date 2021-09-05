@@ -7,7 +7,7 @@ import DataService from "./dataService";
 const express = require('express');
 const app = express();
 
-const users: Array<RegistrationModel> = [];
+/* const users: Array<RegistrationModel> = []; */
 const testUserReg:RegistrationModel = {
   firstName:'fName',
   jobPosition:"JOb",
@@ -20,39 +20,35 @@ const testUserReg:RegistrationModel = {
 } 
 const testUserSign: SignInModel = {
   login:"login",
-  password:"hash12"
+  password:"hash123"
 }
 
 async function regNewUser(req:Request, res:Response) {
 /*   const user = (JSON.parse(req.body) as RegistrationModel); */
   const user = testUserReg;
 
-  const isSuccess = await DataService.addNewUser(user);
-  if(isSuccess === 'success') {
-    const resInfo:ResponseModel = { message: "reg success" };
+  const response = await DataService.addNewUser(user);
+  if(response.isSuccess) {
     res.statusCode = 200;
-    res.send(resInfo);
+    res.send(JSON.stringify(response));
 
   } else {
-    const resInfo:ResponseModel = { message: "regError" };
     res.statusCode = 500;
-    res.send(resInfo);
+    res.send(JSON.stringify(response));
   }
 }
 
 async function signIn(req:Request, res:Response) {
 /*   const userInfo = (JSON.parse(req.body) as SignInModel); */
   const userInfo = testUserSign;
-  const isSuccess = await DataService.signInUser(userInfo);
+  const response = await DataService.signInUser(userInfo);
 
-  if(isSuccess === 'success') {
-    const resInfo:ResponseModel = { message: "Sign in success" };
+  if(response.isSuccess) {
     res.statusCode = 200;
-    res.send(resInfo);
+    res.send(JSON.stringify(response));
   } else {
-    const resInfo:ResponseModel = { message: "signInError" };
     res.statusCode = 404;
-    res.send(resInfo);
+    res.send(JSON.stringify(response));
   }
 
 }

@@ -1,4 +1,5 @@
 import { RegistrationModel } from "../models/registrationModel";
+import { ResponseModel } from "../models/responseModel";
 import { SignInModel } from "../models/signInModel";
 import RegModel from "./mongoDBShcema";
 const mongoose = require('mongoose')
@@ -6,26 +7,32 @@ const bdUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/planing-poc
 
 async function connectToDB() {
   try {
-    await mongoose.connect(bdUrl)
+    await mongoose.connect(bdUrl);
+    return true;
   } catch (e) {
-    console.log('ошибка подключения')
+    console.log('ошибка подключения к БД');
+    return false;
   }
 }
 
-async function addNewUser(user:RegistrationModel) {
-  await connectToDB();
-  const userLogin = await RegModel.find({login: user.login});
+function makeResponse(isSuccess:boolean, message:string) {
+  const status: ResponseModel = { isSuccess, message };
+  return status;
+}
 
+async function addNewUser(user:RegistrationModel) {
+  const isConnect = await connectToDB();
+  if(!isConnect) return makeResponse(false, "failed to connect to server") 
+
+  const userLogin = await RegModel.find({login: user.login});
   if(!userLogin) {
     const newUser = new RegModel(user);
     await newUser.save(); 
     mongoose.connection.close();
 
-    console.log(`юзер ${user.login} добавлен`);
-    return 'success';
+    return makeResponse(true, `user ${user.login} registered successfully`);
   } else {
-    console.log(`юзер с логином  ${user.login} уже существует`)
-    return 'failure';
+    return makeResponse(false, `user with name ${user.login} found`);
   }
 }
 
@@ -35,16 +42,13 @@ async function signIn(user:SignInModel) {
 
   if(userLogin) {
     if(userLogin.password === user.password) {
-      console.log('Авторизован');
-      return 'success';
+      return makeResponse(true, `user ${user.login} login successfully`);
     } else {
-      console.log('неверный пароль');
-      return 'failure';
+      return makeResponse(false, `wrong password`);
     }
 
   } else {
-    console.log(`пользователя с логином: ${user.login} не существует`);
-    return 'failure';
+    return  makeResponse(false, `user ${user.login} is not registered in the system`);
   }
 }
 
