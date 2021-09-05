@@ -6,8 +6,8 @@ import "./Chat.scss";
 const Chat = () => {
   return (
     <div className="Chat">
-      <div className="Chat_messages">
-        <div className="Chat_message">
+      <ul className="Chat_messages">
+        <li className="Chat_message">
           <div className="Chat_message__text">
             Message long long long long longlonglonglonglonglonglong long long
             long long long long long long long long long long long long long
@@ -17,8 +17,8 @@ const Chat = () => {
           <Tooltip title={<div style={{textAlign: 'center'}}>Harry Lewis<br/>Senior Software Engineer</div>}>
             <Avatar className="Chat_message__avatar">H</Avatar>
           </Tooltip>
-        </div>
-      </div>
+        </li>
+      </ul>
       <div className="Chat_input">
         <input placeholder="Type something..." className="Chat_input__text" />
         <IconButton>
