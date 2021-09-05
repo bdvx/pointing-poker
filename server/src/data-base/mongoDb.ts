@@ -12,7 +12,6 @@ async function addNewUser(user:RegistrationModel) {
   if(!isConnect) return makeResponse(false, "failed to connect to server");
 
   const userLogin = await RegModel.findOne({login: user.login});
-
   if(!userLogin) {
     const hashedUser = {...user, password: HashServise.makeHash(user.password)};
     const newUser = new RegModel(hashedUser);
@@ -27,8 +26,8 @@ async function addNewUser(user:RegistrationModel) {
 
 async function signIn(user:SignInModel) {
   await connectToDB();
-  const userInfoFromBD = await RegModel.findOne({login: user.login});
 
+  const userInfoFromBD = await RegModel.findOne({login: user.login});
   if(userInfoFromBD) {
     if(HashServise.comparePassWithHash(user.password, userInfoFromBD.password)) {
       return makeResponse(true, `user ${user.login} login successfully`);

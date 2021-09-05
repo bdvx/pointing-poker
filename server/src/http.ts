@@ -49,7 +49,6 @@ async function signIn(req:Request, res:Response) {
     res.statusCode = 404;
     res.send(JSON.stringify(response));
   }
-
 }
 
 export {
