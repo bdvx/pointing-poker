@@ -8,31 +8,27 @@ const express = require('express');
 const app = express();
 
 const users: Array<RegistrationModel> = [];
+const testUser:RegistrationModel = {
+  firstName:'fName',
+  jobPosition:"JOb",
+  lastName:"lName",
+  login:"login",
+  password:"hash123",
+  role:"role",
+  avatar:"avatar",
+  id:123
+} 
 
 async function regNewUser(req:Request, res:Response) {
-/*   const user = (JSON.parse(req.body) as RegistrationModel); */
-  const user:RegistrationModel = {
-    firstName:'fName',
-    jobPosition:"JOb",
-    lastName:"lName",
-    login:"login",
-    password:"hash123",
-    role:"role",
-    avatar:"avatar",
-    id:123
-  } 
-  console.log(1,user)
+  const user = (JSON.parse(req.body) as RegistrationModel) || testUser;
+
   const isSuccess = await DataService.addNewUser(user);
   if(isSuccess) {
-    const resInfo:ResponseModel = {
-      message: "success"
-    }
+    const resInfo:ResponseModel = { message: "success" };
     res.send(resInfo);
 
   } else {
-    const resInfo:ResponseModel = {
-      message: "error"
-    }
+    const resInfo:ResponseModel = { message: "error" };
     res.statusCode = 500;
     res.send(resInfo);
   }

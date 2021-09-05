@@ -3,9 +3,8 @@ import MongoDB from "./data-base/mongoDb";
 
 export default class DataService {
   static async addNewUser(user:RegistrationModel) {
-    console.log(2)
-    await MongoDB.addNewUser(user);
-    return 'success';
+    const isSuccess = await MongoDB.addNewUser(user);
+    return isSuccess;
   }
  
   static async updateUser() {

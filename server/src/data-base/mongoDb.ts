@@ -1,34 +1,36 @@
-import { MongoClient } from "mongodb";
-import { Mongoose } from "mongoose";
 import { RegistrationModel } from "../models/registrationModel";
 import RegModel from "./mongoDBShcema";
+const mongoose = require('mongoose')
+const bdUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/planing-pocker?retryWrites=true&w=majority';
 
-const client = new Mongoose();
-
-//! Возможно стоит переписать функциями т.k. конструктор не поддерживает асинхронный код 
-export default class MongoDB {
-  constructor() {
-    client.connect('mongodb+srv://poker-planing:9558985@cluster0.oxcy9.mongodb.net/planing-pocker?retryWrites=true&w=majority',(err)=>{
-      console.log('error')
-/*       throw new Error(err.); */
-    });
+async function connectToDB() {
+  try {
+    await mongoose.connect(bdUrl)
+  } catch (e) {
+    console.log('ошибка подключения')
   }
-  
-  static async addNewUser(user:RegistrationModel) {
-    console.log(3)
-    const userLogin = await RegModel.find({login: user.login});
+}
+
+async function addNewUser(user:RegistrationModel) {
+  await connectToDB();
+  const userLogin = await RegModel.find({login: user.login});
+
+  if(!userLogin) {
     const newUser = new RegModel(user);
-    newUser.save();
-    newUser.save();
+    await newUser.save(); 
+    mongoose.connection.close();
     
-    console.log(userLogin)
-    if(userLogin) {
-      //TODO Отправка http об ошибке регистрации
-      console.log('пользователь с таким логином существует')
-    } else {
-      console.log('создаю', user);
-      await RegModel.create(user);
-    }
+    console.log(`юзер ${user.login} добавлен`);
+    return 'success';
+  } else {
+    console.log(`юзер с логином  ${user.login} уже существует`)
+    return 'failure';
   }
+}
 
-} 
+const MongoDB = {
+  addNewUser,
+  connectToDB
+}
+
+export default MongoDB;
