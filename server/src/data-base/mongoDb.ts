@@ -40,6 +40,17 @@ async function signIn(user:SignInModel) {
   }
 }
 
+async function getUserByLogin(login:string) {
+  await connectToDB();
+
+  const userInfoFromBD = await RegModel.findOne({login: login});
+  if(userInfoFromBD) {
+    return userInfoFromBD as SignInModel;
+  } else {
+    return null;
+  }
+}
+
 async function connectToDB() {
   try {
     await mongoose.connect(bdUrl);
@@ -57,6 +68,7 @@ function makeResponse(isSuccess:boolean, message:string) {
 
 const MongoDB = {
   addNewUser,
-  signIn
+  signIn,
+  getUserByLogin
 }
 export default MongoDB;

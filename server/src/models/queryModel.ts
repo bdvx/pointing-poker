@@ -1,4 +1,4 @@
 export interface QueryModel{
-  event:string,
-  info:string
+  type:string,
+  payLoad:string
 }

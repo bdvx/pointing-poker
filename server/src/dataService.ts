@@ -13,7 +13,9 @@ export default class DataService {
     return status;
   }
 
-  static async updateUser() {
+  static async getUserByLogin(login:string) {
+    const status = await MongoDB.getUserByLogin(login);
+    return status;
   }
  
 }
