@@ -1,9 +1,12 @@
 import './Welcome-page.scss';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
+import { RegisterPopup } from '../register-popup/Register-popup';
 import pokerCardsImg from '../../assets/icons/poker-cards.svg';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
+  const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
+
   return (
     <div className={`welcome-page ${ classes }`}>
       <div className="welcome-page__header">
@@ -33,6 +36,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
           variant="contained"
           color="primary"
           size="large"
+          onClick={() => setRegisterPopupOpen(true)}
         >
           Start new game
         </Button>
@@ -67,6 +71,8 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
           </Button>
         </Grid>
       </div>
+
+      <RegisterPopup classes="app__register-popup" open={registerPopupOpen} onChangeRegisterPopupState={(open: boolean) => setRegisterPopupOpen(open)} />
     </div>
   );
 }

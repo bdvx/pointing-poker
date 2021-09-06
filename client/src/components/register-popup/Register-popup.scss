@@ -1,0 +1,80 @@
+.register-popup .MuiPaper-root {
+  padding: 60px 40px 15px;
+}
+
+.register-popup__header {
+  display: flex;
+  margin-bottom: 25px;
+  align-items: center;
+}
+
+.register-popup__title {
+  margin: 0 50px 0 0;
+  font-size: 64px;
+  line-height: 1.17188;
+}
+
+.register-popup__role-block {
+  display: flex;
+}
+
+.register-popup__role-title {
+  margin-right: 30px;
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.register-popup__field-block {
+  margin-bottom: 20px;
+}
+
+.register-popup__field-title {
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.16667;
+  display: flex;
+  align-items: center;
+}
+
+.register-popup__field {
+  max-width: 470px;
+  width: 100%;
+}
+
+.register-popup__avatar-block {
+  margin-bottom: 90px;
+}
+
+.register-popup__avatar-btns {
+  margin-bottom: 15px;
+}
+
+#register-popup__avatar-file {
+  display: none;
+}
+
+.register-popup__avatar-btn {
+  max-width: 275px;
+  width: 100%;
+  background-color: #fff !important;
+  border: 1px solid #eee !important;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 0 0 0 10px !important;
+}
+
+.register-popup__avatar-block-btn {
+  max-width: 190px;
+  width: 100%;
+}
+
+.register-popup__avatar {
+  width: 70px !important;
+  height: 70px !important;
+}
+
+.register-popup__btns {
+  padding: 0 !important;
+  margin: 0 -20px;
+  justify-content: space-between !important;
+}
