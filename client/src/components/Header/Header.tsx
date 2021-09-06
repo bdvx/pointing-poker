@@ -1,4 +1,5 @@
 import { Link, Route, Switch } from "react-router-dom";
+import AboutPage from "../AboutPage/AboutPage";
 import "./Header.scss";
 
 const Header = () => {
@@ -12,7 +13,7 @@ const Header = () => {
         </div>
       </header>
       <Switch>
-        <Route path="/about">About</Route>
+        <Route path="/about"><AboutPage/></Route>
         <Route path="/home">Home</Route>
       </Switch>
     </>
