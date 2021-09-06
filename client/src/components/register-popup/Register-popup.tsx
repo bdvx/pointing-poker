@@ -56,7 +56,10 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
           <span className="register-popup__field-title">Image:</span>
 
           <div className="register-popup__avatar-btns">
-            <label htmlFor="register-popup__avatar-file">
+            <label
+              className="register-popup__avatar-btn-wrap"
+              htmlFor="register-popup__avatar-file"
+            >
               <Input
                 id="register-popup__avatar-file"
                 type="file"
