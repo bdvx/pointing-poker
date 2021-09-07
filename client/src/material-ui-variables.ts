@@ -1,5 +1,4 @@
 import { createTheme } from '@material-ui/core';
-// import '@material-ui/lab/themeAugmentation';
 
 declare module '@material-ui/core/styles' {
   interface Theme {
