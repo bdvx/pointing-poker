@@ -4,6 +4,8 @@ import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from 
 import IRegisterPopupProps from '../../types/register-popup-props.type';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
+  const [login, setLogin] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [jobPosition, setJobPosition] = useState<string>('');
@@ -12,7 +14,13 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   const [avatar, setAvatar] = useState<string>('');
 
   const checkValidation = (value: string, fieldName: string): void => {
-    if (value === '') {
+    let regex = /.+/;
+
+    if (fieldName === 'login') {
+      regex = /^[^\s]+$/;
+    }
+
+    if (!regex.test(value)) {
       if (!errors.includes(fieldName)) {
         setErrors([...errors, fieldName]);
       }
@@ -63,6 +71,39 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               className="register-popup__role"
               defaultChecked
               color="primary"
+            />
+          </label>
+        </div>
+
+        <div className="register-popup__field-block">
+          <label>
+            <span className="register-popup__field-title">Your login:</span>
+            <TextField
+              className="register-popup__field"
+              variant="outlined"
+              size="small"
+              name="login"
+              defaultValue={login}
+              error={errors.includes('login')}
+              helperText={errors.includes('login') ? 'Login can\'t be empty and contain spaces.' : ''}
+              onChange={(e) => { handleFieldChange(e, setLogin) }}
+            />
+          </label>
+        </div>
+
+        <div className="register-popup__field-block">
+          <label>
+            <span className="register-popup__field-title">Your password:</span>
+            <TextField
+              className="register-popup__field"
+              type="password"
+              variant="outlined"
+              size="small"
+              name="password"
+              defaultValue={password}
+              error={errors.includes('password')}
+              helperText={errors.includes('password') ? 'Password can\'t be empty.' : ''}
+              onChange={(e) => { handleFieldChange(e, setPassword) }}
             />
           </label>
         </div>
