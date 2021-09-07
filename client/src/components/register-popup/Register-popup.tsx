@@ -160,6 +160,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             variant="contained"
             color="primary"
             size="large"
+            disabled={errors.length > 0}
             onClick={() => onChangeRegisterPopupState(false)}
           >
             Confirm
