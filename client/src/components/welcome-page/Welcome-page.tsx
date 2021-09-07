@@ -4,6 +4,13 @@ import { Button, Grid, TextField } from '@material-ui/core';
 import { RegisterPopup } from '../register-popup/Register-popup';
 import pokerCardsImg from '../../assets/icons/poker-cards.svg';
 
+declare module '@material-ui/core/Box' {
+  interface BoxProps {
+    src?: string;
+    alt?: string
+  }
+}
+
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
   const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
 
