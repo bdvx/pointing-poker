@@ -93,19 +93,19 @@
   display: none;
 }
 
-.register-popup__avatar-btn {
+.register-popup .register-popup__avatar-btn {
   max-width: 275px;
   width: 100%;
-  background-color: #fff !important;
-  border: 1px solid #eee !important;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) !important;
+  background-color: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
   @include at ($max, $tablet - 1) {
-    margin-bottom: 10px !important;
+    margin-bottom: 10px;
   }
 
   @include at ($min, $tablet) {
-    border-radius: 0 0 0 10px !important;
+    border-radius: 0 0 0 10px;
   }
 }
 
@@ -114,14 +114,20 @@
   width: 100%;
 }
 
-.register-popup__avatar {
-  width: 70px !important;
-  height: 70px !important;
+.register-popup .register-popup__avatar {
+  width: 83px;
+  height: 83px;
+  background-color: #60dabf;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 48px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.register-popup__btns {
-  padding: 0 !important;
-  justify-content: space-between !important;
+.register-popup .register-popup__btns {
+  padding: 0;
+  justify-content: space-between;
 
   @include at ($min, $tablet) {
     margin: 0 -20px;

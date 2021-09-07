@@ -27,6 +27,12 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     checkValidation(value, name);
   };
 
+  const changeStringAvatar = (name: string): string | null => {
+    if (!name) return null;
+
+    return (name.length) > 1 ? `${name[0]}${name[name.length - 1]}` : `${name[0]}`;
+  };
+
   return (
     <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
       <form className="register-popup__form">
@@ -125,6 +131,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             className="register-popup__avatar"
             alt="Avatar"
             src=""
+            children={changeStringAvatar(firstName)}
           />
         </div>
         <DialogActions className="register-popup__btns">
