@@ -4,6 +4,7 @@ import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from 
 import IRegisterPopupProps from '../../types/register-popup-props.type';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
+  const [role, setRole] = useState<boolean>(true);
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
@@ -69,7 +70,8 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             <span className="register-popup__role-title">Connect as<br/>Observer</span>
             <Switch
               className="register-popup__role"
-              defaultChecked
+              checked={role}
+              onChange={() => setRole(!role)}
               color="primary"
             />
           </label>
