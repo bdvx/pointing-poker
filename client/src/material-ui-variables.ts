@@ -1,26 +1,5 @@
 import { createTheme } from '@material-ui/core';
 
-declare module '@material-ui/core/styles' {
-  interface Theme {
-    sizes: {
-      wrapper: React.CSSProperties['width'];
-    };
-    gutters: {
-      'desktop-wrapper-gutter': React.CSSProperties['width'];
-      'mobile-wrapper-gutter': React.CSSProperties['width'];
-    }
-  }
-  interface ThemeOptions {
-    sizes?: {
-      wrapper?: React.CSSProperties['width'];
-    };
-    gutters?: {
-      'desktop-wrapper-gutter'?: React.CSSProperties['width'];
-      'mobile-wrapper-gutter'?: React.CSSProperties['width'];
-    }
-  }
-}
-
 declare module "@material-ui/core/styles/createBreakpoints" {
   interface BreakpointOverrides {
     xs: false;
@@ -55,13 +34,6 @@ export const theme = createTheme({
       widescreen: 1440,
       fullhd: 1920
     },
-  },
-  sizes: {
-    wrapper: 1440,
-  },
-  gutters: {
-    'desktop-wrapper-gutter': 20,
-    'mobile-wrapper-gutter': 10
   },
   palette: {
     primary: {
