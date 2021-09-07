@@ -9,6 +9,8 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   const [jobPosition, setJobPosition] = useState<string>('');
   const [errors, setErrors] = useState<string[]>([]);
 
+  const [avatar, setAvatar] = useState<string>('');
+
   const checkValidation = (value: string, fieldName: string): void => {
     if (value === '') {
       if (!errors.includes(fieldName)) {
@@ -31,6 +33,23 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     if (!name) return null;
 
     return (name.length) > 1 ? `${name[0]}${name[name.length - 1]}` : `${name[0]}`;
+  };
+
+  const changeAvatar = (target: HTMLInputElement | HTMLTextAreaElement): void => {
+    const file = (target as { files: FileList }).files[0];
+
+    if (file) {
+      target.value = '';
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.result) {
+          setAvatar(reader.result.toString());
+        }
+      }
+      
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -107,6 +126,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               <Input
                 id="register-popup__avatar-file"
                 type="file"
+                onChange={(e) => changeAvatar(e.target)}
               />
               <Button
                 className="register-popup__avatar-btn"
@@ -122,15 +142,16 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               variant="contained"
               color="primary"
               size="large"
+              onClick={() => setAvatar('')}
             >
-              Button
+              Reset 
             </Button>
           </div>
 
           <Avatar
             className="register-popup__avatar"
             alt="Avatar"
-            src=""
+            src={ avatar }
             children={changeStringAvatar(firstName)}
           />
         </div>
