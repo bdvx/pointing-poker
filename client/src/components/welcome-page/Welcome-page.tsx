@@ -4,6 +4,13 @@ import pokerCardsImg from '../../assets/icons/poker-cards.svg';
 import { FC } from 'react';
 import { bp } from '../../material-ui-variables';
 
+declare module '@material-ui/core/Box' {
+  interface BoxProps {
+    src?: string;
+    alt?: string
+  }
+}
+
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
   return (
     <div className={`welcome-page ${ classes }`}>
