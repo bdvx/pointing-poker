@@ -1,9 +1,32 @@
 import './Register-popup.scss';
-import { FC } from 'react';
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from '@material-ui/core';
 import IRegisterPopupProps from '../../types/register-popup-props.type';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [jobPosition, setJobPosition] = useState<string>('');
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const checkValidation = (value: string, fieldName: string): void => {
+    if (value === '') {
+      if (!errors.includes(fieldName)) {
+        setErrors([...errors, fieldName]);
+      }
+    } else if (errors.includes(fieldName)) {
+      const newErrors = errors.filter((error) => error !== fieldName);
+      setErrors(newErrors);
+    }
+  };
+
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setFieldValue: Dispatch<SetStateAction<string>>): void => {
+    const { value, name } = e.target;
+
+    setFieldValue(value);
+    checkValidation(value, name);
+  };
+
   return (
     <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
       <form className="register-popup__form">
@@ -26,6 +49,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               className="register-popup__field"
               variant="outlined"
               size="small"
+              name="first name"
+              defaultValue={firstName}
+              error={errors.includes('first name')}
+              helperText={errors.includes('first name') ? 'First name can\'t be empty.' : ''}
+              onChange={(e) => { handleFieldChange(e, setFirstName) }}
             />
           </label>
         </div>
@@ -37,6 +65,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               className="register-popup__field"
               variant="outlined"
               size="small"
+              name="last name"
+              defaultValue={lastName}
+              error={errors.includes('last name')}
+              helperText={errors.includes('last name') ? 'Last name can\'t be empty.' : ''}
+              onChange={(e) => handleFieldChange(e, setLastName)}
             />
           </label>
         </div>
@@ -48,6 +81,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               className="register-popup__field"
               variant="outlined"
               size="small"
+              name="job position"
+              defaultValue={jobPosition}
+              error={errors.includes('job position')}
+              helperText={errors.includes('job position') ? 'Job position can\'t be empty.' : ''}
+              onChange={(e) => handleFieldChange(e, setJobPosition)}
             />
           </label>
         </div>
