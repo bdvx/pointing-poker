@@ -19,7 +19,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
         </div>
       </div>
 
-      <span className="welcome-page__subtitle" color={'secondary.main'}>Start your planning:</span>
+      <span className="welcome-page__subtitle">Start your planning:</span>
 
       <Grid
         className="welcome-page__control-block"
@@ -38,12 +38,12 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
         </Button>
       </Grid>
 
-      <span className="welcome-page__subtitle welcome-page__subtitle_margin_left" color={'secondary.main'}>OR:</span>
+      <span className="welcome-page__subtitle welcome-page__subtitle_margin_left">OR:</span>
 
       <div className="welcome-page__control-block">
         <span className="welcome-page__control-block-text welcome-page__control-block-text_block">
           Connect to lobby by { }
-          <strong color={'secondary.main'}>URL</strong>
+          <strong className="welcome-page__control-block-subtext">URL</strong>
           :
         </span>
 

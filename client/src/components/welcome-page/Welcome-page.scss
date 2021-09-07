@@ -1,4 +1,5 @@
 @import '../../breakpoints.scss';
+@import '../../variables.scss';
 
 .welcome-page {
   padding: 60px 25px 40px;
@@ -80,6 +81,7 @@
   font-weight: 700;
   font-size: 28px;
   line-height: 1.16667;
+  color: $secondary-color;
 
   @include at ($min, $phone) {
     margin-bottom: 50px;
@@ -126,6 +128,10 @@
 .welcome-page__control-block-text_block {
   display: block;
   margin-bottom: 15px;
+}
+
+.welcome-page__control-block-subtext {
+  color: $secondary-color;
 }
 
 .welcome-page__control-block-field {
