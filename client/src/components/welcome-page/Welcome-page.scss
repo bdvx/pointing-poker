@@ -12,11 +12,23 @@
 
 .welcome-page__header {
   margin-bottom: 40px;
+
+  @include at ($min, $phone) {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .welcome-page__header-logo {
   @include at ($max, $phone - 1) {
+    display: block;
     max-width: 80px;
+    margin: auto;
+  }
+
+  @include at ($min, $phone) {
+    margin-top: -60px;
+    margin-right: 25px;
   }
 }
 
@@ -24,6 +36,10 @@
   position: relative;
   max-width: 420px;
   width: 100%;
+
+  @include at ($max, $phone - 1) {
+    margin: auto;
+  }
 
   &::before {
     position: absolute;
@@ -36,6 +52,10 @@
     content: "";
     background-color: #fff;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+    @include at ($max, $phone - 1) {
+      display: none;
+    }
   }
 }
 
@@ -67,6 +87,12 @@
   }
 }
 
+.welcome-page__subtitle_margin_left {
+  @include at ($min, $phone-xl) {
+    margin-left: 200px;
+  }
+}
+
 .welcome-page__control-block {
   max-width: 515px;
   width: 100%;
@@ -87,6 +113,10 @@
   font-weight: 300;
   font-size: 20px;
   line-height: 1.16667;
+
+  @include at ($max, $phone-xl - 1) {
+    margin-bottom: 15px;
+  }
 
   @include at ($min, $phone) {
     font-size: 24px;
