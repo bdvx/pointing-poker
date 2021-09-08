@@ -1,23 +1,12 @@
 import './Welcome-page.scss';
 import { FC } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
-import pokerCardsImg from '../../assets/icons/poker-cards.svg';
+import { LargeLogo } from '../large-logo/Large-logo';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
   return (
     <div className={`welcome-page ${ classes }`}>
-      <div className="welcome-page__header">
-        <img
-          className="welcome-page__header-logo"
-          src={pokerCardsImg}
-          alt="Poker cards"
-        />
-
-        <div className="welcome-page__header-heading">
-          <span className="welcome-page__header-title welcome-page__header-title-1">Poker</span>
-          <span className="welcome-page__header-title welcome-page__header-title-2">Planning</span>
-        </div>
-      </div>
+      <LargeLogo />
 
       <span className="welcome-page__subtitle">Start your planning:</span>
 

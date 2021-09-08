@@ -11,68 +11,8 @@
   }
 }
 
-.welcome-page__header {
+.largeLogo {
   margin-bottom: 40px;
-
-  @include at ($min, $phone) {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-.welcome-page__header-logo {
-  @include at ($max, $phone - 1) {
-    display: block;
-    max-width: 80px;
-    margin: auto;
-  }
-
-  @include at ($min, $phone) {
-    margin-top: -60px;
-    margin-right: 25px;
-  }
-}
-
-.welcome-page__header-heading {
-  position: relative;
-  max-width: 420px;
-  width: 100%;
-
-  @include at ($max, $phone - 1) {
-    margin: auto;
-  }
-
-  &::before {
-    position: absolute;
-    top: 65px;
-    left: 30px;
-    max-width: 350px;
-    width: 100%;
-    height: 10px;
-    transform: rotate(345deg);
-    content: "";
-    background-color: #fff;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-
-    @include at ($max, $phone - 1) {
-      display: none;
-    }
-  }
-}
-
-.welcome-page__header-title {
-  display: block;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 1.17143;
-
-  @include at ($min, $phone) {
-    font-size: 70px;
-  }
-}
-
-.welcome-page__header-title-2 {
-  text-align: right;
 }
 
 .welcome-page__subtitle {
