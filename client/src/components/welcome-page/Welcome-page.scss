@@ -134,13 +134,13 @@
   color: $secondary-color;
 }
 
-.welcome-page__control-block-field {
+.welcome-page .welcome-page__control-block-field {
   flex: 1 0 200px;
-  margin-bottom: 15px !important;
+  margin-bottom: 15px;
 }
 
-.welcome-page__control-block-btn {
+.welcome-page .welcome-page__control-block-btn {
   max-width: 240px;
   width: 100%;
-  margin-bottom: 15px !important;
+  margin-bottom: 15px;
 }
