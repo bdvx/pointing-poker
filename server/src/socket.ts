@@ -1,11 +1,11 @@
 import { ClientModel } from "./models/socketModels/clientModel";
 import { app } from "./http";
-import DataService from "./dataService";
+import DataService from "./tools/dataService";
 import { ConnectUserToWS } from "./models/socketModels/connectUserToWSModel";
 import { WSResponse } from "./models/socketModels/WSresponseModel";
 import { Room } from "./models/socketModels/roomModel";
 import { NewLobbyModel } from "./models/socketModels/newLobbyModel";
-import  Lobby  from "./lobby";
+import  Lobby  from "./room/lobby";
 import { UserInfoFromDB } from "./models/httpModels/useFromDBModel";
 import { DisconectModel } from "./models/socketModels/disconectModel";
 //import { Request, Response } from 'express';
@@ -51,7 +51,7 @@ function addUserToRoom(roomId: string,userInfo: UserInfoFromDB, userWs:WebSocket
   if(room) {
     Lobby.connectUserToRoom(room, userInfo, userWs);
   } else {
-    console.log("Ошибка подключения к комнате")
+    console.log("Ошибка подключения к комнате");
   }
 }
 
@@ -87,14 +87,14 @@ function disconnectUSer(userWs:WebSocket, payLoad:string) {
   }
 }
 
-function joinLobbyByUrl(req: Request, res:Response) {
-
-}
+/* function joinLobbyByUrl(req: Request, res:Response) {
+  //TODO  джоин в комнату
+  //connectUserToWebSocket()
+} */
 
 export {
   wsServer,
   connectUserToWebSocket,
   makeNewLobby,
   disconnectUSer,
-  joinLobbyByUrl
 }

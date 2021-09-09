@@ -1,11 +1,11 @@
-import { wsServer, connectUserToWebSocket, makeNewLobby, disconnectUSer, joinLobbyByUrl } from "./src/socket";
+import { wsServer, connectUserToWebSocket, makeNewLobby, disconnectUSer } from "./src/socket";
 import { app, regNewUser, signIn } from "./src/http";
 import { QueryModel } from "./src/models/socketModels/WSqueryModel";
 
 
 app.get('/regNewUser', regNewUser);
 app.get('/singIn', signIn);
-app.get('/joinLobby/:id', joinLobbyByUrl);
+//app.get('/joinLobby/:id', joinLobbyByUrl);
 
 
 wsServer.on('connection', (clientWs:any) => {
@@ -24,8 +24,8 @@ wsServer.on('connection', (clientWs:any) => {
 
 
 function messageHandler(message:string, clientWs:WebSocket) {
-  let type = (JSON.parse(message) as QueryModel).type;
-  let payLoad = (JSON.parse(message) as QueryModel).payLoad;
+  const type = (JSON.parse(message) as QueryModel).type;
+  const payLoad = (JSON.parse(message) as QueryModel).payLoad;
 
   switch(type) {
     case 'MAKE_NEW_LOBBY':

@@ -1,7 +1,7 @@
 import { RegistrationModel } from "./models/httpModels/registrationModel";
 import { SignInModel } from "./models/httpModels/signInModel";
 import { Request, Response } from 'express';
-import DataService from "./dataService";
+import DataService from "./tools/dataService";
 
 const express = require('express');
 const app = express();
