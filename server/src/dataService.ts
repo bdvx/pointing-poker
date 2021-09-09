@@ -1,6 +1,6 @@
-import { RegistrationModel } from "./models/registrationModel";
+import { RegistrationModel } from "./models/httpModels/registrationModel";
 import MongoDB from "./data-base/mongoDb";
-import { SignInModel } from "./models/signInModel";
+import { SignInModel } from "./models/httpModels/signInModel";
 
 export default class DataService {
   static async addNewUser(user:RegistrationModel) {

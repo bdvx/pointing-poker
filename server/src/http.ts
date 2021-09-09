@@ -1,5 +1,5 @@
-import { RegistrationModel } from "./models/registrationModel";
-import { SignInModel } from "./models/signInModel";
+import { RegistrationModel } from "./models/httpModels/registrationModel";
+import { SignInModel } from "./models/httpModels/signInModel";
 import { Request, Response } from 'express';
 import DataService from "./dataService";
 
@@ -13,7 +13,7 @@ const testUserReg:RegistrationModel = {
   lastName:"lName",
   login:"login1",
   password:"hash123",
-  role:"role",
+  //role:"role",
   avatar:"avatar",
   id:123
 } 
@@ -51,8 +51,12 @@ async function signIn(req:Request, res:Response) {
   }
 }
 
+function joinLobbyByUrl() {
+
+}
 export {
   app,
   regNewUser,
-  signIn
+  signIn,
+  joinLobbyByUrl
 }

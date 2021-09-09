@@ -1,11 +1,14 @@
-import { ClientModel } from "./models/clientModel";
+import { ClientModel } from "./models/socketModels/clientModel";
 import { app } from "./http";
 import DataService from "./dataService";
-import { SignInModel } from "./models/signInModel";
-import { ResponseModel } from "./models/responseModel";
-import { ConnectUserToWS } from "./models/connectUsetToWSModel";
-import { WSResponse } from "./models/WSresponseModel";
-import { Room } from "./models/roomModel";
+import { ConnectUserToWS } from "./models/socketModels/connectUserToWSModel";
+import { WSResponse } from "./models/socketModels/WSresponseModel";
+import { Room } from "./models/socketModels/roomModel";
+import { NewLobbyModel } from "./models/socketModels/newLobbyModel";
+import  Lobby  from "./lobby";
+import { UserInfoFromDB } from "./models/httpModels/useFromDBModel";
+import { DisconectModel } from "./models/socketModels/disconectModel";
+//import { Request, Response } from 'express';
 
 const http = require('http');
 const webSocket = require('ws');
@@ -35,10 +38,20 @@ async function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
   if(userInfoFromDB) {
     let client:ClientModel = { ws:ws, userInfo:userInfoFromDB };
     connectUsers.push(client);
+    addUserToRoom(userInfo.roomId, userInfoFromDB, ws);
   } else {
     const response:WSResponse = { type:"CONNECTION_FAILURE", payLOad:"you should register before playing" }; 
     ws.send(JSON.stringify(response));
     closeConnection(ws);
+  }
+}
+
+function addUserToRoom(roomId: string,userInfo: UserInfoFromDB, userWs:WebSocket) {
+  const room = rooms.find((room)=>room.roomId === roomId);
+  if(room) {
+    Lobby.connectUserToRoom(room, userInfo, userWs);
+  } else {
+    console.log("Ошибка подключения к комнате")
   }
 }
 
@@ -48,11 +61,40 @@ function closeConnection(ws:WebSocket){
 }
 
 async function makeNewLobby(masterWs:WebSocket, payLoad:string) {
-  //TODO создание комнаты + айди на основании мастера
+  const regInfo = JSON.parse(payLoad) as NewLobbyModel;
+  const userInfo = await DataService.getUserByLogin(regInfo.scramLogin);
+
+  if(userInfo) {
+    const scramInfo: ClientModel = {
+      ws:masterWs,
+      userInfo: userInfo
+    }
+  
+    const newRoom = Lobby.makeNewRoom(scramInfo);
+    rooms.push(newRoom);
+  }
+}
+
+function disconnectUSer(userWs:WebSocket, payLoad:string) {
+  const userInfo = JSON.parse(payLoad) as DisconectModel;
+  closeConnection(userWs);
+
+  const room = rooms.find((room)=>room.roomId === userInfo.roomId);
+  if(room) {
+    Lobby.disconnectUserFromRoom(room, userInfo.login);
+  } else {
+    console.log("ошибка: отключение от несуществующей комнаты");
+  }
+}
+
+function joinLobbyByUrl(req: Request, res:Response) {
+
 }
 
 export {
   wsServer,
   connectUserToWebSocket,
-  makeNewLobby
+  makeNewLobby,
+  disconnectUSer,
+  joinLobbyByUrl
 }

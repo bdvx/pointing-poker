@@ -1,8 +1,9 @@
-import { RegistrationModel } from "../models/registrationModel";
-import { ResponseModel } from "../models/responseModel";
-import { SignInModel } from "../models/signInModel";
+import { RegistrationModel } from "../models/httpModels/registrationModel";
+import { ResponseModel } from "../models/httpModels/responseModel";
+import { SignInModel } from "../models/httpModels/signInModel";
 import HashServise from "./hashServise";
 import RegModel from "./mongoDBShcema";
+import { UserInfoFromDB } from "../models/httpModels/useFromDBModel";
 
 const mongoose = require('mongoose')
 const bdUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/planing-pocker?retryWrites=true&w=majority';
@@ -43,9 +44,9 @@ async function signIn(user:SignInModel) {
 async function getUserByLogin(login:string) {
   await connectToDB();
 
-  const userInfoFromBD = await RegModel.findOne({login: login});
-  if(userInfoFromBD) {
-    return userInfoFromBD as SignInModel;
+  const userInfo = await RegModel.findOne({login: login});
+  if(userInfo) {
+    return userInfo as UserInfoFromDB;
   } else {
     return null;
   }

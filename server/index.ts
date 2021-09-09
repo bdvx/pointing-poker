@@ -1,10 +1,11 @@
-import { wsServer, connectUserToWebSocket, makeNewLobby } from "./src/socket";
+import { wsServer, connectUserToWebSocket, makeNewLobby, disconnectUSer, joinLobbyByUrl } from "./src/socket";
 import { app, regNewUser, signIn } from "./src/http";
-import { QueryModel } from "./src/models/queryModel";
+import { QueryModel } from "./src/models/socketModels/WSqueryModel";
 
 
 app.get('/regNewUser', regNewUser);
 app.get('/singIn', signIn);
+app.get('/joinLobby/:id', joinLobbyByUrl);
 
 
 wsServer.on('connection', (clientWs:any) => {
@@ -27,11 +28,13 @@ function messageHandler(message:string, clientWs:WebSocket) {
   let payLoad = (JSON.parse(message) as QueryModel).payLoad;
 
   switch(type) {
-    case 'CONNECT_TO_WS':
-      connectUserToWebSocket(clientWs, payLoad);
-      break;
     case 'MAKE_NEW_LOBBY':
       makeNewLobby(clientWs, payLoad);
       break;
+    case 'CONNECT_TO_ROOM':
+      connectUserToWebSocket(clientWs, payLoad);
+      break;
+    case 'DISCONNECT':
+      disconnectUSer(clientWs, payLoad);
   }
 }
