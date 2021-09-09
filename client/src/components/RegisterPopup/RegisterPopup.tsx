@@ -1,4 +1,4 @@
-import './Register-popup.scss';
+import './RegisterPopup.scss';
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from '@material-ui/core';
 import IRegisterPopupProps from '../../types/register-popup-props.type';

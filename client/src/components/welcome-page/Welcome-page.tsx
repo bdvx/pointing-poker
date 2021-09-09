@@ -1,8 +1,8 @@
 import './Welcome-page.scss';
 import { FC, useState } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
-import { RegisterPopup } from '../register-popup/Register-popup';
 import pokerCardsImg from '../../assets/icons/poker-cards.svg';
+import { RegisterPopup } from '../RegisterPopup/RegisterPopup';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
   const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
