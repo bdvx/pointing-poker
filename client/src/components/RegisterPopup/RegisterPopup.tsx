@@ -3,6 +3,8 @@ import { ChangeEvent, FC, useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from '@material-ui/core';
 import IRegisterPopupProps from '../../types/RegisterPopupProps.type';
 import IRegisterPopupFieldsValues from '../../types/RegisterPopupFieldsValues.type';
+import IRegisterPopupFieldsProps from '../../types/RegisterPopupFieldsProps.type';
+import { REGISTER_POPUP_FIELDS } from '../../constants';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
@@ -68,6 +70,12 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     }
   };
 
+  const addFieldErrorMessage = ({ name, title, errorMessage }: IRegisterPopupFieldsProps): string => {
+    if (!errors.includes(name)) return '';
+
+    return errorMessage ? errorMessage : `${ title } can't be empty.`;
+  }
+
   return (
     <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
       <form className="register-popup__form">
@@ -84,86 +92,26 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
           </label>
         </div>
 
-        <div className="register-popup__field-block">
-          <label>
-            <span className="register-popup__field-title">Your login:</span>
-            <TextField
-              className="register-popup__field"
-              variant="outlined"
-              size="small"
-              name="login"
-              defaultValue={fieldsValues.login}
-              error={errors.includes('login')}
-              helperText={errors.includes('login') ? 'Login can\'t be empty and contain spaces.' : ''}
-              onChange={(e) => { handleFieldChange(e) }}
-            />
-          </label>
-        </div>
-
-        <div className="register-popup__field-block">
-          <label>
-            <span className="register-popup__field-title">Your password:</span>
-            <TextField
-              className="register-popup__field"
-              type="password"
-              variant="outlined"
-              size="small"
-              name="password"
-              defaultValue={fieldsValues.password}
-              error={errors.includes('password')}
-              helperText={errors.includes('password') ? 'Password can\'t be empty.' : ''}
-              onChange={(e) => { handleFieldChange(e) }}
-            />
-          </label>
-        </div>
-
-        <div className="register-popup__field-block">
-          <label>
-            <span className="register-popup__field-title">Your first name:</span>
-            <TextField
-              className="register-popup__field"
-              variant="outlined"
-              size="small"
-              name="firstName"
-              defaultValue={fieldsValues.firstName}
-              error={errors.includes('firstName')}
-              helperText={errors.includes('firstName') ? 'First name can\'t be empty.' : ''}
-              onChange={(e) => { handleFieldChange(e) }}
-            />
-          </label>
-        </div>
-
-        <div className="register-popup__field-block">
-          <label>
-            <span className="register-popup__field-title">Your last name:</span>
-            <TextField
-              className="register-popup__field"
-              variant="outlined"
-              size="small"
-              name="lastName"
-              defaultValue={fieldsValues.lastName}
-              error={errors.includes('lastName')}
-              helperText={errors.includes('lastName') ? 'Last name can\'t be empty.' : ''}
-              onChange={(e) => handleFieldChange(e)}
-            />
-          </label>
-        </div>
-
-        <div className="register-popup__field-block">
-          <label>
-            <span className="register-popup__field-title">Your job position:</span>
-            <TextField
-              className="register-popup__field"
-              variant="outlined"
-              size="small"
-              name="jobPosition"
-              defaultValue={fieldsValues.jobPosition}
-              error={errors.includes('jobPosition')}
-              helperText={errors.includes('jobPosition') ? 'Job position can\'t be empty.' : ''}
-              onChange={(e) => handleFieldChange(e)}
-            />
-          </label>
-        </div>
+        {
+          REGISTER_POPUP_FIELDS.map((field) => (
+            <div className="register-popup__field-block" key={field.name}>
+              <label>
+                <span className="register-popup__field-title">Your { field.title }:</span>
+                <TextField
+                  className="register-popup__field"
+                  defaultValue={ fieldsValues[field.name as keyof IRegisterPopupFieldsValues] }
+                  onChange={ (e) => handleFieldChange(e) }
+                  name={ field.name }
+                  error={ errors.includes(field.name) }
+                  helperText={ addFieldErrorMessage(field) }
+                  type={ field.type ? field.type : 'text' }
+                  variant="outlined"
+                  size="small"
+                />
+              </label>
+            </div>
+          ))
+        }
 
         <div className="register-popup__avatar-block">
           <span className="register-popup__field-title">Image:</span>

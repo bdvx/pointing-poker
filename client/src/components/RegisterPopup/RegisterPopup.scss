@@ -75,6 +75,10 @@
 .register-popup__field {
   max-width: 470px;
   width: 100%;
+
+  .MuiFormHelperText-root::first-letter {
+    text-transform: uppercase;
+  }
 }
 
 .register-popup__avatar-block {
