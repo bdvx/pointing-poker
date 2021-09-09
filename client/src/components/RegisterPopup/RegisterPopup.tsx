@@ -1,18 +1,21 @@
 import './RegisterPopup.scss';
-import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from '@material-ui/core';
-import IRegisterPopupProps from '../../types/register-popup-props.type';
+import IRegisterPopupProps from '../../types/RegisterPopupProps.type';
+import IRegisterPopupFieldsValues from '../../types/RegisterPopupFieldsValues.type';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
-  const [login, setLogin] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [jobPosition, setJobPosition] = useState<string>('');
-  const [errors, setErrors] = useState<string[]>([]);
-
   const [avatar, setAvatar] = useState<string>('');
+
+  const [fieldsValues, setFieldsValues] = useState<IRegisterPopupFieldsValues>({
+    login: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    jobPosition: ''
+  });
+  const [errors, setErrors] = useState<string[]>([]);
 
   const checkValidation = (value: string, fieldName: string): void => {
     let regex = /.+/;
@@ -31,10 +34,14 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     }
   };
 
-  const handleFieldChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setFieldValue: Dispatch<SetStateAction<string>>): void => {
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { value, name } = e.target;
 
-    setFieldValue(value);
+    setFieldsValues({
+      ...fieldsValues,
+      [name]: value
+    });
+
     checkValidation(value, name);
   };
 
@@ -85,10 +92,10 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               variant="outlined"
               size="small"
               name="login"
-              defaultValue={login}
+              defaultValue={fieldsValues.login}
               error={errors.includes('login')}
               helperText={errors.includes('login') ? 'Login can\'t be empty and contain spaces.' : ''}
-              onChange={(e) => { handleFieldChange(e, setLogin) }}
+              onChange={(e) => { handleFieldChange(e) }}
             />
           </label>
         </div>
@@ -102,10 +109,10 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               variant="outlined"
               size="small"
               name="password"
-              defaultValue={password}
+              defaultValue={fieldsValues.password}
               error={errors.includes('password')}
               helperText={errors.includes('password') ? 'Password can\'t be empty.' : ''}
-              onChange={(e) => { handleFieldChange(e, setPassword) }}
+              onChange={(e) => { handleFieldChange(e) }}
             />
           </label>
         </div>
@@ -117,11 +124,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               className="register-popup__field"
               variant="outlined"
               size="small"
-              name="first name"
-              defaultValue={firstName}
-              error={errors.includes('first name')}
-              helperText={errors.includes('first name') ? 'First name can\'t be empty.' : ''}
-              onChange={(e) => { handleFieldChange(e, setFirstName) }}
+              name="firstName"
+              defaultValue={fieldsValues.firstName}
+              error={errors.includes('firstName')}
+              helperText={errors.includes('firstName') ? 'First name can\'t be empty.' : ''}
+              onChange={(e) => { handleFieldChange(e) }}
             />
           </label>
         </div>
@@ -133,11 +140,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               className="register-popup__field"
               variant="outlined"
               size="small"
-              name="last name"
-              defaultValue={lastName}
-              error={errors.includes('last name')}
-              helperText={errors.includes('last name') ? 'Last name can\'t be empty.' : ''}
-              onChange={(e) => handleFieldChange(e, setLastName)}
+              name="lastName"
+              defaultValue={fieldsValues.lastName}
+              error={errors.includes('lastName')}
+              helperText={errors.includes('lastName') ? 'Last name can\'t be empty.' : ''}
+              onChange={(e) => handleFieldChange(e)}
             />
           </label>
         </div>
@@ -149,11 +156,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               className="register-popup__field"
               variant="outlined"
               size="small"
-              name="job position"
-              defaultValue={jobPosition}
-              error={errors.includes('job position')}
-              helperText={errors.includes('job position') ? 'Job position can\'t be empty.' : ''}
-              onChange={(e) => handleFieldChange(e, setJobPosition)}
+              name="jobPosition"
+              defaultValue={fieldsValues.jobPosition}
+              error={errors.includes('jobPosition')}
+              helperText={errors.includes('jobPosition') ? 'Job position can\'t be empty.' : ''}
+              onChange={(e) => handleFieldChange(e)}
             />
           </label>
         </div>
@@ -195,7 +202,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             className="register-popup__avatar"
             alt="Avatar"
             src={ avatar }
-            children={changeStringAvatar(firstName)}
+            children={changeStringAvatar(fieldsValues.firstName)}
           />
         </div>
         <DialogActions className="register-popup__btns">
