@@ -23,7 +23,7 @@ function connectUserToRoom(room:Room, userInfo:UserInfoFromDB, userWS:WebSocket)
   }
   userWS.onmessage = (ev) => { lobbyMessageHandler(room, ev.data) };
 
-  const response = makeWSResponseMessage("JOIN_ROOM", userInfo);
+  const response = makeWSResponseMessage("NEW_USER_JOIN_ROOM", userInfo);
   room.players.forEach((player)=>player.ws.send(JSON.stringify(response)));
   room.players.push(newPlayer);
 }

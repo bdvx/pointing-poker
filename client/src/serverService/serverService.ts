@@ -1,7 +1,7 @@
+import LobbyService from "./lobbyService";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
-import { WSRequest } from "./models/WSRequestModel";
 import { WSResponse } from "./models/WSResponseModel";
 
 const url = "http://localhost:5000/";
@@ -37,7 +37,7 @@ async function connectToRoom(connectInfo:ConnectUserToWS) {
 
   wss.onopen = () => {
     isConnect = true;
-    wss.send(makeWSRequestString("CONNECT_TO_ROOM", connectInfo));
+    LobbyService.connectToRoom(wss, request);
 
     wss.onmessage = (event) => {
       responseHandler(event.data);
@@ -56,15 +56,6 @@ function responseHandler(message:string){
   }
 }
 
-function makeWSRequestString(type: string, payLoadObj:any) {
-  const payLoadStr = JSON.stringify(payLoadObj);
-  const request: WSRequest = {
-    type: type,
-    payLoad: payLoadStr
-  }
-
-  return payLoadStr;
-}
 
 //TODO мб норм расширение нужно?
 function onConnectionFailure(info:string) {
