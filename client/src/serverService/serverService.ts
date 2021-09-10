@@ -1,7 +1,13 @@
+import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
+import { WSRequest } from "./models/WSRequestModel";
+import { WSResponse } from "./models/WSResponseModel";
 
 const url = "http://localhost:5000/";
+let wss:WebSocket;
+let isConnect = false;
+/* let userLogin:string; */
 
 async function registerNewUser(regInfo:RegistrationModel) {
   const request = JSON.stringify(regInfo);
@@ -25,8 +31,50 @@ async function signInUser(signInInfo:SignInModel) {
   return response.body;
 }
 
+async function connectToRoom(connectInfo:ConnectUserToWS) {
+  const request = JSON.stringify(connectInfo);
+  wss = new WebSocket(url);
+
+  wss.onopen = () => {
+    isConnect = true;
+    wss.send(makeWSRequestString("CONNECT_TO_ROOM", connectInfo));
+
+    wss.onmessage = (event) => {
+      responseHandler(event.data);
+    };
+  }
+}
+
+function responseHandler(message:string){
+  let event = (JSON.parse(message) as WSResponse).type;
+  let info = (JSON.parse(message) as WSResponse).payLoad;
+
+  switch(event){
+    case "CONNECTION_FAILURE": //!этот кейс скорей всего и не нужен
+      onConnectionFailure(info);
+      break;
+  }
+}
+
+function makeWSRequestString(type: string, payLoadObj:any) {
+  const payLoadStr = JSON.stringify(payLoadObj);
+  const request: WSRequest = {
+    type: type,
+    payLoad: payLoadStr
+  }
+
+  return payLoadStr;
+}
+
+//TODO мб норм расширение нужно?
+function onConnectionFailure(info:string) {
+  wss.close();
+  isConnect = false;
+}
+
 const ServerService = {
   registerNewUser,
-  signInUser
+  signInUser,
+  connectToRoom
 }
 export default ServerService;
