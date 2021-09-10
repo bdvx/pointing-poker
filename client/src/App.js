@@ -1,10 +1,15 @@
+import { BrowserRouter } from 'react-router-dom';
 import "./App.css";
-import Chat from "./components/Chat/Chat";
+import Header from './components/Header/Header';
 
 function App() {
-  return <div className="App">
-    <Chat/>
-  </div>;
+  return (
+    <BrowserRouter>
+      <div className="App">
+        <Header/>
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default App;
