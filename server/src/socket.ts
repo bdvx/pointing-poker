@@ -5,7 +5,7 @@ const http = require('http');
 const webSocket = require('ws');
 const server = http.createServer(app);
 const wsServer = new webSocket.Server({server});
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 let connectUsers:Array<ClientModel> = [];
 
