@@ -10,7 +10,7 @@
     max-width: 1380px;
     height: 70px;
     box-sizing: border-box;
-    padding-right: 430px;
+    padding-right: 28vw;
   }
   &_logo {
     width: 70px;
@@ -34,7 +34,7 @@
       height: 3px;
       background-color: snow;
       content: "";
-      transition: width 0.3s ease-out;
+      transition: width 0.2s ease-out;
     }
     &:hover:after,
     &:focus:after {
