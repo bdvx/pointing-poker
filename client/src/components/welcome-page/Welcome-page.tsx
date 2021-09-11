@@ -1,9 +1,12 @@
 import './Welcome-page.scss';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
 import { LargeLogo } from '../large-logo/Large-logo';
+import { RegisterPopup } from '../RegisterPopup/RegisterPopup';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
+  const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
+
   return (
     <div className={`welcome-page ${ classes }`}>
       <LargeLogo />
@@ -22,6 +25,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
           variant="contained"
           color="primary"
           size="large"
+          onClick={() => setRegisterPopupOpen(true)}
         >
           Start new game
         </Button>
@@ -56,6 +60,8 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
           </Button>
         </Grid>
       </div>
+
+      <RegisterPopup classes="app__register-popup" open={registerPopupOpen} onChangeRegisterPopupState={(open: boolean) => setRegisterPopupOpen(open)} />
     </div>
   );
 }

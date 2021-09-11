@@ -1,0 +1,139 @@
+@import '../../breakpoints.scss';
+
+.register-popup {
+  .MuiPaper-root {
+    padding: 30px 15px 15px;
+
+    @include at ($min, $tablet) {
+      padding: 60px 40px 15px;
+    }
+  }
+
+  .MuiDialog-paper {
+    @include at ($max, $tablet - 1) {
+      margin: 10px;
+    }
+  }
+}
+
+.register-popup__header {
+  margin-bottom: 25px;
+
+  @include at ($min, $tablet) {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.register-popup__title {
+  margin: 0 50px 0 0;
+  font-size: 40px;
+  line-height: 1.17188;
+
+  @include at ($max, $tablet - 1) {
+    margin-bottom: 15px;
+  }
+
+  @include at ($min, $tablet) {
+    font-size: 64px;
+  }
+}
+
+.register-popup__role-block {
+  display: flex;
+  align-items: center;
+}
+
+.register-popup__role-title {
+  margin-right: 30px;
+  font-size: 20px;
+  line-height: 1.25;
+
+  @include at ($min, $tablet) {
+    font-size: 24px;
+    white-space: nowrap;
+  }
+}
+
+.register-popup__field-block {
+  margin-bottom: 20px;
+}
+
+.register-popup__field-title {
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.16667;
+  display: flex;
+  align-items: center;
+
+  @include at ($min, $tablet) {
+    font-size: 24px;
+  }
+}
+
+.register-popup__field {
+  max-width: 470px;
+  width: 100%;
+
+  .MuiFormHelperText-root::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.register-popup__avatar-block {
+  margin-bottom: 50px;
+
+  @include at ($min, $tablet) {
+    margin-bottom: 90px;
+  }
+}
+
+.register-popup__avatar-btns {
+  margin-bottom: 15px;
+}
+
+#register-popup__avatar-file {
+  display: none;
+}
+
+.register-popup .register-popup__avatar-btn {
+  max-width: 275px;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+  @include at ($max, $tablet - 1) {
+    margin-bottom: 10px;
+  }
+
+  @include at ($min, $tablet) {
+    border-radius: 0 0 0 10px;
+  }
+}
+
+.register-popup__avatar-block-btn {
+  max-width: 190px;
+  width: 100%;
+}
+
+.register-popup .register-popup__avatar {
+  width: 83px;
+  height: 83px;
+  background-color: #60dabf;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 48px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.register-popup .register-popup__btns {
+  padding: 0;
+  justify-content: space-between;
+
+  @include at ($min, $tablet) {
+    margin: 0 -20px;
+  }
+}
