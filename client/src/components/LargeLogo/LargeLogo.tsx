@@ -1,4 +1,4 @@
-import './Large-logo.scss';
+import './LargeLogo.scss';
 import { FC } from 'react';
 import pokerCardsImg from '../../assets/icons/poker-cards.svg';
 

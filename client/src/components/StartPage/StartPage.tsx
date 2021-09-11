@@ -1,7 +1,7 @@
-import './Start-page.scss';
+import './StartPage.scss';
 import { FC } from 'react';
 import { Button } from '@material-ui/core';
-import { LargeLogo } from '../large-logo/Large-logo';
+import { LargeLogo } from '../LargeLogo/LargeLogo';
 
 export const StartPage: FC<{classes: string}> = ({classes}: {classes: string}) => {
   return (

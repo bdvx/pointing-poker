@@ -1,7 +1,7 @@
 import './App.scss';
 import { ThemeProvider } from '@material-ui/core';
 import { theme } from './material-ui-variables';
-import { StartPage } from './components/start-page/Start-page';
+import { StartPage } from './components/StartPage/StartPage';
 import { CssBaseline } from '@material-ui/core';
 
 function App() {

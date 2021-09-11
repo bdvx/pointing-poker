@@ -1,7 +1,7 @@
-import './Welcome-page.scss';
+import './WelcomePage.scss';
 import { FC, useState } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
-import { LargeLogo } from '../large-logo/Large-logo';
+import { LargeLogo } from '../LargeLogo/LargeLogo';
 import { RegisterPopup } from '../RegisterPopup/RegisterPopup';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
