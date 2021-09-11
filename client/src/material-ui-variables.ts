@@ -20,6 +20,12 @@ declare module "@material-ui/core/styles/createBreakpoints" {
   }
 }
 
+declare module '@material-ui/core/styles/createPalette' {
+  interface PaletteOptions {
+    avatar: string;
+  }
+}
+
 export const theme = createTheme({
   breakpoints: {
     values: {
@@ -41,7 +47,8 @@ export const theme = createTheme({
     },
     secondary: {
       main: '#66999b'
-    }
+    },
+    avatar: '#60dabf'
   }
 });
 
