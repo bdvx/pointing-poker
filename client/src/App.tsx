@@ -3,6 +3,7 @@ import { ThemeProvider } from '@material-ui/core';
 import { WelcomePage } from './components/welcome-page/Welcome-page';
 import { theme } from './material-ui-variables';
 import { CssBaseline } from '@material-ui/core';
+import { Footer } from './components/Footer/Footer';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <main>
           <WelcomePage classes="app__welcome-page" />
         </main>
+        <Footer />
       </div>
     </ThemeProvider>
   );
