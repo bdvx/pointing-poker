@@ -1,7 +1,7 @@
 import './App.scss';
 import { ThemeProvider } from '@material-ui/core';
-import { WelcomePage } from './components/welcome-page/Welcome-page';
 import { theme } from './material-ui-variables';
+import { StartPage } from './components/StartPage/StartPage';
 import { CssBaseline } from '@material-ui/core';
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <CssBaseline />
       <div className="App">
         <main>
-          <WelcomePage classes="app__welcome-page" />
+          <StartPage classes="app__startPage" />
         </main>
       </div>
     </ThemeProvider>
