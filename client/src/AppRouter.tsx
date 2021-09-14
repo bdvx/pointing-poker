@@ -2,6 +2,7 @@ import Header from "./components/Header/Header";
 import { Route, Switch, useLocation, Redirect, BrowserRouter } from 'react-router-dom';
 import { StartPage } from "./components/pages/StartPage/StartPage";
 import { AboutPage } from "./components/pages/AboutPage/aboutPage";
+import { WelcomePage } from "./components/pages/WelcomePage/WelcomePage";
 
 export default function AppRouter() {
   let location =  useLocation();
@@ -14,6 +15,9 @@ export default function AppRouter() {
         </Route>
         <Route exact path={'/about'}>
           <AboutPage></AboutPage>
+        </Route>
+        <Route exact path={'/welcomePage'}>
+          <WelcomePage classes="welcome-page"></WelcomePage>
         </Route>
       
         <Route exact path="/">

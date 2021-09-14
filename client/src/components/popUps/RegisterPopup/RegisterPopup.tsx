@@ -8,6 +8,8 @@ import { REGISTER_POPUP_FIELDS } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { RegistrationModel } from '../../../serverService/models/registrationModel';
 import { HttpResponseModel } from '../../../serverService/models/httpResponseModel';
+import { useHistory } from 'react-router';
+import history from "../../../history";
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
@@ -164,7 +166,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             color="primary"
             size="large"
             disabled={errors.length > 0}
-            onClick={() => handleConfirmRegistration(onChangeRegisterPopupState, fieldsValues)}
+            onClick={() => HandleConfirmRegistration(onChangeRegisterPopupState, fieldsValues)}
           >
             Confirm
           </Button>
@@ -182,18 +184,25 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   );
 };
 
-
-async function handleConfirmRegistration(cb:Function, fieldsValues:RegistrationModel) {
+//!не изменять uppercase первой буквы (реакт ругается)
+async function HandleConfirmRegistration(cb:Function, fieldsValues:RegistrationModel) {
   const response = await ServerService.registerNewUser(fieldsValues);
+
   //TODO прикрутить лоадер
-  if(response.isSuccess) {
+/*   if(response.isSuccess) */
+  if(true) {
     //попап
     //response.message хранит информацию 
+
+        //alert - временная замена попАпу
+    //история должна пушится после закрытия попапа успешной регистрации
+    //!Какие-то проблемы с historyPush, возможно, придется  крутится с useHistory;
+    history.push('/welcomePage');
+    alert(response);
+    cb(false);
   } else {
     //ошибка создания
     //response.message хранит информацию ошибки
   }
-  //alert - временная замена попАпу
-  alert(response);
-  cb(false);
+
 }
