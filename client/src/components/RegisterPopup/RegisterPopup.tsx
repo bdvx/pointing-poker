@@ -7,6 +7,7 @@ import IRegisterPopupFieldsProps from '../../types/RegisterPopupFieldsProps.type
 import { REGISTER_POPUP_FIELDS } from '../../constants';
 import ServerService from '../../serverService/serverService';
 import { RegistrationModel } from '../../serverService/models/registrationModel';
+import { HttpResponseModel } from '../../serverService/models/httpResponseModel';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
@@ -185,6 +186,14 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
 async function handleConfirmRegistration(cb:Function, fieldsValues:RegistrationModel) {
   const response = await ServerService.registerNewUser(fieldsValues);
   //TODO прикрутить лоадер
+  if(response.isSuccess) {
+    //попап
+    //response.message хранит информацию 
+  } else {
+    //ошибка создания
+    //response.message хранит информацию ошибки
+  }
+  //alert - временная замена попАпу
   alert(response);
   cb(false);
 }

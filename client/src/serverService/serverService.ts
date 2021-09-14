@@ -1,5 +1,6 @@
 import LobbyService from "./lobbyService";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
+import { HttpResponseModel } from "./models/httpResponseModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
 import { WSResponse } from "./models/WSResponseModel";
@@ -18,7 +19,7 @@ async function registerNewUser(regInfo:RegistrationModel) {
     method: "POST"
   }).then(res => res.json());
 
-  return response.message;
+  return response.message as HttpResponseModel;
 }
 
 async function signInUser(signInInfo:SignInModel) {
@@ -26,10 +27,11 @@ async function signInUser(signInInfo:SignInModel) {
 
   const response = await fetch(url + "singIn", {
     body: request,
+    headers: { 'Content-Type': 'application/json' },
     method: "POST"
-  });
+  }).then(res => res.json());
 
-  return response.body;
+  return response.message as HttpResponseModel;
 }
 
 async function connectToRoom(connectInfo:ConnectUserToWS) {
