@@ -5,6 +5,8 @@ import IRegisterPopupProps from '../../types/RegisterPopupProps.type';
 import IRegisterPopupFieldsValues from '../../types/RegisterPopupFieldsValues.type';
 import IRegisterPopupFieldsProps from '../../types/RegisterPopupFieldsProps.type';
 import { REGISTER_POPUP_FIELDS } from '../../constants';
+import ServerService from '../../serverService/serverService';
+import { RegistrationModel } from '../../serverService/models/registrationModel';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
@@ -15,7 +17,8 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     password: '',
     firstName: '',
     lastName: '',
-    jobPosition: ''
+    jobPosition: '',
+    avatar: ''
   });
   const [errors, setErrors] = useState<string[]>([]);
 
@@ -63,6 +66,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       reader.onload = () => {
         if (reader.result) {
           setAvatar(reader.result.toString());
+          setFieldsValues({...fieldsValues, avatar:reader.result.toString()});
         }
       }
       
@@ -80,8 +84,8 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
       <form className="register-popup__form">
         <div className="register-popup__header">
-          <h3 className="register-popup__title">Connect to lobby</h3>
-          <label className="register-popup__role-block">
+          <h3 className="register-popup__title">Register new user</h3>
+{/*           <label className="register-popup__role-block">
             <span className="register-popup__role-title">Connect as<br/>Observer</span>
             <Switch
               className="register-popup__role"
@@ -89,7 +93,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
               onChange={() => setRole(!role)}
               color="primary"
             />
-          </label>
+          </label> */}
         </div>
 
         {
@@ -159,7 +163,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             color="primary"
             size="large"
             disabled={errors.length > 0}
-            onClick={() => onChangeRegisterPopupState(false)}
+            onClick={() => handleConfirmRegistration(onChangeRegisterPopupState, fieldsValues)}
           >
             Confirm
           </Button>
@@ -176,3 +180,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     </Dialog>
   );
 };
+
+
+async function handleConfirmRegistration(cb:Function, fieldsValues:RegistrationModel) {
+  const response = await ServerService.registerNewUser(fieldsValues);
+  //TODO прикрутить лоадер
+  alert(response);
+  cb(false);
+}

@@ -3,8 +3,8 @@ import { app, regNewUser, signIn } from "./src/http";
 import { QueryModel } from "./src/models/socketModels/WSqueryModel";
 
 
-app.get('/regNewUser', regNewUser);
-app.get('/singIn', signIn);
+app.post('/regNewUser', regNewUser);
+app.post('/singIn', signIn);
 //app.get('/joinLobby/:id', joinLobbyByUrl);
 
 

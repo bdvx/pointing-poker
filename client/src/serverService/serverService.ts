@@ -14,10 +14,11 @@ async function registerNewUser(regInfo:RegistrationModel) {
 
   const response = await fetch(url + "regNewUser", {
     body: request,
+    headers: { 'Content-Type': 'application/json' },
     method: "POST"
-  });
+  }).then(res => res.json());
 
-  return response.body;
+  return response.message;
 }
 
 async function signInUser(signInInfo:SignInModel) {

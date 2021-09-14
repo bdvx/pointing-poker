@@ -4,4 +4,5 @@ export default interface IRegisterPopupFieldsValues {
   firstName: string;
   lastName: string;
   jobPosition: string;
+  avatar?: string,
 };

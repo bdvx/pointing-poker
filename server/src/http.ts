@@ -3,9 +3,13 @@ import { SignInModel } from "./models/httpModels/signInModel";
 import { Request, Response } from 'express';
 import DataService from "./tools/dataService";
 
+const cors = require('cors')
 const express = require('express');
 const app = express();
-
+const bodyParser = require('body-parser');
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.json());
 /* const users: Array<RegistrationModel> = []; */
 const testUserReg:RegistrationModel = {
   firstName:'fName',
@@ -23,13 +27,11 @@ const testUserSign: SignInModel = {
 }
 
 async function regNewUser(req:Request, res:Response) {
-/*   const user = (JSON.parse(req.body) as RegistrationModel); */
-  const user = testUserReg;
-
+  const user = req.body;
   const response = await DataService.addNewUser(user);
   if(response.isSuccess) {
     res.statusCode = 200;
-    res.send(JSON.stringify(response));
+    res.send(response);
 
   } else {
     res.statusCode = 500;
