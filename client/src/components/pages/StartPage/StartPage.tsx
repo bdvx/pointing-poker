@@ -1,8 +1,8 @@
 import './StartPage.scss';
 import { FC, useState } from 'react';
 import { Button } from '@material-ui/core';
-import { LargeLogo } from '../LargeLogo/LargeLogo';
-import { RegisterPopup } from '../RegisterPopup/RegisterPopup';
+import { LargeLogo } from '../../LargeLogo/LargeLogo';
+import { RegisterPopup } from '../../popUps/RegisterPopup/RegisterPopup';
 
 export const StartPage: FC<{classes: string}> = ({classes}: {classes: string}) => {
   const [registerPopupOpen, setRegisterPopupOpen] = useState(false);

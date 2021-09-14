@@ -1,13 +1,13 @@
 import './RegisterPopup.scss';
 import { ChangeEvent, FC, useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from '@material-ui/core';
-import IRegisterPopupProps from '../../types/RegisterPopupProps.type';
-import IRegisterPopupFieldsValues from '../../types/RegisterPopupFieldsValues.type';
-import IRegisterPopupFieldsProps from '../../types/RegisterPopupFieldsProps.type';
-import { REGISTER_POPUP_FIELDS } from '../../constants';
-import ServerService from '../../serverService/serverService';
-import { RegistrationModel } from '../../serverService/models/registrationModel';
-import { HttpResponseModel } from '../../serverService/models/httpResponseModel';
+import IRegisterPopupProps from '../../../types/RegisterPopupProps.type';
+import IRegisterPopupFieldsValues from '../../../types/RegisterPopupFieldsValues.type';
+import IRegisterPopupFieldsProps from '../../../types/RegisterPopupFieldsProps.type';
+import { REGISTER_POPUP_FIELDS } from '../../../constants';
+import ServerService from '../../../serverService/serverService';
+import { RegistrationModel } from '../../../serverService/models/registrationModel';
+import { HttpResponseModel } from '../../../serverService/models/httpResponseModel';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);

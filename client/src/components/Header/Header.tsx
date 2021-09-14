@@ -1,5 +1,5 @@
-import { Link, Route, Switch } from "react-router-dom";
-import { StartPage } from "../StartPage/StartPage";
+import { NavLink } from "react-router-dom";
+import { StartPage } from "../pages/StartPage/StartPage";
 import "./Header.scss";
 
 const Header = () => {
@@ -8,20 +8,14 @@ const Header = () => {
       <header className="Header">
         <div className="Header_wrapper">
           <div className="Header_logo"></div>
-          <Link to="/home" className="Header_link">
+          <NavLink to="/" className="Header_link">
             Home
-          </Link>
-          <Link to="/about" className="Header_link">
+          </NavLink>
+          <NavLink to="/about" className="Header_link">
             About
-          </Link>
+          </NavLink>
         </div>
       </header>
-      <Switch>
-        <Route path="/about">About</Route>
-        <Route path="/home">
-          <StartPage classes="app__startPage" />
-        </Route>
-      </Switch>
     </>
   );
 };
