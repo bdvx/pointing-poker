@@ -1,0 +1,44 @@
+.Header {
+  height: 70px;
+  background-color: #2b3a67;
+  &_wrapper {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1380px;
+    height: 70px;
+    box-sizing: border-box;
+    padding-right: 28vw;
+  }
+  &_logo {
+    width: 70px;
+    height: 70px;
+    margin-top: 25px;
+    background-image: url(../../assets/images/logo.svg);
+    background-size: contain;
+  }
+  &_link {
+    position: relative;
+    width: 100px;
+    color: snow;
+    text-decoration: none;
+    font: 28px Roboto, sans-serif;
+    transition: all 0.3s linear;
+    &:after {
+      display: block;
+      position: absolute;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: snow;
+      content: "";
+      transition: width 0.2s ease-out;
+    }
+    &:hover:after,
+    &:focus:after {
+      width: 100%;
+    }
+  }
+}
