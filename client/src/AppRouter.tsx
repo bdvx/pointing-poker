@@ -17,7 +17,7 @@ export default function AppRouter() {
           <AboutPage></AboutPage>
         </Route>
         <Route exact path={'/welcomePage'}>
-          <WelcomePage classes="welcome-page"></WelcomePage>
+          <WelcomePage classes="app__welcome-page"></WelcomePage>
         </Route>
       
         <Route exact path="/">

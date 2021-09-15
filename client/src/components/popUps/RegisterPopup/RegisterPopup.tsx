@@ -1,21 +1,21 @@
 import './RegisterPopup.scss';
-import { ChangeEvent, FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from '@material-ui/core';
 import IRegisterPopupProps from '../../../types/RegisterPopupProps.type';
-import IRegisterPopupFieldsValues from '../../../types/RegisterPopupFieldsValues.type';
-import IRegisterPopupFieldsProps from '../../../types/RegisterPopupFieldsProps.type';
 import { REGISTER_POPUP_FIELDS } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { RegistrationModel } from '../../../serverService/models/registrationModel';
 import { HttpResponseModel } from '../../../serverService/models/httpResponseModel';
 import { useHistory } from 'react-router';
+import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpPopup';
+import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
   const [avatar, setAvatar] = useState<string>('');
   const history = useHistory();
 
-  const [fieldsValues, setFieldsValues] = useState<IRegisterPopupFieldsValues>({
+  const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({
     login: '',
     password: '',
     firstName: '',
@@ -25,35 +25,10 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   });
   const [errors, setErrors] = useState<string[]>([]);
 
-  const checkValidation = (value: string, fieldName: string): void => {
-    let regex = /.+/;
+  const fieldsProps = { fieldsValues, setFieldsValues, errors, setErrors };
+  const { handleFieldChange, addFieldErrorMessage } = LogInOrSignUpPopup();
 
-    if (fieldName === 'login') {
-      regex = /^[^\s]+$/;
-    }
-
-    if (!regex.test(value)) {
-      if (!errors.includes(fieldName)) {
-        setErrors([...errors, fieldName]);
-      }
-    } else if (errors.includes(fieldName)) {
-      const newErrors = errors.filter((error) => error !== fieldName);
-      setErrors(newErrors);
-    }
-  };
-
-  const handleFieldChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-    const { value, name } = e.target;
-
-    setFieldsValues({
-      ...fieldsValues,
-      [name]: value
-    });
-
-    checkValidation(value, name);
-  };
-
-  const changeStringAvatar = (name: string): string | null => {
+  const changeStringAvatar = (name: string | undefined): string | null => {
     if (!name) return null;
 
     return (name.length) > 1 ? `${name[0]}${name[name.length - 1]}` : `${name[0]}`;
@@ -77,14 +52,8 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     }
   };
 
-  const addFieldErrorMessage = ({ name, title, errorMessage }: IRegisterPopupFieldsProps): string => {
-    if (!errors.includes(name)) return '';
-
-    return errorMessage ? errorMessage : `${ title } can't be empty.`;
-  }
-
   const HandleConfirmRegistration = async () => {
-    const response = await ServerService.registerNewUser(fieldsValues);
+    const response = await ServerService.registerNewUser(fieldsValues as RegistrationModel);
 
     //TODO прикрутить лоадер
   /*   if(response.isSuccess) */
@@ -128,11 +97,11 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
                 <span className="register-popup__field-title">Your { field.title }:</span>
                 <TextField
                   className="register-popup__field"
-                  defaultValue={ fieldsValues[field.name as keyof IRegisterPopupFieldsValues] }
-                  onChange={ (e) => handleFieldChange(e) }
+                  defaultValue={ fieldsValues[field.name as keyof IFieldsValues] }
+                  onChange={ (e) => handleFieldChange({ e, ...fieldsProps }) }
                   name={ field.name }
                   error={ errors.includes(field.name) }
-                  helperText={ addFieldErrorMessage(field) }
+                  helperText={ addFieldErrorMessage(field, errors) }
                   type={ field.type ? field.type : 'text' }
                   variant="outlined"
                   size="small"
@@ -205,4 +174,3 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     </Dialog>
   );
 };
-
