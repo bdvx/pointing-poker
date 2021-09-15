@@ -22,3 +22,5 @@ export const REGISTER_POPUP_FIELDS = [
     title: 'job position',
   }
 ];
+
+export const APP_AUTHORS_GITHUB_USERNAME = ['WFZ1', 'JxmJuice', 'FURY-PERSON', 'bdvx'];
