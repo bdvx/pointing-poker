@@ -1,3 +1,5 @@
+export const LOGIN_POPUP_FIELDS = ['login', 'password'];
+
 export const REGISTER_POPUP_FIELDS = [
   {
     name: 'login',
