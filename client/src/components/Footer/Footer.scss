@@ -1,0 +1,105 @@
+@import '../../breakpoints.scss';
+@import '../../variables.scss';
+
+.Footer {
+  padding: 30px $desktop-container-gutter;
+  background-color: $primary-color;
+}
+
+.Footer__container {
+  max-width: $wrapper;
+  margin: 0 auto;
+
+	@include at ($min, $phone) {
+		display: flex;
+		justify-content: space-between;
+  	align-items: center;
+	}
+}
+
+.Footer__rss {
+	position: relative;
+	display: block;
+	width: 111px;
+	margin-bottom: 40px;
+	text-decoration: none;
+
+	@include at ($min, $phone) {
+		margin-right: 40px;
+		margin-bottom: 0;
+	}
+
+	&:hover span {
+		right: -5px;
+		letter-spacing: 0;
+	}
+
+	img {
+		vertical-align: middle;
+	}
+
+	span {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		color: #fff;
+		font-size: 21px;
+		font-weight: 900;
+		line-height: 0.7;
+		letter-spacing: -2px;
+		transition: right 0.3s, letter-spacing 0.3s;
+	}
+}
+
+.Footer__githubList {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	@include at ($min, $phone) {
+		display: flex;
+	}
+
+	li {
+		position: relative;
+		margin-bottom: 5px;
+		cursor: pointer;
+		overflow: hidden;
+
+		@include at ($min, $phone) {
+			margin-right: 20px;
+			margin-bottom: 0;
+		}
+
+		@include at ($min, $lap) {
+			margin-right: 50px;
+		}
+
+		&:last-child {
+			margin-right: 0;
+		}
+
+		&:hover::after,
+    &:focus::after {
+      right: 0;
+    }
+
+		&::after {
+			position: absolute;
+      bottom: 0;
+			left: 0;
+			right: 100%;
+      height: 1px;
+			content: "";
+      background-color: #fff;
+      transition: right 0.3s;
+    }
+	}
+
+	a {
+		color: #fff;
+		font-size: 15px;
+		text-decoration: none;
+		letter-spacing: 1.5px; 
+	}
+}
