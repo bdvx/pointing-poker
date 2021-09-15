@@ -9,11 +9,11 @@ import ServerService from '../../../serverService/serverService';
 import { RegistrationModel } from '../../../serverService/models/registrationModel';
 import { HttpResponseModel } from '../../../serverService/models/httpResponseModel';
 import { useHistory } from 'react-router';
-import history from "../../../history";
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
   const [avatar, setAvatar] = useState<string>('');
+  const history = useHistory();
 
   const [fieldsValues, setFieldsValues] = useState<IRegisterPopupFieldsValues>({
     login: '',
@@ -81,6 +81,28 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     if (!errors.includes(name)) return '';
 
     return errorMessage ? errorMessage : `${ title } can't be empty.`;
+  }
+
+  const HandleConfirmRegistration = async () => {
+    const response = await ServerService.registerNewUser(fieldsValues);
+
+    //TODO прикрутить лоадер
+  /*   if(response.isSuccess) */
+    if(true) {
+      //попап
+      //response.message хранит информацию 
+  
+          //alert - временная замена попАпу
+      //история должна пушится после закрытия попапа успешной регистрации
+
+      history.push('/welcomePage');
+      alert(response);
+      onChangeRegisterPopupState(false);
+    } else {
+      //ошибка создания
+      //response.message хранит информацию ошибки
+    }
+  
   }
 
   return (
@@ -166,7 +188,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             color="primary"
             size="large"
             disabled={errors.length > 0}
-            onClick={() => HandleConfirmRegistration(onChangeRegisterPopupState, fieldsValues)}
+            onClick={() => HandleConfirmRegistration()}
           >
             Confirm
           </Button>
@@ -184,25 +206,3 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   );
 };
 
-//!не изменять uppercase первой буквы (реакт ругается)
-async function HandleConfirmRegistration(cb:Function, fieldsValues:RegistrationModel) {
-  const response = await ServerService.registerNewUser(fieldsValues);
-
-  //TODO прикрутить лоадер
-/*   if(response.isSuccess) */
-  if(true) {
-    //попап
-    //response.message хранит информацию 
-
-        //alert - временная замена попАпу
-    //история должна пушится после закрытия попапа успешной регистрации
-    //!Какие-то проблемы с historyPush, возможно, придется  крутится с useHistory;
-    history.push('/welcomePage');
-    alert(response);
-    cb(false);
-  } else {
-    //ошибка создания
-    //response.message хранит информацию ошибки
-  }
-
-}

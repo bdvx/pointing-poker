@@ -11,7 +11,7 @@ export const StartPage: FC<{classes: string}> = ({classes}: {classes: string}) =
     <div className={`startPage ${ classes }`}>
       <LargeLogo />
 
-      <Button onClick={ () => setRegisterPopupOpen(true) } variant="contained" color="primary" size="large">Sign up</Button>
+      <Button onClick={ () => setRegisterPopupOpen(true)  } variant="contained" color="primary" size="large">Sign up</Button>
       <Button variant="contained" color="primary" size="large">Log in</Button>
 
       <RegisterPopup classes="" open={registerPopupOpen} onChangeRegisterPopupState={(open) => setRegisterPopupOpen(open)} />
