@@ -13,7 +13,7 @@ import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
   const [avatar, setAvatar] = useState<string>('');
-  const history = useHistory();
+  const router = useHistory();
 
   const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({
     login: '',
@@ -56,20 +56,18 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
     const response = await ServerService.registerNewUser(fieldsValues as RegistrationModel);
 
     //TODO прикрутить лоадер
-  /*   if(response.isSuccess) */
-    if(true) {
+    if(response.isSuccess) {
       //попап
-      //response.message хранит информацию 
-  
-          //alert - временная замена попАпу
+      //alert - временная замена попАпу
       //история должна пушится после закрытия попапа успешной регистрации
 
-      history.push('/welcomePage');
-      alert(response);
+      router.push('/welcomePage');
+      alert(response.message);
       onChangeRegisterPopupState(false);
     } else {
       //ошибка создания
       //response.message хранит информацию ошибки
+      alert(response.message);
     }
   
   }

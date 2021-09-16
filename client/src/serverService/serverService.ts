@@ -19,7 +19,7 @@ async function registerNewUser(regInfo:RegistrationModel) {
     method: "POST"
   }).then(res => res.json());
 
-  return response.message as HttpResponseModel;
+  return response as HttpResponseModel;
 }
 
 async function signInUser(signInInfo:SignInModel) {
@@ -31,7 +31,7 @@ async function signInUser(signInInfo:SignInModel) {
     method: "POST"
   }).then(res => res.json());
 
-  return response.message as HttpResponseModel;
+  return response as HttpResponseModel;
 }
 
 async function connectToRoom(connectInfo:ConnectUserToWS) {

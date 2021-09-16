@@ -5,6 +5,8 @@ import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpP
 import ILogInPopupProps from '../../../types/LogInPopupProps.type';
 import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
 import { LOGIN_POPUP_FIELDS } from '../../../constants';
+import ServerService from '../../../serverService/serverService';
+import { useHistory } from 'react-router';
 
 export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState }: ILogInPopupProps) => {
   const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({
@@ -14,6 +16,21 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
 
   const fieldsProps = { fieldsValues, setFieldsValues };
   const { handleFieldChange } = LogInOrSignUpPopup();
+  const router = useHistory();
+
+  const HandleConfirmLogin = async () => {
+    const response = await ServerService.signInUser(fieldsValues);
+
+    //TODO прикрутить лоадер
+    if(response.isSuccess) {
+      alert(response.message);
+      //история должна пушится после закрытия попапа успешной регистрации
+      router.push("/welcomePage");
+      onChangeLogInPopupState(false);
+    } else {
+      alert(response.message);
+    }
+  }
 
   return (
     <Dialog className="LogInPopup" open={ open } onClose={ () => onChangeLogInPopupState(false) }>
@@ -38,8 +55,8 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
         }
 
         <DialogActions className="LogInPopup__actions">
-          <Button onClick={ () => onChangeLogInPopupState(false) } variant="contained" color="primary" size="large">Confirm</Button>
-          <Button onClick={ () => onChangeLogInPopupState(false) } variant="outlined" color="primary" size="large">Cancel</Button>
+          <Button onClick={HandleConfirmLogin} variant="contained" color="primary" size="large">Confirm</Button>
+          <Button onClick={() => onChangeLogInPopupState(false)} variant="outlined" color="primary" size="large">Cancel</Button>
         </DialogActions>
       </form>
     </Dialog>
