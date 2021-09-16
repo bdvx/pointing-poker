@@ -2,10 +2,13 @@ import './WelcomePage.scss';
 import { FC, useState } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
 import { LargeLogo } from '../../LargeLogo/LargeLogo';
-import { RegisterPopup } from '../../popUps/RegisterPopup/RegisterPopup';
+import ServerService from '../../../serverService/serverService';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
-  const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
+  const onstartBtnClick = async () => {
+    //TODO вытащить инфу создателя из редакса
+    ServerService.makeNewRoom();
+  }
 
   return (
     <div className={`welcome-page ${ classes }`}>
@@ -25,7 +28,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => setRegisterPopupOpen(true)}
+          onClick={onstartBtnClick}
         >
           Start new game
         </Button>
@@ -61,7 +64,6 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
         </Grid>
       </div>
 
-      <RegisterPopup classes="app__register-popup" open={registerPopupOpen} onChangeRegisterPopupState={(open: boolean) => setRegisterPopupOpen(open)} />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { Route, Switch, useLocation, Redirect, BrowserRouter } from 'react-route
 import { StartPage } from "./components/pages/StartPage/StartPage";
 import { AboutPage } from "./components/pages/AboutPage/aboutPage";
 import { WelcomePage } from "./components/pages/WelcomePage/WelcomePage";
+import Lobby from "./components/Lobby/Lobby";
 
 export default function AppRouter() {
   let location =  useLocation();
@@ -19,7 +20,9 @@ export default function AppRouter() {
         <Route exact path={'/welcomePage'}>
           <WelcomePage classes="app__welcome-page"></WelcomePage>
         </Route>
-      
+        <Route exact path={'/lobbyStart'}>
+          <Lobby></Lobby>
+        </Route>
         <Route exact path="/">
           <Redirect to='/home'></Redirect>
         </Route>

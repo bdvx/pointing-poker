@@ -48,6 +48,21 @@ async function connectToRoom(connectInfo:ConnectUserToWS) {
   }
 }
 
+async function makeNewRoom(/* connectInfo:ConnectUserToWS */) {
+/*   const request = JSON.stringify(connectInfo); */
+  wss = new WebSocket(url);
+
+
+  wss.onopen = () => {
+    isConnect = true;
+    LobbyService.makeNewRoom(/* wss, request */);
+
+    wss.onmessage = (event) => {
+      responseHandler(event.data);
+    };
+  }
+}
+
 function responseHandler(message:string){
   let event = (JSON.parse(message) as WSResponse).type;
   let info = (JSON.parse(message) as WSResponse).payLoad;
@@ -69,6 +84,7 @@ function onConnectionFailure(info:string) {
 const ServerService = {
   registerNewUser,
   signInUser,
-  connectToRoom
+  connectToRoom,
+  makeNewRoom
 }
 export default ServerService;

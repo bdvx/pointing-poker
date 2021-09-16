@@ -30,9 +30,14 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
   wss.send(request);
 }
 
+function makeNewRoom(/* userWss:WebSocket, connectInfo:string */) {
+
+}
+
 const LobbyService = {
   connectToRoom,
-  sendChatMessage
+  sendChatMessage,
+  makeNewRoom
 }
 export default LobbyService;
 
