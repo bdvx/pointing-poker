@@ -8,6 +8,7 @@ import { NewLobbyModel } from "./models/socketModels/newLobbyModel";
 import  Lobby  from "./room/lobby";
 import { UserInfoFromDB } from "./models/httpModels/useFromDBModel";
 import { DisconectModel } from "./models/socketModels/disconectModel";
+import { UserInfoModel } from "./models/socketModels/userInfoModel";
 //import { Request, Response } from 'express';
 
 const http = require('http');
@@ -30,15 +31,27 @@ setInterval(() => {
   });
 }, 10000);
 
+function makeNewLobby(masterWs:WebSocket, payLoad:string) {
+  const newLobbyInfo = JSON.parse(payLoad) as NewLobbyModel;
+  const scramInfo = newLobbyInfo.scramInfo;
 
-async function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
-  const userInfo = JSON.parse(payLoad) as ConnectUserToWS;
-  const userInfoFromDB = await DataService.getUserByLogin(userInfo.login);
+  const roomScramInfo: ClientModel = {
+    ws:masterWs,
+    userInfo: scramInfo
+  }
 
-  if(userInfoFromDB) {
-    let client:ClientModel = { ws:ws, userInfo:userInfoFromDB };
+  const newRoom = Lobby.makeNewRoom(roomScramInfo);
+  rooms.push(newRoom);
+}
+
+function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
+  const connectInfo = JSON.parse(payLoad) as ConnectUserToWS;
+  const userInfo = connectInfo.userInfo;
+
+  if(userInfo.login) {
+    let client:ClientModel = { ws:ws, userInfo:userInfo };
     connectUsers.push(client);
-    addUserToRoom(userInfo.roomId, userInfoFromDB, ws);
+    addUserToRoom(connectInfo.roomId, userInfo, ws);
   } else {
     const response:WSResponse = { type:"CONNECTION_FAILURE", payLOad:"you should register before playing" }; 
     ws.send(JSON.stringify(response));
@@ -46,7 +59,7 @@ async function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
   }
 }
 
-function addUserToRoom(roomId: string,userInfo: UserInfoFromDB, userWs:WebSocket) {
+function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket) {
   const room = rooms.find((room)=>room.roomId === roomId);
   if(room) {
     Lobby.connectUserToRoom(room, userInfo, userWs);
@@ -58,21 +71,6 @@ function addUserToRoom(roomId: string,userInfo: UserInfoFromDB, userWs:WebSocket
 function closeConnection(ws:WebSocket){
   connectUsers = connectUsers.filter((user)=>user.ws !== ws);
   ws.close();
-}
-
-async function makeNewLobby(masterWs:WebSocket, payLoad:string) {
-  const regInfo = JSON.parse(payLoad) as NewLobbyModel;
-  const userInfo = await DataService.getUserByLogin(regInfo.scramLogin);
-
-  if(userInfo) {
-    const scramInfo: ClientModel = {
-      ws:masterWs,
-      userInfo: userInfo
-    }
-  
-    const newRoom = Lobby.makeNewRoom(scramInfo);
-    rooms.push(newRoom);
-  }
 }
 
 function disconnectUSer(userWs:WebSocket, payLoad:string) {

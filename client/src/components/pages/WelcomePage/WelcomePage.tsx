@@ -3,11 +3,18 @@ import { FC, useState } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
 import { LargeLogo } from '../../LargeLogo/LargeLogo';
 import ServerService from '../../../serverService/serverService';
+import { useTypedSelector } from '../../../hooky/useTypedSelector';
+import { NewLobbyModel } from '../../../serverService/models/newLobbyModel';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
-  const onstartBtnClick = async () => {
-    //TODO вытащить инфу создателя из редакса
-    ServerService.makeNewRoom();
+  const currentUser = useTypedSelector(store=>store.userInfo);
+  const onStartBtnClick = async () => {
+    const newLobbyInfo:NewLobbyModel = {
+      scramInfo:currentUser,
+      roomId:currentUser.login
+      //TODO хешированый айди
+    }
+    await  ServerService.makeNewRoom(newLobbyInfo);
   }
 
   return (
@@ -28,7 +35,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
           variant="contained"
           color="primary"
           size="large"
-          onClick={onstartBtnClick}
+          onClick={onStartBtnClick}
         >
           Start new game
         </Button>

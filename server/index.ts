@@ -10,7 +10,7 @@ app.post('/singIn', signIn);
 
 wsServer.on('connection', (clientWs:any) => {
   clientWs.isAlive = true;
-  
+
   clientWs.on('message', (message:string) => { 
     messageHandler(message, clientWs);
   })

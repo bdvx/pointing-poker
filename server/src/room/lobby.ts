@@ -6,17 +6,20 @@ import { WSResponse } from "../models/socketModels/WSresponseModel";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
 import { KickInfo } from "../models/socketModels/kickInfoModel";
+import { UserInfoModel } from "../models/socketModels/userInfoModel";
 
 function makeNewRoom(scramInfo:ClientModel) {
   const newRoom:Room = {
     players: [scramInfo],
-    roomId: String(hashCode(scramInfo.userInfo.login)),
+    roomId: String(hashCode(scramInfo.userInfo.login + Date.now())),
   }
 
+  //TODO создание базовой комнаты
+  scramInfo.ws.send(makeWSResponseMessage("ROOM_BUILD", newRoom.roomId));
   return newRoom;
 }
 
-function connectUserToRoom(room:Room, userInfo:UserInfoFromDB, userWS:WebSocket) {
+function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) {
   const newPlayer:ClientModel = {
     ws: userWS,
     userInfo: userInfo

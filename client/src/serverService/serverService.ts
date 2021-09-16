@@ -1,15 +1,17 @@
 import LobbyService from "./lobbyService";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { HttpResponseModel } from "./models/httpResponseModel";
+import { NewLobbyModel } from "./models/newLobbyModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
 import { WSResponse } from "./models/WSResponseModel";
 
 const url = "http://localhost:5000/";
+const wsUrl = "ws://localhost:5000/";
 let wss:WebSocket;
 let isConnect = false;
-/* let userLogin:string; */
 
+//http part
 async function registerNewUser(regInfo:RegistrationModel) {
   const request = JSON.stringify(regInfo);
 
@@ -34,7 +36,9 @@ async function signInUser(signInInfo:SignInModel) {
   return response as HttpResponseModel;
 }
 
-async function connectToRoom(connectInfo:ConnectUserToWS) {
+
+//WS part
+function connectToRoom(connectInfo:ConnectUserToWS) {
   const request = JSON.stringify(connectInfo);
   wss = new WebSocket(url);
 
@@ -48,14 +52,13 @@ async function connectToRoom(connectInfo:ConnectUserToWS) {
   }
 }
 
-async function makeNewRoom(/* connectInfo:ConnectUserToWS */) {
-/*   const request = JSON.stringify(connectInfo); */
-  wss = new WebSocket(url);
-
+function makeNewRoom(connectInfo:NewLobbyModel) {
+  const request = JSON.stringify(connectInfo);
+  wss = new WebSocket(wsUrl);
 
   wss.onopen = () => {
     isConnect = true;
-    LobbyService.makeNewRoom(/* wss, request */);
+    LobbyService.makeNewRoom(wss, request);
 
     wss.onmessage = (event) => {
       responseHandler(event.data);
@@ -73,7 +76,6 @@ function responseHandler(message:string){
       break;
   }
 }
-
 
 //TODO мб норм расширение нужно?
 function onConnectionFailure(info:string) {

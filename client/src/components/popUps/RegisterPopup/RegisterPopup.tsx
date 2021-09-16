@@ -9,11 +9,14 @@ import { HttpResponseModel } from '../../../serverService/models/httpResponseMod
 import { useHistory } from 'react-router';
 import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpPopup';
 import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '../../../store/currentUserSlice';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
   const [avatar, setAvatar] = useState<string>('');
   const router = useHistory();
+  const dispatch = useDispatch();
 
   const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({
     login: '',
@@ -60,7 +63,9 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       //попап
       //alert - временная замена попАпу
       //история должна пушится после закрытия попапа успешной регистрации
-
+      console.log(fieldsValues)
+      dispatch(setUserInfo(fieldsValues));
+      //!сброс полей только после диспатча
       router.push('/welcomePage');
       alert(response.message);
       onChangeRegisterPopupState(false);

@@ -14,8 +14,18 @@ function roomMessageHandler(message:string) {
     //case "DISCONNECT_USER":
     case "KICK_OFFER":
     case "NEW_MESSAGE":
-      //TODO изменение стейта
+    case "ROOM_BUILD":
+      onSuccessRoomBuild();
+      break;
   }
+}
+
+function makeNewRoom(userWss:WebSocket, roomInfo:string) {
+  wss = userWss;
+  const request = makeWSRequestString("MAKE_NEW_LOBBY", roomInfo);
+
+  wss.send(request);
+  wss.onmessage = (ev) => { roomMessageHandler(ev.data) };
 }
 
 function connectToRoom(userWss:WebSocket, connectInfo:string) {
@@ -30,8 +40,8 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
   wss.send(request);
 }
 
-function makeNewRoom(/* userWss:WebSocket, connectInfo:string */) {
-
+function onSuccessRoomBuild() {
+  //TODO изменение стейта
 }
 
 const LobbyService = {
@@ -41,12 +51,11 @@ const LobbyService = {
 }
 export default LobbyService;
 
-function makeWSRequestString(type: string, payLoadObj:any) {
-  const payLoadStr = JSON.stringify(payLoadObj);
+function makeWSRequestString(type: string, payLoadObj:any) {;
   const request: WSRequest = {
     type: type,
-    payLoad: payLoadStr
+    payLoad: payLoadObj
   }
 
-  return payLoadStr;
+  return JSON.stringify(request);
 }
