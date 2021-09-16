@@ -1,4 +1,3 @@
-import Divider from "@material-ui/core/Divider";
 import { Link, Route, useRouteMatch } from "react-router-dom";
 import LobbyMain from "../LobbyMain/LobbyMain";
 import Settings from "../Settings/Settings";
