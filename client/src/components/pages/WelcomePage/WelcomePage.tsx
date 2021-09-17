@@ -1,20 +1,15 @@
 import './WelcomePage.scss';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
 import { LargeLogo } from '../../LargeLogo/LargeLogo';
 import ServerService from '../../../serverService/serverService';
 import { useTypedSelector } from '../../../hooky/useTypedSelector';
-import { NewLobbyModel } from '../../../serverService/models/newLobbyModel';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
-  const currentUser = useTypedSelector(store=>store.userInfo);
-  const onStartBtnClick = async () => {
-    const newLobbyInfo:NewLobbyModel = {
-      scramInfo:currentUser,
-      roomId:currentUser.login
-      //TODO хешированый айди
-    }
-    await  ServerService.makeNewRoom(newLobbyInfo);
+  const scramInfo = useTypedSelector(store=>store.userInfo);
+  
+  const onStartBtnClick = () => {
+    ServerService.makeNewRoom(scramInfo);
   }
 
   return (

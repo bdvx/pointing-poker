@@ -32,8 +32,7 @@ setInterval(() => {
 }, 10000);
 
 function makeNewLobby(masterWs:WebSocket, payLoad:string) {
-  const newLobbyInfo = JSON.parse(payLoad) as NewLobbyModel;
-  const scramInfo = newLobbyInfo.scramInfo;
+  const scramInfo = JSON.parse(payLoad) as UserInfoModel;
 
   const roomScramInfo: ClientModel = {
     ws:masterWs,

@@ -1,3 +1,4 @@
+import { CurrentUserModel } from "../store/currentUserSlice";
 import LobbyService from "./lobbyService";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { HttpResponseModel } from "./models/httpResponseModel";
@@ -52,8 +53,8 @@ function connectToRoom(connectInfo:ConnectUserToWS) {
   }
 }
 
-function makeNewRoom(connectInfo:NewLobbyModel) {
-  const request = JSON.stringify(connectInfo);
+function makeNewRoom(scramtInfo:CurrentUserModel) {
+  const request = JSON.stringify(scramtInfo);
   wss = new WebSocket(wsUrl);
 
   wss.onopen = () => {

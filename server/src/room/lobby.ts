@@ -1,7 +1,6 @@
 import { Room } from "../models/socketModels/roomModel";
 import { ClientModel } from "../models/socketModels/clientModel"
 import { hashCode } from "../tools/hashFunction";
-import { UserInfoFromDB } from "../models/httpModels/useFromDBModel";
 import { WSResponse } from "../models/socketModels/WSresponseModel";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";

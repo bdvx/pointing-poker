@@ -15,14 +15,14 @@ function roomMessageHandler(message:string) {
     case "KICK_OFFER":
     case "NEW_MESSAGE":
     case "ROOM_BUILD":
-      onSuccessRoomBuild();
+      onSuccessRoomBuild(payLoad);
       break;
   }
 }
 
-function makeNewRoom(userWss:WebSocket, roomInfo:string) {
+function makeNewRoom(userWss:WebSocket, scramInfo:string) {
   wss = userWss;
-  const request = makeWSRequestString("MAKE_NEW_LOBBY", roomInfo);
+  const request = makeWSRequestString("MAKE_NEW_LOBBY", scramInfo);
 
   wss.send(request);
   wss.onmessage = (ev) => { roomMessageHandler(ev.data) };
@@ -40,7 +40,8 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
   wss.send(request);
 }
 
-function onSuccessRoomBuild() {
+function onSuccessRoomBuild(payLoad: string) {
+
   //TODO изменение стейта
 }
 
