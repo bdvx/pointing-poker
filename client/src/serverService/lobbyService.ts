@@ -1,4 +1,6 @@
+import { setRoomInfo } from "../store/roomSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
+import { Room } from "./models/roomModel";
 import { WSRequest } from "./models/WSRequestModel";
 import { WSResponse } from "./models/WSResponseModel";
 
@@ -40,9 +42,9 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
   wss.send(request);
 }
 
-function onSuccessRoomBuild(payLoad: string) {
-
-  //TODO изменение стейта
+function onSuccessRoomBuild(roomInfo: string) {
+  const roomServer = JSON.parse(roomInfo) as Room;
+  setRoomInfo(roomServer);
 }
 
 const LobbyService = {

@@ -1,5 +1,5 @@
 import { Room } from "../models/socketModels/roomModel";
-import { ClientModel } from "../models/socketModels/clientModel"
+import { WSClientModel } from "../models/socketModels/clientModel"
 import { hashCode } from "../tools/hashFunction";
 import { WSResponse } from "../models/socketModels/WSresponseModel";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
@@ -7,19 +7,21 @@ import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
 import { KickInfo } from "../models/socketModels/kickInfoModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 
-function makeNewRoom(scramInfo:ClientModel) {
+function makeNewRoom(scramInfo:WSClientModel) {
   const newRoom:Room = {
     players: [scramInfo],
     roomId: String(hashCode(scramInfo.userInfo.login + Date.now())),
   }
 
-  //TODO создание базовой комнаты
-  scramInfo.ws.send(makeWSResponseMessage("ROOM_BUILD", newRoom.roomId));
+  const scramWS = scramInfo.ws as WebSocket;
+  
+  scramWS.onmessage = (ev) => { lobbyMessageHandler(newRoom, ev.data) };
+  scramWS.send(makeWSResponseMessage("ROOM_BUILD", newRoom));
   return newRoom;
 }
 
 function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) {
-  const newPlayer:ClientModel = {
+  const newPlayer:WSClientModel = {
     ws: userWS,
     userInfo: userInfo
   }
@@ -90,13 +92,12 @@ function offerKickPlayer(room:Room, payLoad:string) {
 }
 
 function makeWSResponseMessage(type: string, payLoadObj:any) {
-  const payLoadStr = JSON.stringify(payLoadObj);
   const response: WSResponse = {
     type: type,
-    payLOad: payLoadStr
+    payLOad: payLoadObj
   }
 
-  return payLoadStr;
+  return JSON.stringify(response);
 }
 
 const Lobby = {

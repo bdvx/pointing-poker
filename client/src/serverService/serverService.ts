@@ -1,4 +1,4 @@
-import { CurrentUserModel } from "../store/currentUserSlice";
+import { UserInfo } from "./models/userInfoModel";
 import LobbyService from "./lobbyService";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { HttpResponseModel } from "./models/httpResponseModel";
@@ -53,7 +53,7 @@ function connectToRoom(connectInfo:ConnectUserToWS) {
   }
 }
 
-function makeNewRoom(scramtInfo:CurrentUserModel) {
+function makeNewRoom(scramtInfo:UserInfo) {
   const request = JSON.stringify(scramtInfo);
   wss = new WebSocket(wsUrl);
 

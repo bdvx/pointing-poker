@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { UserInfo } from "../serverService/models/userInfoModel";
 
-const initialState: CurrentUserModel = {
+const initialState: UserInfo = {
   firstName: '',
   lastName: '',
   jobPosition: '',
@@ -9,7 +10,7 @@ const initialState: CurrentUserModel = {
 }
 
 const currentUserSlice = createSlice({
-  name: "main",
+  name: "currentUserStore",
   initialState,
   reducers: {
     setUserInfo(state, action) {
@@ -20,10 +21,3 @@ const currentUserSlice = createSlice({
 
 export default currentUserSlice.reducer;
 export const {setUserInfo} = currentUserSlice.actions;
-export interface CurrentUserModel {
-  firstName: '',
-  lastName: '',
-  jobPosition: '',
-  login: '',
-  avatar: ''
-}

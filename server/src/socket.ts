@@ -1,4 +1,4 @@
-import { ClientModel } from "./models/socketModels/clientModel";
+import { WSClientModel } from "./models/socketModels/clientModel";
 import { app } from "./http";
 import DataService from "./tools/dataService";
 import { ConnectUserToWS } from "./models/socketModels/connectUserToWSModel";
@@ -17,7 +17,7 @@ const server = http.createServer(app);
 const wsServer = new webSocket.Server({server});
 const port = process.env.PORT || 5000;
 
-let connectUsers:Array<ClientModel> = [];
+let connectUsers:Array<WSClientModel> = [];
 const rooms:Array<Room> = []
 
 server.listen(port, () => console.log("Server started"))
@@ -34,7 +34,7 @@ setInterval(() => {
 function makeNewLobby(masterWs:WebSocket, payLoad:string) {
   const scramInfo = JSON.parse(payLoad) as UserInfoModel;
 
-  const roomScramInfo: ClientModel = {
+  const roomScramInfo: WSClientModel = {
     ws:masterWs,
     userInfo: scramInfo
   }
@@ -48,7 +48,7 @@ function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
   const userInfo = connectInfo.userInfo;
 
   if(userInfo.login) {
-    let client:ClientModel = { ws:ws, userInfo:userInfo };
+    let client:WSClientModel = { ws:ws, userInfo:userInfo };
     connectUsers.push(client);
     addUserToRoom(connectInfo.roomId, userInfo, ws);
   } else {
