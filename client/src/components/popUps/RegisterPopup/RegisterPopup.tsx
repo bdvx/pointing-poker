@@ -1,6 +1,6 @@
 import './RegisterPopup.scss';
 import { FC, useState } from 'react';
-import { Avatar, Button, Dialog, DialogActions, Input, Switch, TextField } from '@material-ui/core';
+import { Avatar, Button, DialogActions, Input, TextField } from '@material-ui/core';
 import IRegisterPopupProps from '../../../types/RegisterPopupProps.type';
 import { REGISTER_POPUP_FIELDS } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
@@ -13,8 +13,10 @@ import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../store/currentUserSlice';
 import { RegisterSuccessPopup } from '../RegisterSuccessPopup/RegisterSuccessPopup';
 import { RegisterFailPopup } from '../RegisterFailPopup/RegisterFailPopup';
+import { PopUpLinearProgress } from '../PopUpLinearProgress/PopUpLinearProgress';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [role, setRole] = useState<boolean>(true);
   const [avatar, setAvatar] = useState<string>('');
   const router = useHistory();
@@ -61,9 +63,10 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   };
 
   const HandleConfirmRegistration = async () => {
+    setLoading(true);
+
     const response = await ServerService.registerNewUser(fieldsValues as RegistrationModel);
 
-    //TODO прикрутить лоадер
     if(response.isSuccess) {
       //попап
       //alert - временная замена попАпу
@@ -73,6 +76,8 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       //!сброс полей только после диспатча
       router.push('/welcomePage');
       alert(response.message);
+
+      setLoading(false);
       onChangeRegisterPopupState(false);
 
       setOpenRegisterSuccessPopup(true);
@@ -81,6 +86,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       //response.message хранит информацию ошибки
       alert(response.message);
 
+      setLoading(false);
       setOpenRegisterFailPopup(true);
     }
   
@@ -88,7 +94,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
 
   return (
     <>
-      <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
+      <PopUpLinearProgress className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)} loading={ loading }>
         <form className="register-popup__form">
           <div className="register-popup__header">
             <h3 className="register-popup__title">Register new user</h3>
@@ -184,7 +190,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             </Button>
           </DialogActions>
         </form>
-      </Dialog>
+      </PopUpLinearProgress>
 
       <RegisterSuccessPopup open={ openRegisterSuccessPopup } onChangeRegisterSuccessPopupState={ (open) => setOpenRegisterSuccessPopup(open) } />
       <RegisterFailPopup open={ openRegisterFailPopup } onChangeRegisterFailPopupState={ (open) => setOpenRegisterFailPopup(open) } />
