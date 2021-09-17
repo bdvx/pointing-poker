@@ -1,4 +1,6 @@
+import { UserInfo } from "./userInfoModel";
+
 export interface ConnectUserToWS {
-  login: string,
+  userInfo: UserInfo,
   roomId: string
 }

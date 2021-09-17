@@ -1,4 +1,4 @@
 export interface WSResponse {
   type: string,
-  payLoad: string
+  payLoad: any
 }

@@ -14,7 +14,7 @@ function makeNewRoom(scramInfo:WSClientModel) {
   }
 
   const scramWS = scramInfo.ws as WebSocket;
-  
+
   scramWS.onmessage = (ev) => { lobbyMessageHandler(newRoom, ev.data) };
   scramWS.send(makeWSResponseMessage("ROOM_BUILD", newRoom));
   return newRoom;
@@ -27,9 +27,12 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
   }
   userWS.onmessage = (ev) => { lobbyMessageHandler(room, ev.data) };
 
+  //TODO вынести все ф-и которые отправляют всем пользователям в отдельную ф-ю
   const response = makeWSResponseMessage("NEW_USER_JOIN_ROOM", userInfo);
   room.players.forEach((player)=>player.ws.send(JSON.stringify(response)));
   room.players.push(newPlayer);
+
+  newPlayer.ws.send(makeWSResponseMessage("UPDATE_ROOM", room));
 }
 
 function disconnectUserFromRoom(room:Room, userLogin:string) {
@@ -60,15 +63,15 @@ function lobbyMessageHandler(room:Room, message:string) {
   //!Для обработки запросов связанных чисто с игрой
   switch(type) {
     case "CHAT_MESSAGE":
-      chatMessageHandler(room, payLoad);
+      onChatMessageHandler(room, payLoad);
       break;
     case "KICK_PLAYER_OFFER":
-      offerKickPlayer(room, payLoad);
+      onOfferKickPlayer(room, payLoad);
       break;
   }
 }
 
-function chatMessageHandler(room:Room, payLoad: string) {
+function onChatMessageHandler(room:Room, payLoad: string) {
   const messageInfo = JSON.parse(payLoad) as ChatMessageInfo;
   const response = makeWSResponseMessage("NEW_MESSAGE", messageInfo);
 
@@ -79,7 +82,7 @@ function chatMessageHandler(room:Room, payLoad: string) {
 }
 
 //TODO где хранить подсчет голосов (room?)
-function offerKickPlayer(room:Room, payLoad:string) {
+function onOfferKickPlayer(room:Room, payLoad:string) {
   const kickInfo = JSON.parse(payLoad) as KickInfo;
   const response = makeWSResponseMessage("KICK_OFFER", kickInfo);
 
@@ -94,7 +97,7 @@ function offerKickPlayer(room:Room, payLoad:string) {
 function makeWSResponseMessage(type: string, payLoadObj:any) {
   const response: WSResponse = {
     type: type,
-    payLOad: payLoadObj
+    payLoad: payLoadObj
   }
 
   return JSON.stringify(response);

@@ -2,7 +2,6 @@ import { UserInfo } from "./models/userInfoModel";
 import LobbyService from "./lobbyService";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { HttpResponseModel } from "./models/httpResponseModel";
-import { NewLobbyModel } from "./models/newLobbyModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
 import { WSResponse } from "./models/WSResponseModel";
@@ -39,9 +38,13 @@ async function signInUser(signInInfo:SignInModel) {
 
 
 //WS part
-function connectToRoom(connectInfo:ConnectUserToWS) {
-  const request = JSON.stringify(connectInfo);
-  wss = new WebSocket(url);
+function connectToRoom(userInfo: UserInfo, roomId:string) {
+  const connectionInfo:ConnectUserToWS = {
+    userInfo: userInfo,
+    roomId: roomId
+  }
+  const request = JSON.stringify(connectionInfo);
+  wss = new WebSocket(wsUrl);
 
   wss.onopen = () => {
     isConnect = true;
@@ -59,11 +62,10 @@ function makeNewRoom(scramtInfo:UserInfo) {
 
   wss.onopen = () => {
     isConnect = true;
-    LobbyService.makeNewRoom(wss, request);
-
     wss.onmessage = (event) => {
       responseHandler(event.data);
     };
+    LobbyService.makeNewRoom(wss, request);
   }
 }
 
@@ -80,6 +82,7 @@ function responseHandler(message:string){
 
 //TODO мб норм расширение нужно?
 function onConnectionFailure(info:string) {
+  alert(info)
   wss.close();
   isConnect = false;
 }

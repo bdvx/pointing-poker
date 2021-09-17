@@ -1,15 +1,11 @@
 import { WSClientModel } from "./models/socketModels/clientModel";
 import { app } from "./http";
-import DataService from "./tools/dataService";
 import { ConnectUserToWS } from "./models/socketModels/connectUserToWSModel";
 import { WSResponse } from "./models/socketModels/WSresponseModel";
 import { Room } from "./models/socketModels/roomModel";
-import { NewLobbyModel } from "./models/socketModels/newLobbyModel";
 import  Lobby  from "./room/lobby";
-import { UserInfoFromDB } from "./models/httpModels/useFromDBModel";
 import { DisconectModel } from "./models/socketModels/disconectModel";
 import { UserInfoModel } from "./models/socketModels/userInfoModel";
-//import { Request, Response } from 'express';
 
 const http = require('http');
 const webSocket = require('ws');
@@ -31,7 +27,7 @@ setInterval(() => {
   });
 }, 10000);
 
-function makeNewLobby(masterWs:WebSocket, payLoad:string) {
+function onMakeNewLobby(masterWs:WebSocket, payLoad:string) {
   const scramInfo = JSON.parse(payLoad) as UserInfoModel;
 
   const roomScramInfo: WSClientModel = {
@@ -43,7 +39,7 @@ function makeNewLobby(masterWs:WebSocket, payLoad:string) {
   rooms.push(newRoom);
 }
 
-function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
+function onConnectUserToWebSocket(ws:WebSocket, payLoad:string) {
   const connectInfo = JSON.parse(payLoad) as ConnectUserToWS;
   const userInfo = connectInfo.userInfo;
 
@@ -52,12 +48,11 @@ function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
     connectUsers.push(client);
     addUserToRoom(connectInfo.roomId, userInfo, ws);
   } else {
-    const response:WSResponse = { type:"CONNECTION_FAILURE", payLOad:"you should register before playing" }; 
+    const response:WSResponse = { type:"CONNECTION_FAILURE", payLoad:"you should register before playing" }; 
     ws.send(JSON.stringify(response));
     closeConnection(ws);
   }
 }
-
 function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket) {
   const room = rooms.find((room)=>room.roomId === roomId);
   if(room) {
@@ -67,21 +62,21 @@ function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket)
   }
 }
 
-function closeConnection(ws:WebSocket){
-  connectUsers = connectUsers.filter((user)=>user.ws !== ws);
-  ws.close();
-}
 
-function disconnectUSer(userWs:WebSocket, payLoad:string) {
+function onDisconnectUser(userWs:WebSocket, payLoad:string) {
   const userInfo = JSON.parse(payLoad) as DisconectModel;
   closeConnection(userWs);
-
+  
   const room = rooms.find((room)=>room.roomId === userInfo.roomId);
   if(room) {
     Lobby.disconnectUserFromRoom(room, userInfo.login);
   } else {
     console.log("ошибка: отключение от несуществующей комнаты");
   }
+}
+function closeConnection(ws:WebSocket){
+  connectUsers = connectUsers.filter((user)=>user.ws !== ws);
+  ws.close();
 }
 
 /* function joinLobbyByUrl(req: Request, res:Response) {
@@ -91,7 +86,7 @@ function disconnectUSer(userWs:WebSocket, payLoad:string) {
 
 export {
   wsServer,
-  connectUserToWebSocket,
-  makeNewLobby,
-  disconnectUSer,
+  onConnectUserToWebSocket,
+  onMakeNewLobby,
+  onDisconnectUser,
 }

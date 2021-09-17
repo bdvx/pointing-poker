@@ -4,12 +4,23 @@ import { Button, Grid, TextField } from '@material-ui/core';
 import { LargeLogo } from '../../LargeLogo/LargeLogo';
 import ServerService from '../../../serverService/serverService';
 import { useTypedSelector } from '../../../hooky/useTypedSelector';
+import { useHistory } from 'react-router';
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
-  const scramInfo = useTypedSelector(store=>store.userInfo);
-  
+  const currentUserInfo = useTypedSelector(store => store.userInfo);
+  const currentRoom = useTypedSelector(store => store.roomInfo);
+  const router = useHistory();
+
   const onStartBtnClick = () => {
-    ServerService.makeNewRoom(scramInfo);
+    ServerService.makeNewRoom(currentUserInfo);
+    router.push("/lobbyStart");
+  }
+
+  const onConnectToLobbyBtnClick = () => {
+    //TODO при введении url разу добавлять в стейт
+    ServerService.connectToRoom(currentUserInfo, currentRoom.roomId);
+    //TODO коннект уже в саму игру (нужно в Room хранить поле isInGame)
+    router.push("/lobbyStart");
   }
 
   return (
@@ -60,6 +71,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
             variant="contained"
             color="primary"
             size="large"
+            onClick={onConnectToLobbyBtnClick}
           >
             Connect
           </Button>

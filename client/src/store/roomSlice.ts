@@ -12,9 +12,12 @@ const roomSlice = createSlice({
   reducers: {
     setRoomInfo(state, action) {
       state = action.payload;
+    },
+    addNewUserToRoom(state, action) {
+      state.players.push(action.payload);
     }
   }
 })
 
 export default roomSlice.reducer;
-export const {setRoomInfo} = roomSlice.actions;
+export const {setRoomInfo, addNewUserToRoom} = roomSlice.actions;
