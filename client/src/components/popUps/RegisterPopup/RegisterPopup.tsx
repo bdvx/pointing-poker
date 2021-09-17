@@ -11,6 +11,8 @@ import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpP
 import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../store/currentUserSlice';
+import { RegisterSuccessPopup } from '../RegisterSuccessPopup/RegisterSuccessPopup';
+import { RegisterFailPopup } from '../RegisterFailPopup/RegisterFailPopup';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
@@ -30,6 +32,9 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
 
   const fieldsProps = { fieldsValues, setFieldsValues, errors, setErrors };
   const { handleFieldChange, addFieldErrorMessage } = LogInOrSignUpPopup();
+
+  const [openRegisterSuccessPopup, setOpenRegisterSuccessPopup] = useState(false);
+  const [openRegisterFailPopup, setOpenRegisterFailPopup] = useState(false);
 
   const changeStringAvatar = (name: string | undefined): string | null => {
     if (!name) return null;
@@ -69,111 +74,120 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       router.push('/welcomePage');
       alert(response.message);
       onChangeRegisterPopupState(false);
+
+      setOpenRegisterSuccessPopup(true);
     } else {
       //ошибка создания
       //response.message хранит информацию ошибки
       alert(response.message);
+
+      setOpenRegisterFailPopup(true);
     }
   
   }
 
   return (
-    <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
-      <form className="register-popup__form">
-        <div className="register-popup__header">
-          <h3 className="register-popup__title">Register new user</h3>
-{/*           <label className="register-popup__role-block">
-            <span className="register-popup__role-title">Connect as<br/>Observer</span>
-            <Switch
-              className="register-popup__role"
-              checked={role}
-              onChange={() => setRole(!role)}
-              color="primary"
-            />
-          </label> */}
-        </div>
-
-        {
-          REGISTER_POPUP_FIELDS.map((field) => (
-            <div className="register-popup__field-block" key={field.name}>
-              <label>
-                <span className="register-popup__field-title">Your { field.title }:</span>
-                <TextField
-                  className="register-popup__field"
-                  defaultValue={ fieldsValues[field.name as keyof IFieldsValues] }
-                  onChange={ (e) => handleFieldChange({ e, ...fieldsProps }) }
-                  name={ field.name }
-                  error={ errors.includes(field.name) }
-                  helperText={ addFieldErrorMessage(field, errors) }
-                  type={ field.type ? field.type : 'text' }
-                  variant="outlined"
-                  size="small"
-                />
-              </label>
-            </div>
-          ))
-        }
-
-        <div className="register-popup__avatar-block">
-          <span className="register-popup__field-title">Image:</span>
-
-          <div className="register-popup__avatar-btns">
-            <label
-              className="register-popup__avatar-btn-wrap"
-              htmlFor="register-popup__avatar-file"
-            >
-              <Input
-                id="register-popup__avatar-file"
-                type="file"
-                onChange={(e) => changeAvatar(e.target)}
+    <>
+      <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
+        <form className="register-popup__form">
+          <div className="register-popup__header">
+            <h3 className="register-popup__title">Register new user</h3>
+            {/* <label className="register-popup__role-block">
+              <span className="register-popup__role-title">Connect as<br/>Observer</span>
+              <Switch
+                className="register-popup__role"
+                checked={role}
+                onChange={() => setRole(!role)}
+                color="primary"
               />
-              <Button
-                className="register-popup__avatar-btn"
-                variant="contained"
-                size="large"
-                component="span"
+            </label> */}
+          </div>
+
+          {
+            REGISTER_POPUP_FIELDS.map((field) => (
+              <div className="register-popup__field-block" key={field.name}>
+                <label>
+                  <span className="register-popup__field-title">Your { field.title }:</span>
+                  <TextField
+                    className="register-popup__field"
+                    defaultValue={ fieldsValues[field.name as keyof IFieldsValues] }
+                    onChange={ (e) => handleFieldChange({ e, ...fieldsProps }) }
+                    name={ field.name }
+                    error={ errors.includes(field.name) }
+                    helperText={ addFieldErrorMessage(field, errors) }
+                    type={ field.type ? field.type : 'text' }
+                    variant="outlined"
+                    size="small"
+                  />
+                </label>
+              </div>
+            ))
+          }
+
+          <div className="register-popup__avatar-block">
+            <span className="register-popup__field-title">Image:</span>
+
+            <div className="register-popup__avatar-btns">
+              <label
+                className="register-popup__avatar-btn-wrap"
+                htmlFor="register-popup__avatar-file"
               >
-                Choose file
+                <Input
+                  id="register-popup__avatar-file"
+                  type="file"
+                  onChange={(e) => changeAvatar(e.target)}
+                />
+                <Button
+                  className="register-popup__avatar-btn"
+                  variant="contained"
+                  size="large"
+                  component="span"
+                >
+                  Choose file
+                </Button>
+              </label>
+              <Button
+                className="register-popup__avatar-block-btn"
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => setAvatar('')}
+              >
+                Reset 
               </Button>
-            </label>
+            </div>
+
+            <Avatar
+              className="register-popup__avatar"
+              alt="Avatar"
+              src={ avatar }
+              children={changeStringAvatar(fieldsValues.firstName)}
+            />
+          </div>
+          <DialogActions className="register-popup__btns">
             <Button
-              className="register-popup__avatar-block-btn"
               variant="contained"
               color="primary"
               size="large"
-              onClick={() => setAvatar('')}
+              disabled={errors.length > 0}
+              onClick={() => HandleConfirmRegistration()}
             >
-              Reset 
+              Confirm
             </Button>
-          </div>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="large"
+              onClick={() => onChangeRegisterPopupState(false)}
+            >
+              Cancel
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
 
-          <Avatar
-            className="register-popup__avatar"
-            alt="Avatar"
-            src={ avatar }
-            children={changeStringAvatar(fieldsValues.firstName)}
-          />
-        </div>
-        <DialogActions className="register-popup__btns">
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={errors.length > 0}
-            onClick={() => HandleConfirmRegistration()}
-          >
-            Confirm
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="large"
-            onClick={() => onChangeRegisterPopupState(false)}
-          >
-            Cancel
-          </Button>
-        </DialogActions>
-      </form>
-    </Dialog>
+      <RegisterSuccessPopup open={ openRegisterSuccessPopup } onChangeRegisterSuccessPopupState={ (open) => setOpenRegisterSuccessPopup(open) } />
+      <RegisterFailPopup open={ openRegisterFailPopup } onChangeRegisterFailPopupState={ (open) => setOpenRegisterFailPopup(open) } />
+    </>
   );
 };
