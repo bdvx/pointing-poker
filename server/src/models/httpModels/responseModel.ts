@@ -1,4 +1,5 @@
 export interface ResponseModel {
-  message: string,
-  isSuccess: boolean
+  body?: any,
+  isSuccess: boolean,
+  message:string
 }

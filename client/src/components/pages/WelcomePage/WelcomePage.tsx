@@ -5,20 +5,31 @@ import { LargeLogo } from '../../LargeLogo/LargeLogo';
 import ServerService from '../../../serverService/serverService';
 import { useTypedSelector } from '../../../hooky/useTypedSelector';
 import { useHistory } from 'react-router';
+import { setScrumStatus } from '../../../store/currentUserSlice';
+import { UserInfo } from '../../../serverService/models/userInfoModel';
+import { useDispatch } from 'react-redux';
+
 
 export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
   const currentUserInfo = useTypedSelector(store => store.userInfo);
   const currentRoom = useTypedSelector(store => store.roomInfo);
   const router = useHistory();
+  const dispatch = useDispatch();
+
+  ServerService.setDispatch(dispatch);
 
   const onStartBtnClick = () => {
-    ServerService.makeNewRoom(currentUserInfo);
+    setScrumStatus(true);
+    const userInfoCopy = makeUserInfoCopy(currentUserInfo, true);
+    ServerService.makeNewRoom(userInfoCopy);
     router.push("/lobbyStart");
   }
 
   const onConnectToLobbyBtnClick = () => {
+    setScrumStatus(false);
+    const userInfoCopy = makeUserInfoCopy(currentUserInfo, false);
     //TODO при введении url разу добавлять в стейт
-    ServerService.connectToRoom(currentUserInfo, currentRoom.roomId);
+    ServerService.connectToRoom(userInfoCopy, currentRoom.roomId);
     //TODO коннект уже в саму игру (нужно в Room хранить поле isInGame)
     router.push("/lobbyStart");
   }
@@ -80,4 +91,12 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
 
     </div>
   );
+}
+
+function makeUserInfoCopy (currentUserInfo:UserInfo, isScrum:boolean) {
+  const userInfoCopy:UserInfo = {
+    ...currentUserInfo,
+    isScrum: isScrum
+  }
+  return userInfoCopy;
 }

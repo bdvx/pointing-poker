@@ -10,6 +10,13 @@ const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
 let wss:WebSocket;
 let isConnect = false;
+let serverDispatch:any;
+
+function setDispatch(dispatch:any) {
+  serverDispatch = dispatch;
+  LobbyService.setLobbyDispatch(dispatch);
+}
+
 
 //http part
 async function registerNewUser(regInfo:RegistrationModel) {
@@ -36,7 +43,6 @@ async function signInUser(signInInfo:SignInModel) {
   return response as HttpResponseModel;
 }
 
-
 //WS part
 function connectToRoom(userInfo: UserInfo, roomId:string) {
   const connectionInfo:ConnectUserToWS = {
@@ -49,10 +55,6 @@ function connectToRoom(userInfo: UserInfo, roomId:string) {
   wss.onopen = () => {
     isConnect = true;
     LobbyService.connectToRoom(wss, request);
-
-    wss.onmessage = (event) => {
-      responseHandler(event.data);
-    };
   }
 }
 
@@ -62,35 +64,16 @@ function makeNewRoom(scramtInfo:UserInfo) {
 
   wss.onopen = () => {
     isConnect = true;
-    wss.onmessage = (event) => {
-      responseHandler(event.data);
-    };
     LobbyService.makeNewRoom(wss, request);
   }
 }
 
-function responseHandler(message:string){
-  let event = (JSON.parse(message) as WSResponse).type;
-  let info = (JSON.parse(message) as WSResponse).payLoad;
-
-  switch(event){
-    case "CONNECTION_FAILURE": //!этот кейс скорей всего и не нужен
-      onConnectionFailure(info);
-      break;
-  }
-}
-
-//TODO мб норм расширение нужно?
-function onConnectionFailure(info:string) {
-  alert(info)
-  wss.close();
-  isConnect = false;
-}
 
 const ServerService = {
   registerNewUser,
   signInUser,
   connectToRoom,
-  makeNewRoom
+  makeNewRoom,
+  setDispatch
 }
 export default ServerService;

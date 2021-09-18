@@ -71,7 +71,6 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       //попап
       //alert - временная замена попАпу
       //история должна пушится после закрытия попапа успешной регистрации
-      console.log(fieldsValues)
       dispatch(setUserInfo(fieldsValues));
       //!сброс полей только после диспатча
       router.push('/welcomePage');

@@ -8,9 +8,11 @@ import { KickInfo } from "../models/socketModels/kickInfoModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 
 function makeNewRoom(scramInfo:WSClientModel) {
+  const roomId = String(hashCode(scramInfo.userInfo.login + Date.now()))
   const newRoom:Room = {
     players: [scramInfo],
-    roomId: String(hashCode(scramInfo.userInfo.login + Date.now())),
+    roomId: roomId,
+    roomUrl: `http://localhost:5000/joinLobby/${roomId}`
   }
 
   const scramWS = scramInfo.ws as WebSocket;

@@ -1,6 +1,7 @@
-import { ClientModel } from "./clientModel";
+import { WSClientModel } from "./clientModel";
 
 export interface Room {
   roomId: string,
-  players: Array<ClientModel>,
+  players: Array<WSClientModel>,
+  roomUrl: string
 }

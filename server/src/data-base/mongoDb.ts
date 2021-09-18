@@ -31,7 +31,7 @@ async function signIn(user:SignInModel) {
   const userInfoFromBD = await RegModel.findOne({login: user.login});
   if(userInfoFromBD) {
     if(HashServise.comparePassWithHash(user.password, userInfoFromBD.password)) {
-      return makeResponse(true, `user ${user.login} login successfully`);
+      return makeResponse(true, `user ${user.login} login successfully`, userInfoFromBD);
     } else {
       return makeResponse(false, `wrong password`);
     }
@@ -62,8 +62,8 @@ async function connectToDB() {
   }
 }
 
-function makeResponse(isSuccess:boolean, message:string) {
-  const status: ResponseModel = { isSuccess, message };
+function makeResponse(isSuccess:boolean, message:string, body?:any) {
+  const status: ResponseModel = { isSuccess, message, body };
   return status;
 }
 

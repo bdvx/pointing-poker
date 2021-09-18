@@ -8,9 +8,12 @@ import { LOGIN_POPUP_FIELDS } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { useHistory } from 'react-router';
 import { PopUpLinearProgress } from '../PopUpLinearProgress/PopUpLinearProgress';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '../../../store/currentUserSlice';
 
 export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState }: ILogInPopupProps) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({
     login: '',
     password: ''
@@ -27,6 +30,8 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
     if(response.isSuccess) {
       setLoading(false);
       alert(response.message);
+      console.log(response)
+      dispatch(setUserInfo(response.body))
       //история должна пушится после закрытия попапа успешной регистрации
       router.push("/welcomePage");
       onChangeLogInPopupState(false);

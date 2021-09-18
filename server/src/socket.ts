@@ -29,7 +29,7 @@ setInterval(() => {
 
 function onMakeNewLobby(masterWs:WebSocket, payLoad:string) {
   const scramInfo = JSON.parse(payLoad) as UserInfoModel;
-
+  console.log(scramInfo)
   const roomScramInfo: WSClientModel = {
     ws:masterWs,
     userInfo: scramInfo

@@ -3,7 +3,8 @@ import { Room } from "../serverService/models/roomModel";
 
 const initialState: Room = {
   players: [],
-  roomId: ''
+  roomId: '',
+  roomUrl:''
 }
 
 const roomSlice = createSlice({
@@ -11,7 +12,8 @@ const roomSlice = createSlice({
   initialState,
   reducers: {
     setRoomInfo(state, action) {
-      state = action.payload;
+      console.log('roomSlice')
+      return action.payload;
     },
     addNewUserToRoom(state, action) {
       state.players.push(action.payload);

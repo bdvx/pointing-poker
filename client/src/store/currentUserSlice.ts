@@ -6,7 +6,8 @@ const initialState: UserInfo = {
   lastName: '',
   jobPosition: '',
   login: '',
-  avatar: ''
+  avatar: '',
+  isScrum: false
 }
 
 const currentUserSlice = createSlice({
@@ -14,10 +15,13 @@ const currentUserSlice = createSlice({
   initialState,
   reducers: {
     setUserInfo(state, action) {
-      state = action.payload;
+      return action.payload;
+    },
+    setScrumStatus(state, action) {
+      state.isScrum = action.payload;
     }
   }
 })
 
 export default currentUserSlice.reducer;
-export const {setUserInfo} = currentUserSlice.actions;
+export const {setUserInfo, setScrumStatus} = currentUserSlice.actions;

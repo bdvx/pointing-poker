@@ -35,9 +35,10 @@ async function signIn(req:Request, res:Response) {
   }
 }
 
-function joinLobbyByUrl() {
-
+function joinLobbyByUrl(req:Request, res:Response) {
+  console.log(req.body)
 }
+
 export {
   app,
   regNewUser,
