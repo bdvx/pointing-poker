@@ -4,7 +4,6 @@ import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { HttpResponseModel } from "./models/httpResponseModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
-import { WSResponse } from "./models/WSResponseModel";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -49,22 +48,20 @@ function connectToRoom(userInfo: UserInfo, roomId:string) {
     userInfo: userInfo,
     roomId: roomId
   }
-  const request = JSON.stringify(connectionInfo);
   wss = new WebSocket(wsUrl);
 
   wss.onopen = () => {
     isConnect = true;
-    LobbyService.connectToRoom(wss, request);
+    LobbyService.connectToRoom(wss, connectionInfo);
   }
 }
 
-function makeNewRoom(scramtInfo:UserInfo) {
-  const request = JSON.stringify(scramtInfo);
+function makeNewRoom(scrumtInfo:UserInfo) {
   wss = new WebSocket(wsUrl);
 
   wss.onopen = () => {
     isConnect = true;
-    LobbyService.makeNewRoom(wss, request);
+    LobbyService.makeNewRoom(wss, scrumtInfo);
   }
 }
 

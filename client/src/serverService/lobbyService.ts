@@ -1,6 +1,6 @@
-import { useDispatch } from "react-redux";
-import { addNewUserToRoom, setRoomInfo } from "../store/roomSlice";
+import { addNewUserToRoom, setRoomInfo, addNewMessage } from "../store/roomSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
+import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { Room } from "./models/roomModel";
 import { UserInfo } from "./models/userInfoModel";
 import { WSRequest } from "./models/WSRequestModel";
@@ -29,6 +29,10 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(setRoomInfo(roomInfo));
   }
 
+  const onNewMessage = (messageInfo:ChatMessageInfo) => {
+    lobbyDispatch(addNewMessage(messageInfo));
+  }
+
   switch(type) {
     case "NEW_USER_JOIN_ROOM":
       onNewUserJoinRoom(payLoad);
@@ -39,34 +43,32 @@ function RoomMessageHandler(message:string) {
     //case "DISCONNECT_USER":
     case "KICK_OFFER":
     case "NEW_MESSAGE":
+      onNewMessage(payLoad);
+      break;
     case "ROOM_BUILD":
       onSuccessRoomBuild(payLoad);
       break;
-  }
-  
+  }  
 }
 
 
-
-
-
-function sendChatMessage(messageInfo:ChatMessageInfo) {
-  const request = makeWSRequestString("CHAT_MESSAGE", messageInfo);
-  wss.send(request);
-}
-
-function makeNewRoom(userWss:WebSocket, scramInfo:string) {
+function makeNewRoom(userWss:WebSocket, scrumInfo:UserInfo) {
   wss = userWss;
-  const request = makeWSRequestString("MAKE_NEW_LOBBY", scramInfo);
+  const request = makeWSRequestString("MAKE_NEW_LOBBY", scrumInfo);
   wss.send(request);
   wss.onmessage = (ev) => { RoomMessageHandler(ev.data) };
 }
 
-function connectToRoom(userWss:WebSocket, connectInfo:string) {
+function connectToRoom(userWss:WebSocket, connectInfo:ConnectUserToWS) {
   wss = userWss;
   wss.send(makeWSRequestString("CONNECT_TO_ROOM", connectInfo));
 
   wss.onmessage = (ev) => { RoomMessageHandler(ev.data) };
+}
+
+function sendChatMessage(messageInfo:ChatMessageInfo) {
+  const request = makeWSRequestString("CHAT_MESSAGE", messageInfo);
+  wss.send(request);
 }
 
 const LobbyService = {
@@ -76,6 +78,7 @@ const LobbyService = {
   setLobbyDispatch
 }
 export default LobbyService;
+
 
 function makeWSRequestString(type: string, payLoadObj:any) {;
   const request: WSRequest = {

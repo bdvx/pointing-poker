@@ -11,7 +11,6 @@ const Lobby = () => {
     <div className="Lobby">
       <div className="Lobby__wrapper">
         <div className="Lobby__title">Some random lobby name</div>
-        <h1>{roomInfo.roomUrl}</h1>
         <div className="Lobby__routing">
           <Link to={`/lobby`} className="Lobby__link">
             Lobby

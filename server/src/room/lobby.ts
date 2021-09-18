@@ -12,7 +12,9 @@ function makeNewRoom(scramInfo:WSClientModel) {
   const newRoom:Room = {
     players: [scramInfo],
     roomId: roomId,
-    roomUrl: `http://localhost:5000/joinLobby/${roomId}`
+    roomUrl: `http://localhost:5000/joinLobby/${roomId}`,
+    chat: [],
+    isPlaying: false
   }
 
   const scramWS = scramInfo.ws as WebSocket;
@@ -55,10 +57,6 @@ function sendPlayerRoomConfiguration(room:Room, userWs:WebSocket) {
   }) */
 }
 
-function makeConnectionEndPoint() {
-
-}
-
 function lobbyMessageHandler(room:Room, message:string) {
   const type = (JSON.parse(message) as QueryModel).type;
   const payLoad = (JSON.parse(message) as QueryModel).payLoad;
@@ -73,8 +71,7 @@ function lobbyMessageHandler(room:Room, message:string) {
   }
 }
 
-function onChatMessageHandler(room:Room, payLoad: string) {
-  const messageInfo = JSON.parse(payLoad) as ChatMessageInfo;
+function onChatMessageHandler(room:Room, messageInfo: ChatMessageInfo) {
   const response = makeWSResponseMessage("NEW_MESSAGE", messageInfo);
 
   room.players.forEach((player)=>{
@@ -84,8 +81,7 @@ function onChatMessageHandler(room:Room, payLoad: string) {
 }
 
 //TODO где хранить подсчет голосов (room?)
-function onOfferKickPlayer(room:Room, payLoad:string) {
-  const kickInfo = JSON.parse(payLoad) as KickInfo;
+function onOfferKickPlayer(room:Room, kickInfo:KickInfo) {
   const response = makeWSResponseMessage("KICK_OFFER", kickInfo);
 
   room.players.forEach((player)=>{

@@ -27,8 +27,7 @@ setInterval(() => {
   });
 }, 10000);
 
-function onMakeNewLobby(masterWs:WebSocket, payLoad:string) {
-  const scramInfo = JSON.parse(payLoad) as UserInfoModel;
+function onMakeNewLobby(masterWs:WebSocket, scramInfo:UserInfoModel) {
   console.log(scramInfo)
   const roomScramInfo: WSClientModel = {
     ws:masterWs,
@@ -39,8 +38,7 @@ function onMakeNewLobby(masterWs:WebSocket, payLoad:string) {
   rooms.push(newRoom);
 }
 
-function onConnectUserToWebSocket(ws:WebSocket, payLoad:string) {
-  const connectInfo = JSON.parse(payLoad) as ConnectUserToWS;
+function onConnectUserToWebSocket(ws:WebSocket, connectInfo:ConnectUserToWS) {
   const userInfo = connectInfo.userInfo;
 
   if(userInfo.login) {
@@ -63,8 +61,7 @@ function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket)
 }
 
 
-function onDisconnectUser(userWs:WebSocket, payLoad:string) {
-  const userInfo = JSON.parse(payLoad) as DisconectModel;
+function onDisconnectUser(userWs:WebSocket, userInfo:DisconectModel) {
   closeConnection(userWs);
   
   const room = rooms.find((room)=>room.roomId === userInfo.roomId);
@@ -78,11 +75,6 @@ function closeConnection(ws:WebSocket){
   connectUsers = connectUsers.filter((user)=>user.ws !== ws);
   ws.close();
 }
-
-/* function joinLobbyByUrl(req: Request, res:Response) {
-  //TODO  джоин в комнату
-  //connectUserToWebSocket()
-} */
 
 export {
   wsServer,
