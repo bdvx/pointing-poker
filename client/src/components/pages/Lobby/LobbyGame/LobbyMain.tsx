@@ -1,13 +1,16 @@
-import PlayerCard from "../PlayerCard/PlayerCard";
+import { useTypedSelector } from "../../../../hooky/useTypedSelector";
+import PlayerCard from "../../../PlayerCard/PlayerCard";
 import './LobbyMain.scss'
 
 const LobbyMain = () => {
+  const roomInfo = useTypedSelector(store => store.roomInfo);
+
   return (
     <div className="Lobby__main">
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
           <PlayerCard image='' name='David' surname='Blaine' position='Senior Software Developer'/>
-          <div className="Lobby__exit-btn"><a></a></div>
+          <div className="Lobby__exit-btn"><a>Exit</a></div>
         </div>
       <div className="Lobby__members">
         <div className='Lobby__members_title'>Members:</div>
