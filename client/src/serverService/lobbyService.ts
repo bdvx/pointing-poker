@@ -17,11 +17,13 @@ function RoomMessageHandler(message:string) {
   const type = (JSON.parse(message) as WSResponse).type;
   const payLoad = (JSON.parse(message) as WSResponse).payLoad;
 
-  const onUpdateRoomStore = (updadedRoomStr: Room) => {
-    lobbyDispatch(setRoomInfo(updadedRoomStr));
+  const onUpdateRoomStore = (updadedRoom: Room) => {
+    console.log('update', updadedRoom)
+    lobbyDispatch(setRoomInfo(updadedRoom));
   }
   
   const onNewUserJoinRoom = (newUserInfo: UserInfo) => {
+    console.log('new', newUserInfo)
     lobbyDispatch(addNewUserToRoom(newUserInfo));
   }
   
@@ -32,7 +34,7 @@ function RoomMessageHandler(message:string) {
   const onNewMessage = (messageInfo:ChatMessageInfo) => {
     lobbyDispatch(addNewMessage(messageInfo));
   }
-
+  console.log(111,message)
   switch(type) {
     case "NEW_USER_JOIN_ROOM":
       onNewUserJoinRoom(payLoad);
@@ -56,6 +58,7 @@ function makeNewRoom(userWss:WebSocket, scrumInfo:UserInfo) {
   wss = userWss;
   const request = makeWSRequestString("MAKE_NEW_LOBBY", scrumInfo);
   wss.send(request);
+  
   wss.onmessage = (ev) => { RoomMessageHandler(ev.data) };
 }
 
@@ -63,7 +66,7 @@ function connectToRoom(userWss:WebSocket, connectInfo:ConnectUserToWS) {
   wss = userWss;
   wss.send(makeWSRequestString("CONNECT_TO_ROOM", connectInfo));
 
-  wss.onmessage = (ev) => { RoomMessageHandler(ev.data) };
+  wss.onmessage = (ev) => { RoomMessageHandler(ev.data); };
 }
 
 function sendChatMessage(messageInfo:ChatMessageInfo) {

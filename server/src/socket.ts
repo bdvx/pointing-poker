@@ -28,7 +28,6 @@ setInterval(() => {
 }, 10000);
 
 function onMakeNewLobby(masterWs:WebSocket, scramInfo:UserInfoModel) {
-  console.log(scramInfo)
   const roomScramInfo: WSClientModel = {
     ws:masterWs,
     userInfo: scramInfo

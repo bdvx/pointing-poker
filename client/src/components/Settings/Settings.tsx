@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Issue from "../Issue/Issue";
+import Issue from "../pages/Lobby/Issue/Issue";
 
 const Settings = () => {
   const [issues, setIssues] = useState([

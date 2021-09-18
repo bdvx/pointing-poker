@@ -6,21 +6,24 @@ import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
 import { KickInfo } from "../models/socketModels/kickInfoModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
+import { RoomToClient } from "../models/socketModels/roomToClient";
 
-function makeNewRoom(scramInfo:WSClientModel) {
-  const roomId = String(hashCode(scramInfo.userInfo.login + Date.now()))
+function makeNewRoom(scrumInfo:WSClientModel) {
+  const roomId = String(hashCode(scrumInfo.userInfo.login + Date.now()))
   const newRoom:Room = {
-    players: [scramInfo],
     roomId: roomId,
     roomUrl: `http://localhost:5000/joinLobby/${roomId}`,
     chat: [],
-    isPlaying: false
+    isPlaying: false,
+    scrumInfo: scrumInfo.userInfo,
+    playersWS: [scrumInfo]
   }
 
-  const scramWS = scramInfo.ws as WebSocket;
+  const scramWS = scrumInfo.ws as WebSocket;
 
   scramWS.onmessage = (ev) => { lobbyMessageHandler(newRoom, ev.data) };
-  scramWS.send(makeWSResponseMessage("ROOM_BUILD", newRoom));
+  const roomToClient = transformServerRoomToClient(newRoom);
+  scramWS.send(makeWSResponseMessage("ROOM_BUILD", roomToClient));
   return newRoom;
 }
 
@@ -33,23 +36,27 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
 
   //TODO вынести все ф-и которые отправляют всем пользователям в отдельную ф-ю
   const response = makeWSResponseMessage("NEW_USER_JOIN_ROOM", userInfo);
-  room.players.forEach((player)=>player.ws.send(JSON.stringify(response)));
-  room.players.push(newPlayer);
+  room.playersWS.push(newPlayer);
+  room.playersWS.forEach((player)=>{
+    player.ws.send(response);
+  });
 
-  newPlayer.ws.send(makeWSResponseMessage("UPDATE_ROOM", room));
+  const roomToClient = transformServerRoomToClient(room);
+  newPlayer.ws.send(makeWSResponseMessage("UPDATE_ROOM", roomToClient));
 }
 
 function disconnectUserFromRoom(room:Room, userLogin:string) {
-  room.players.filter((player)=>player.userInfo.login !== userLogin);
+  room.playersWS.filter((playerWS)=>playerWS.userInfo.login !== userLogin);
 
   const response = makeWSResponseMessage("DISCONNECT_USER", userLogin);
-  room.players.forEach((player) => {
-    player.ws.send(JSON.stringify(response));
+  room.playersWS.forEach((playerWS) => {
+    playerWS.ws.send(JSON.stringify(response));
   })
 }
 
 function sendPlayerRoomConfiguration(room:Room, userWs:WebSocket) {
-  const response = makeWSResponseMessage("UPDATE_ROOM", room);
+  const roomToClient = transformServerRoomToClient(room);
+  const response = makeWSResponseMessage("UPDATE_ROOM", roomToClient);
   userWs.send(response);
 
 /*   room.players.forEach((player)=>{
@@ -74,9 +81,9 @@ function lobbyMessageHandler(room:Room, message:string) {
 function onChatMessageHandler(room:Room, messageInfo: ChatMessageInfo) {
   const response = makeWSResponseMessage("NEW_MESSAGE", messageInfo);
 
-  room.players.forEach((player)=>{
-    if(messageInfo.login !== player.userInfo.login) 
-      player.ws.send(response);
+  room.playersWS.forEach((playerWS)=>{
+    if(messageInfo.login !== playerWS.userInfo.login) 
+      playerWS.ws.send(response);
   })
 }
 
@@ -84,10 +91,10 @@ function onChatMessageHandler(room:Room, messageInfo: ChatMessageInfo) {
 function onOfferKickPlayer(room:Room, kickInfo:KickInfo) {
   const response = makeWSResponseMessage("KICK_OFFER", kickInfo);
 
-  room.players.forEach((player)=>{
-    if(player.userInfo.login !== kickInfo.whoKick &&
-       player.userInfo.login !== kickInfo.whoOffer) {
-        player.ws.send(response);
+  room.playersWS.forEach((playerWS)=>{
+    if(playerWS.userInfo.login !== kickInfo.whoKick &&
+       playerWS.userInfo.login !== kickInfo.whoOffer) {
+         playerWS.ws.send(response);
     }
   })
 }
@@ -99,6 +106,18 @@ function makeWSResponseMessage(type: string, payLoadObj:any) {
   }
 
   return JSON.stringify(response);
+}
+
+function transformServerRoomToClient(serverRoom:Room) {
+  const clientRoom:RoomToClient = {
+    chat: serverRoom.chat,
+    isPlaying: serverRoom.isPlaying,
+    players: serverRoom.playersWS.map((playerWs)=>playerWs.userInfo),
+    roomId: serverRoom.roomId,
+    roomUrl: serverRoom.roomUrl,
+    scrumInfo: serverRoom.scrumInfo,
+  }
+  return clientRoom;
 }
 
 const Lobby = {

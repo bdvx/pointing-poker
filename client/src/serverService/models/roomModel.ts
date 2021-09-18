@@ -7,5 +7,6 @@ export interface Room {
   roomUrl: string,
   players: Array<UserInfo>,
   chat: Array<ChatMessageInfo>,
-  isPlaying: boolean
+  isPlaying: boolean,
+  scrumInfo: UserInfo
 }

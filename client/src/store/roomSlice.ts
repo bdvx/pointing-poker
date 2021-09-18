@@ -6,7 +6,15 @@ const initialState: Room = {
   roomId: '',
   roomUrl: '',
   chat: [],
-  isPlaying: false
+  isPlaying: false,
+  scrumInfo: {
+    firstName: '',
+    isScrum: true,
+    jobPosition: '',
+    lastName: '',
+    login: '',
+    avatar: ''
+  }
 }
 
 const roomSlice = createSlice({
