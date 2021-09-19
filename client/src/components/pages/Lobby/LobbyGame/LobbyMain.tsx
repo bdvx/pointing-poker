@@ -19,8 +19,6 @@ const LobbyMain = () => {
     router.push('/welcomePage');
   }
 
-  useEffect(()=>{console.log('aaaaaaaaaaaaaa')},[])
-
     //TODO на страничку нужно разместить url инвайта roomInfo.roomUrl
   return (
     <div className="Lobby__main">

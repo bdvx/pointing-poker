@@ -3,6 +3,7 @@ import { setRoomInfo } from "../store/roomSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { DisconectModel } from "./models/disconnectModel";
+import { IssueModel } from "./models/issueModel";
 import { Room } from "./models/roomModel";
 import { UserInfo } from "./models/userInfoModel";
 import { WSRequest } from "./models/WSRequestModel";
@@ -72,12 +73,30 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
   wss.send(request);
 }
 
+function sendIssueToRoom(issue:IssueModel) {
+  const request = makeWSRequestString("NEW_ISSUE", issue);
+  wss.send(request);
+}
+
+function updateIssueInRoom(issue:IssueModel) {
+  const request = makeWSRequestString("UPDATE_ISSUE", issue);
+  wss.send(request);
+}
+
+function deleteIssue(issueId:string) {
+  const request = makeWSRequestString("DELETE_ISSUE", issueId);
+  wss.send(request);
+}
+
 const LobbyService = {
   connectToRoom,
   sendChatMessage,
   makeNewRoom,
   setLobbyDispatch,
-  disconectFromRoom
+  disconectFromRoom,
+  sendIssueToRoom,
+  updateIssueInRoom,
+  deleteIssue
 }
 export default LobbyService;
 

@@ -8,6 +8,7 @@ import { KickInfo } from "../models/socketModels/kickInfoModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { RoomToClient } from "../models/socketModels/roomToClient";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
+import { IssueModel } from "../models/socketModels/issueModel";
 
 function makeNewRoom(scrumInfo:WSClientModel) {
   const roomId = String(hashCode(scrumInfo.userInfo.login + Date.now()))
@@ -17,7 +18,8 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     chat: [],
     isPlaying: false,
     scrumInfo: scrumInfo.userInfo,
-    playersWS: [scrumInfo]
+    playersWS: [scrumInfo],
+    issues: []
   }
 
   const scramWS = scrumInfo.ws as WebSocket;
@@ -71,15 +73,24 @@ function lobbyMessageHandler(room:Room, message:string) {
   //!Для обработки запросов связанных чисто с игрой
   switch(type) {
     case "CHAT_MESSAGE":
-      onChatMessageHandler(room, payLoad);
+      onChatMessage(room, payLoad);
       break;
     case "KICK_PLAYER_OFFER":
       onOfferKickPlayer(room, payLoad);
       break;
+    case "NEW_ISSUE":
+      onNewIssue(room, payLoad);
+      break;
+    case "UPDATE_ISSUE":
+      onUpdateIssue(room, payLoad);
+      break;
+    case "DELETE_ISSUE":
+      onDeleteIssue(room, payLoad);
+      break;
   }
 }
 
-function onChatMessageHandler(room:Room, messageInfo: ChatMessageInfo) {
+function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
   const response = makeWSResponseMessage("NEW_MESSAGE", messageInfo);
 
   room.playersWS.forEach((playerWS)=>{
@@ -100,6 +111,31 @@ function onOfferKickPlayer(room:Room, kickInfo:KickInfo) {
   }) */
 }
 
+function onNewIssue(room:Room, issue:IssueModel) {
+  room.issues.push(issue);
+  room.playersWS.forEach((player) => {
+    sendUpdatedRoom(room, player.ws);
+  })
+}
+
+function onUpdateIssue(room:Room, newIssue:IssueModel) {
+  const index = room.issues.findIndex((issue) => issue.id === newIssue.id);
+  room.issues[index] = newIssue;
+
+  room.playersWS.forEach((player) => {
+    sendUpdatedRoom(room, player.ws);
+  })
+}
+
+function onDeleteIssue(room:Room, newIssueId: string) {
+  const index = room.issues.findIndex((issue) => issue.id === newIssueId);
+  room.issues.splice(index, 1);
+
+  room.playersWS.forEach((player) => {
+    sendUpdatedRoom(room, player.ws);
+  })
+}
+
 
 const Lobby = {
   makeNewRoom,
@@ -117,12 +153,12 @@ function sendUpdatedRoom(room:Room, ws:WebSocket) {
 
 function transformServerRoomToClient(serverRoom:Room) {
   const clientRoom:RoomToClient = {
-    chat: serverRoom.chat,
     isPlaying: serverRoom.isPlaying,
     players: serverRoom.playersWS.map((playerWs)=>playerWs.userInfo),
     roomId: serverRoom.roomId,
     roomUrl: serverRoom.roomUrl,
     scrumInfo: serverRoom.scrumInfo,
+    issues: serverRoom.issues
   }
   return clientRoom;
 }

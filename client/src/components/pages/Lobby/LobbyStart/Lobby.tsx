@@ -1,11 +1,11 @@
 import { Link, Route } from "react-router-dom";
-import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import LobbyMain from "../LobbyGame/LobbyMain";
 import Settings from "../../../Settings/Settings";
 import "./Lobby.scss";
 
 const Lobby = () => {
-  const roomInfo = useTypedSelector(store => store.roomInfo)
+/*   const roomInfo = useTypedSelector(store => store.roomInfo) */
+  //! Убрать имя лобби (чья компонента напишите Мише)
 
   return (
     <div className="Lobby">

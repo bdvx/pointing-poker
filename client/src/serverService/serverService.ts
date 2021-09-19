@@ -5,6 +5,8 @@ import { HttpResponseModel } from "./models/httpResponseModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
 import { DisconectModel } from "./models/disconnectModel";
+import { IssueModel } from "./models/issueModel";
+import { hashCode } from "../../../server/src/tools/hashFunction";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -75,6 +77,19 @@ function disconect(userInfo:UserInfo, roomId:string, reason?:string) {
   LobbyService.disconectFromRoom(disconnectInfo);
 }
 
+function makeIssue(issue:IssueModel) {
+  //TODO сделать нормальный id
+  issue.id = String(hashCode(issue.title));
+  LobbyService.sendIssueToRoom(issue);
+}
+
+function updateIssue(issue:IssueModel) {
+  LobbyService.updateIssueInRoom(issue);
+}
+
+function deleteIssue(issueId:string) {
+  LobbyService.deleteIssue(issueId);
+}
 
 const ServerService = {
   registerNewUser,
@@ -82,6 +97,9 @@ const ServerService = {
   connectToRoom,
   makeNewRoom,
   setDispatch,
-  disconect
+  disconect,
+  makeIssue,
+  updateIssue,
+  deleteIssue
 }
 export default ServerService;
