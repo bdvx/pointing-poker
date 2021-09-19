@@ -6,7 +6,7 @@ import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
 import { DisconectModel } from "./models/disconnectModel";
 import { IssueModel } from "./models/issueModel";
-import { hashCode } from "../../../server/src/tools/hashFunction";
+import { hashCode } from "../tool/hashFunction";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
