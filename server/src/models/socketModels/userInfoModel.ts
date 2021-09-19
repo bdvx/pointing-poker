@@ -3,5 +3,5 @@ export interface UserInfoModel {
   lastName: string,
   jobPosition: string,
   login: string,
-  avatar: string
+  avatar?: string
 }

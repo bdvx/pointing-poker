@@ -1,4 +1,5 @@
-import { addNewUserToRoom, setRoomInfo, addNewMessage, deleteUser } from "../store/roomSlice";
+import { newMessage } from "../store/chatSlice";
+import { setRoomInfo } from "../store/roomSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { DisconectModel } from "./models/disconnectModel";
@@ -19,43 +20,28 @@ function RoomMessageHandler(message:string) {
   const payLoad = (JSON.parse(message) as WSResponse).payLoad;
 
   const onUpdateRoomStore = (updadedRoom: Room) => {
-    console.log('update', updadedRoom)
     lobbyDispatch(setRoomInfo(updadedRoom));
-  }
-  
-  const onNewUserJoinRoom = (newUserInfo: UserInfo) => {
-    lobbyDispatch(addNewUserToRoom(newUserInfo));
   }
   
   const onSuccessRoomBuild = (roomInfo: Room) => {
     lobbyDispatch(setRoomInfo(roomInfo));
   }
 
-  const onNewMessage = (messageInfo:ChatMessageInfo) => {
-    lobbyDispatch(addNewMessage(messageInfo));
-  }
-
-  const onDisconnectUser = (disconnectInfo:DisconectModel) => {
-    lobbyDispatch(deleteUser(disconnectInfo.login));
-    //можно сообщение выводить в чат
+  const onChatMessage = (message:ChatMessageInfo) => {
+    lobbyDispatch(newMessage(message));
   }
 
   switch(type) {
-    case "NEW_USER_JOIN_ROOM":
-      onNewUserJoinRoom(payLoad);
-      break;
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
       break;
-    case "DISCONNECT_USER":
-      onDisconnectUser(payLoad);
-      break;
-    case "KICK_OFFER":
-    case "NEW_MESSAGE":
-      onNewMessage(payLoad);
-      break;
+/*     case "KICK_OFFER": */
     case "ROOM_BUILD":
       onSuccessRoomBuild(payLoad);
+      break;
+
+    case "CHAT_MESSAGE":
+      onChatMessage(payLoad);
       break;
   }  
 }

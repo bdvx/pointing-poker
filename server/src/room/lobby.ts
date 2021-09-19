@@ -35,24 +35,23 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
   }
   userWS.onmessage = (ev) => { lobbyMessageHandler(room, ev.data) };
 
-  //TODO вынести все ф-и которые отправляют всем пользователям в отдельную ф-ю
-  const response = makeWSResponseMessage("NEW_USER_JOIN_ROOM", userInfo);
   room.playersWS.push(newPlayer);
-  room.playersWS.forEach((player)=>{
-    player.ws.send(response);
+  room.playersWS.forEach((player) => {
+    sendUpdatedRoom(room, player.ws);
   });
-
-  const roomToClient = transformServerRoomToClient(room);
-  newPlayer.ws.send(makeWSResponseMessage("UPDATE_ROOM", roomToClient));
 }
 
 function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
-  room.playersWS.filter((playerWS)=>playerWS.userInfo.login !== disconnectInfo.login);
-  console.log(room.playersWS)
+  const index = room.playersWS.findIndex(player => player.userInfo.login === disconnectInfo.login);
+  if (index !== -1) {
+    room.playersWS.splice(index, 1);
+  }
 
-  const response = makeWSResponseMessage("DISCONNECT_USER", disconnectInfo);
+  //!Какого фига в этом месте не работает filter?
+/*   room.playersWS.filter((playerWS) => playerWS.userInfo.login !== disconnectInfo.login); */
+
   room.playersWS.forEach((playerWS) => {
-    playerWS.ws.send(response);
+    sendUpdatedRoom(room, playerWS.ws);
   })
 }
 
@@ -91,23 +90,29 @@ function onChatMessageHandler(room:Room, messageInfo: ChatMessageInfo) {
 
 //TODO где хранить подсчет голосов (room?)
 function onOfferKickPlayer(room:Room, kickInfo:KickInfo) {
-  const response = makeWSResponseMessage("KICK_OFFER", kickInfo);
+/*   const response = makeWSResponseMessage("KICK_OFFER", kickInfo);
 
   room.playersWS.forEach((playerWS)=>{
     if(playerWS.userInfo.login !== kickInfo.whoKick &&
        playerWS.userInfo.login !== kickInfo.whoOffer) {
          playerWS.ws.send(response);
     }
-  })
+  }) */
 }
 
-function makeWSResponseMessage(type: string, payLoadObj:any) {
-  const response: WSResponse = {
-    type: type,
-    payLoad: payLoadObj
-  }
 
-  return JSON.stringify(response);
+const Lobby = {
+  makeNewRoom,
+  connectUserToRoom,
+  disconnectUserFromRoom,
+}
+export default  Lobby;
+
+
+function sendUpdatedRoom(room:Room, ws:WebSocket) {
+  const roomToClient = transformServerRoomToClient(room);
+  const response = makeWSResponseMessage("UPDATE_ROOM", roomToClient);
+  ws.send(response);
 }
 
 function transformServerRoomToClient(serverRoom:Room) {
@@ -122,9 +127,11 @@ function transformServerRoomToClient(serverRoom:Room) {
   return clientRoom;
 }
 
-const Lobby = {
-  makeNewRoom,
-  connectUserToRoom,
-  disconnectUserFromRoom,
+function makeWSResponseMessage(type: string, payLoadObj:any) {
+  const response: WSResponse = {
+    type: type,
+    payLoad: payLoadObj
+  }
+
+  return JSON.stringify(response);
 }
-export default  Lobby;

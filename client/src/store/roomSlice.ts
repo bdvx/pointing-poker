@@ -5,7 +5,6 @@ const initialState: Room = {
   players: [],
   roomId: '',
   roomUrl: '',
-  chat: [],
   isPlaying: false,
   scrumInfo: {
     firstName: '',
@@ -18,23 +17,11 @@ const initialState: Room = {
 }
 
 const roomSlice = createSlice({
-  name: "main",
+  name: "roomSlice",
   initialState,
   reducers: {
     setRoomInfo(state, action) {
       return action.payload;
-    },
-    addNewUserToRoom(state, action) {
-      state.players.push(action.payload);
-    },
-    addNewMessage(state, action) {
-      state.chat.push(action.payload);
-    },
-    deleteUser(state, action) {
-      const index = state.players.findIndex(player => player.login === action.payload);
-      if (index !== -1) {
-        state.players.splice(index, 1);
-      }
     },
     resetRoomInfo() {
       return initialState;
@@ -43,4 +30,4 @@ const roomSlice = createSlice({
 })
 
 export default roomSlice.reducer;
-export const {setRoomInfo, addNewUserToRoom, addNewMessage, deleteUser, resetRoomInfo} = roomSlice.actions;
+export const {setRoomInfo, resetRoomInfo} = roomSlice.actions;
