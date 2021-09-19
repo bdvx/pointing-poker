@@ -7,6 +7,7 @@ import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
 import { KickInfo } from "../models/socketModels/kickInfoModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { RoomToClient } from "../models/socketModels/roomToClient";
+import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
 
 function makeNewRoom(scrumInfo:WSClientModel) {
   const roomId = String(hashCode(scrumInfo.userInfo.login + Date.now()))
@@ -45,12 +46,13 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
   newPlayer.ws.send(makeWSResponseMessage("UPDATE_ROOM", roomToClient));
 }
 
-function disconnectUserFromRoom(room:Room, userLogin:string) {
-  room.playersWS.filter((playerWS)=>playerWS.userInfo.login !== userLogin);
+function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
+  room.playersWS.filter((playerWS)=>playerWS.userInfo.login !== disconnectInfo.login);
+  console.log(room.playersWS)
 
-  const response = makeWSResponseMessage("DISCONNECT_USER", userLogin);
+  const response = makeWSResponseMessage("DISCONNECT_USER", disconnectInfo);
   room.playersWS.forEach((playerWS) => {
-    playerWS.ws.send(JSON.stringify(response));
+    playerWS.ws.send(response);
   })
 }
 

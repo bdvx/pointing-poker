@@ -23,7 +23,7 @@
     height: 55px;
     perspective: 1000px;
     cursor: pointer;
-    & a {
+    & div {
       font-size: 19px;
       letter-spacing: 1px;
       transform-style: preserve-3d;
@@ -31,8 +31,8 @@
       transition: transform 0.25s;
       font: 20px Roboto, sans-serif;
     }
-    & a:before,
-    & a:after {
+    & div:before,
+    & div:after {
       position: absolute;
       content: "Exit";
       height: 55px;
@@ -44,16 +44,16 @@
       box-sizing: border-box;
       border-radius: 5px;
     }
-    & a:before {
+    & div:before {
       color: #fff;
       background: #2b3a67;
       transform: rotateY(0deg) translateZ(25px);
     }
-    & a:after {
+    & div:after {
       color: #2b3a67;
       transform: rotateX(90deg) translateZ(25px);
     }
-    & a:hover {
+    & div:hover {
       transform: translateZ(-25px) rotateX(-90deg);
     }
   }

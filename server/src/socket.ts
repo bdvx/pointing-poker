@@ -60,12 +60,12 @@ function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket)
 }
 
 
-function onDisconnectUser(userWs:WebSocket, userInfo:DisconectModel) {
+function onDisconnectUser(userWs:WebSocket, disconnectInfo:DisconectModel) {
   closeConnection(userWs);
   
-  const room = rooms.find((room)=>room.roomId === userInfo.roomId);
+  const room = rooms.find((room)=>room.roomId === disconnectInfo.roomId);
   if(room) {
-    Lobby.disconnectUserFromRoom(room, userInfo.login);
+    Lobby.disconnectUserFromRoom(room, disconnectInfo);
   } else {
     console.log("ошибка: отключение от несуществующей комнаты");
   }

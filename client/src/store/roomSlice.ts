@@ -29,9 +29,18 @@ const roomSlice = createSlice({
     },
     addNewMessage(state, action) {
       state.chat.push(action.payload);
+    },
+    deleteUser(state, action) {
+      const index = state.players.findIndex(player => player.login === action.payload);
+      if (index !== -1) {
+        state.players.splice(index, 1);
+      }
+    },
+    resetRoomInfo() {
+      return initialState;
     }
   }
 })
 
 export default roomSlice.reducer;
-export const {setRoomInfo, addNewUserToRoom, addNewMessage} = roomSlice.actions;
+export const {setRoomInfo, addNewUserToRoom, addNewMessage, deleteUser, resetRoomInfo} = roomSlice.actions;

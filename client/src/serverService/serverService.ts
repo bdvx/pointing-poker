@@ -4,6 +4,7 @@ import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { HttpResponseModel } from "./models/httpResponseModel";
 import { RegistrationModel } from "./models/registrationModel";
 import { SignInModel } from "./models/signInModel";
+import { DisconectModel } from "./models/disconnectModel";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -56,13 +57,22 @@ function connectToRoom(userInfo: UserInfo, roomId:string) {
   }
 }
 
-function makeNewRoom(scrumtInfo:UserInfo) {
+function makeNewRoom(scrumInfo:UserInfo) {
   wss = new WebSocket(wsUrl);
 
   wss.onopen = () => {
     isConnect = true;
-    LobbyService.makeNewRoom(wss, scrumtInfo);
+    LobbyService.makeNewRoom(wss, scrumInfo);
   }
+}
+
+function disconect(userInfo:UserInfo, roomId:string, reason?:string) {
+  const disconnectInfo:DisconectModel = {
+    login: userInfo.login,
+    reason: reason || '',
+    roomId: roomId
+  }
+  LobbyService.disconectFromRoom(disconnectInfo);
 }
 
 
@@ -71,6 +81,7 @@ const ServerService = {
   signInUser,
   connectToRoom,
   makeNewRoom,
-  setDispatch
+  setDispatch,
+  disconect
 }
 export default ServerService;

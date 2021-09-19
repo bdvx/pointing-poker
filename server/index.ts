@@ -5,7 +5,8 @@ import { QueryModel } from "./src/models/socketModels/WSqueryModel";
 
 app.post('/regNewUser', regNewUser);
 app.post('/singIn', signIn);
-app.get('/joinLobby', joinLobbyByUrl);
+/* app.get('/joinLobby', joinLobbyByUrl); */
+app.post('/joinLobby', joinLobbyByUrl);
 
 
 wsServer.on('connection', (clientWs:any) => {

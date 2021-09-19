@@ -1,6 +1,7 @@
-import { addNewUserToRoom, setRoomInfo, addNewMessage } from "../store/roomSlice";
+import { addNewUserToRoom, setRoomInfo, addNewMessage, deleteUser } from "../store/roomSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
+import { DisconectModel } from "./models/disconnectModel";
 import { Room } from "./models/roomModel";
 import { UserInfo } from "./models/userInfoModel";
 import { WSRequest } from "./models/WSRequestModel";
@@ -23,7 +24,6 @@ function RoomMessageHandler(message:string) {
   }
   
   const onNewUserJoinRoom = (newUserInfo: UserInfo) => {
-    console.log('new', newUserInfo)
     lobbyDispatch(addNewUserToRoom(newUserInfo));
   }
   
@@ -34,7 +34,12 @@ function RoomMessageHandler(message:string) {
   const onNewMessage = (messageInfo:ChatMessageInfo) => {
     lobbyDispatch(addNewMessage(messageInfo));
   }
-  console.log(111,message)
+
+  const onDisconnectUser = (disconnectInfo:DisconectModel) => {
+    lobbyDispatch(deleteUser(disconnectInfo.login));
+    //можно сообщение выводить в чат
+  }
+
   switch(type) {
     case "NEW_USER_JOIN_ROOM":
       onNewUserJoinRoom(payLoad);
@@ -42,7 +47,9 @@ function RoomMessageHandler(message:string) {
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
       break;
-    //case "DISCONNECT_USER":
+    case "DISCONNECT_USER":
+      onDisconnectUser(payLoad);
+      break;
     case "KICK_OFFER":
     case "NEW_MESSAGE":
       onNewMessage(payLoad);
@@ -69,6 +76,11 @@ function connectToRoom(userWss:WebSocket, connectInfo:ConnectUserToWS) {
   wss.onmessage = (ev) => { RoomMessageHandler(ev.data); };
 }
 
+function disconectFromRoom(disconnectInfo:DisconectModel) {
+  const request = makeWSRequestString('DISCONNECT', disconnectInfo);
+  wss.send(request);
+}
+
 function sendChatMessage(messageInfo:ChatMessageInfo) {
   const request = makeWSRequestString("CHAT_MESSAGE", messageInfo);
   wss.send(request);
@@ -78,7 +90,8 @@ const LobbyService = {
   connectToRoom,
   sendChatMessage,
   makeNewRoom,
-  setLobbyDispatch
+  setLobbyDispatch,
+  disconectFromRoom
 }
 export default LobbyService;
 
