@@ -4,11 +4,12 @@ import { hashCode } from "../tools/hashFunction";
 import { WSResponse } from "../models/socketModels/WSresponseModel";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
-import { KickInfo } from "../models/socketModels/kickInfoModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { RoomToClient } from "../models/socketModels/roomToClient";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
 import { IssueModel } from "../models/socketModels/issueModel";
+import { KickedPlayer } from "../models/socketModels/kickedPlayerMOdel";
+import { VoitingModel } from "../models/socketModels/voitingModel";
 
 function makeNewRoom(scrumInfo:WSClientModel) {
   const roomId = String(hashCode(scrumInfo.userInfo.login + Date.now()))
@@ -19,7 +20,8 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     isPlaying: false,
     scrumInfo: scrumInfo.userInfo,
     playersWS: [scrumInfo],
-    issues: []
+    issues: [],
+    voits: [],
   }
 
   const scramWS = scrumInfo.ws as WebSocket;
@@ -57,15 +59,6 @@ function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
   })
 }
 
-function sendPlayerRoomConfiguration(room:Room, userWs:WebSocket) {
-  const roomToClient = transformServerRoomToClient(room);
-  const response = makeWSResponseMessage("UPDATE_ROOM", roomToClient);
-  userWs.send(response);
-
-/*   room.players.forEach((player)=>{
-    player.ws.send(JSON.stringify(eventInfo));
-  }) */
-}
 
 function lobbyMessageHandler(room:Room, message:string) {
   const type = (JSON.parse(message) as QueryModel).type;
@@ -75,9 +68,6 @@ function lobbyMessageHandler(room:Room, message:string) {
     case "CHAT_MESSAGE":
       onChatMessage(room, payLoad);
       break;
-    case "KICK_PLAYER_OFFER":
-      onOfferKickPlayer(room, payLoad);
-      break;
     case "NEW_ISSUE":
       onNewIssue(room, payLoad);
       break;
@@ -86,6 +76,12 @@ function lobbyMessageHandler(room:Room, message:string) {
       break;
     case "DELETE_ISSUE":
       onDeleteIssue(room, payLoad);
+      break;
+    case "KICK_PLAYER_OFFER":
+      onOfferKickPlayer(room, payLoad);
+      break;
+    case "AGREE_WITH_KICK":
+      onAgreeWithKick(room, payLoad);
       break;
   }
 }
@@ -100,15 +96,29 @@ function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
 }
 
 //TODO где хранить подсчет голосов (room?)
-function onOfferKickPlayer(room:Room, kickInfo:KickInfo) {
-/*   const response = makeWSResponseMessage("KICK_OFFER", kickInfo);
+function onOfferKickPlayer(room:Room, voitInfo:VoitingModel) {
+  if(voitInfo.whoOffer === room.scrumInfo.login) {
+/*     const kickedPlayer:KickedPlayer = {
+      kickedLogin: kickInfo.whoKick,
+      reason: `user ${kickInfo.whoKick} was kicked by scrum master`
+    } */
+    //возможно, стоит добавить сообщение в чат о кике
+    voitInfo.isVoiting = false;
+    room.voits.push(voitInfo);
+    room.playersWS.forEach((player) => {
+      sendUpdatedRoom(room, player.ws);
+    })
+  } else {
+    room.playersWS.forEach((playerWS) => {
+      const response = makeWSResponseMessage("KICK_OFFER", voitInfo);
 
-  room.playersWS.forEach((playerWS)=>{
-    if(playerWS.userInfo.login !== kickInfo.whoKick &&
-       playerWS.userInfo.login !== kickInfo.whoOffer) {
-         playerWS.ws.send(response);
-    }
-  }) */
+      if(playerWS.userInfo.login !== voitInfo.whoKick &&
+         playerWS.userInfo.login !== voitInfo.whoOffer) {
+           playerWS.ws.send(response);
+           //!здесь заюзаем все прелести замыкания и сет тайм аут
+      }
+    })
+  }
 }
 
 function onNewIssue(room:Room, issue:IssueModel) {
@@ -134,6 +144,11 @@ function onDeleteIssue(room:Room, newIssueId: string) {
   room.playersWS.forEach((player) => {
     sendUpdatedRoom(room, player.ws);
   })
+}
+
+function onAgreeWithKick(room:Room, kickedPlayerLogin:string) {
+  const index = room.voits.findIndex((voit) => voit.whoKick === kickedPlayerLogin);
+  room.voits[index].amountAgree++;
 }
 
 

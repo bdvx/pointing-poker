@@ -1,3 +1,4 @@
+import { VoitingModel } from "../../../../client/src/serverService/models/voitingModel";
 import { ChatMessageInfo } from "./chatMessageInfoModel";
 import { WSClientModel } from "./clientModel";
 import { GameModel } from "./gameModel";
@@ -12,5 +13,6 @@ export interface Room {
   scrumInfo: UserInfoModel,
   playersWS: Array<WSClientModel>,
   issues: Array<IssueModel>,
-  game?: GameModel
+  game?: GameModel,
+  voits: Array<VoitingModel>
 }

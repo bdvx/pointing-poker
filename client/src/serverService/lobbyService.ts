@@ -6,6 +6,7 @@ import { DisconectModel } from "./models/disconnectModel";
 import { IssueModel } from "./models/issueModel";
 import { Room } from "./models/roomModel";
 import { UserInfo } from "./models/userInfoModel";
+import { VoitingModel } from "./models/voitingModel";
 import { WSRequest } from "./models/WSRequestModel";
 import { WSResponse } from "./models/WSResponseModel";
 
@@ -32,17 +33,25 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(newMessage(message));
   }
 
+  const onKickOffer = (kickInfo:VoitingModel) => {
+    //TODO попап кика
+  }
+
   switch(type) {
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
       break;
-/*     case "KICK_OFFER": */
+
     case "ROOM_BUILD":
       onSuccessRoomBuild(payLoad);
       break;
-
+      
     case "CHAT_MESSAGE":
       onChatMessage(payLoad);
+      break;
+
+    case "KICK_OFFER":
+      onKickOffer(payLoad);
       break;
   }  
 }
@@ -88,6 +97,18 @@ function deleteIssue(issueId:string) {
   wss.send(request);
 }
 
+function sendKickOfferToRoom(kickInfo: VoitingModel) {
+  const request = makeWSRequestString("KICK_PLAYER_OFFER", kickInfo);
+  wss.send(request);
+}
+
+function sendKickConclusionToRoom(conclusion:boolean, kickedPlayerLogin?:string) {
+  if(conclusion) {
+    const request = makeWSRequestString("AGREE_WITH_KICK", kickedPlayerLogin);
+    wss.send(request);
+  }
+}
+
 const LobbyService = {
   connectToRoom,
   sendChatMessage,
@@ -96,7 +117,9 @@ const LobbyService = {
   disconectFromRoom,
   sendIssueToRoom,
   updateIssueInRoom,
-  deleteIssue
+  deleteIssue,
+  sendKickOfferToRoom,
+  sendKickConclusionToRoom
 }
 export default LobbyService;
 

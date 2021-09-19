@@ -7,6 +7,7 @@ import { SignInModel } from "./models/signInModel";
 import { DisconectModel } from "./models/disconnectModel";
 import { IssueModel } from "./models/issueModel";
 import { hashCode } from "../tool/hashFunction";
+import { VoitingModel } from "./models/voitingModel";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -91,15 +92,27 @@ function deleteIssue(issueId:string) {
   LobbyService.deleteIssue(issueId);
 }
 
+function kickPlayer(kickInfo:VoitingModel) {
+  LobbyService.sendKickOfferToRoom(kickInfo);
+}
+
+function setKickConclusion(conclusion:boolean, kickedPlayerLogin?:string) {
+  LobbyService.sendKickConclusionToRoom(conclusion, kickedPlayerLogin);
+}
+
 const ServerService = {
+  setDispatch,
   registerNewUser,
   signInUser,
   connectToRoom,
   makeNewRoom,
-  setDispatch,
   disconect,
+  
   makeIssue,
   updateIssue,
-  deleteIssue
+  deleteIssue,
+
+  kickPlayer,
+  setKickConclusion
 }
 export default ServerService;

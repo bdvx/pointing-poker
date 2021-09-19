@@ -7,5 +7,7 @@ export interface Room {
   roomUrl: string,
   players: Array<UserInfo>,
   isPlaying: boolean,
-  scrumInfo: UserInfo
+  scrumInfo: UserInfo,
+  isVoiting: boolean,
+  amountAgreeWithKick: number
 }
