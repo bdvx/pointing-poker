@@ -15,7 +15,7 @@ export const Footer: FC = () => {
         <ul className="Footer__githubList">
           {
             APP_AUTHORS_GITHUB_USERNAME.map((username) => (
-              <li>
+              <li key={ username }>
                 <a href={ `https://github.com/${ username }`} target="_blank" rel="noopener noreferrer">&copy;{ username }</a>
               </li>
             ))
