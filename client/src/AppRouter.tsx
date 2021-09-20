@@ -11,13 +11,13 @@ export default function AppRouter() {
     <>
       <Switch  location={location}>
         <Route exact path={`/home`}>
-          <StartPage classes="app__startPage"></StartPage>
+          <StartPage classes="App__startPage"></StartPage>
         </Route>
         <Route exact path={'/about'}>
           <AboutPage></AboutPage>
         </Route>
         <Route exact path={'/welcomePage'}>
-          <WelcomePage classes="app__welcome-page"></WelcomePage>
+          <WelcomePage classes="App__welcomePage"></WelcomePage>
         </Route>
         <Route exact path={'/lobbyStart'}>
           <Lobby></Lobby>
