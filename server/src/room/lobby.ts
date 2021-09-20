@@ -10,6 +10,8 @@ import { DisconectModel } from "../../../client/src/serverService/models/disconn
 import { IssueModel } from "../models/socketModels/issueModel";
 import { KickedPlayer } from "../models/socketModels/kickedPlayerMOdel";
 import { VoitingModel } from "../models/socketModels/voitingModel";
+import Game from "./game";
+import { GameModel } from "../../../client/src/serverService/models/gameModel";
 
 function makeNewRoom(scrumInfo:WSClientModel) {
   const roomId = String(hashCode(scrumInfo.userInfo.login + Date.now()))
@@ -82,6 +84,9 @@ function lobbyMessageHandler(room:Room, message:string) {
       break;
     case "AGREE_WITH_KICK":
       onAgreeWithKick(room, payLoad);
+      break;
+    case "MAKE_NEW_GAME":
+      onMakeNewGame(room, payLoad);
       break;
   }
 }
@@ -170,6 +175,10 @@ function onDeleteIssue(room:Room, newIssueId: string) {
 function onAgreeWithKick(room:Room, kickedPlayerLogin:string) {
   const index = room.voits.findIndex((voit) => voit.whoKick === kickedPlayerLogin);
   room.voits[index].amountAgree++;
+}
+
+function onMakeNewGame(room:Room, gameInfo:GameModel) {
+  Game.makeNewGame(gameInfo);
 }
 
 

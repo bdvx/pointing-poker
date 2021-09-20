@@ -8,6 +8,7 @@ import { DisconectModel } from "./models/disconnectModel";
 import { IssueModel } from "./models/issueModel";
 import { hashCode } from "../tool/hashFunction";
 import { VoitingModel } from "./models/voitingModel";
+import { GameModel } from "./models/gameModel";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -100,6 +101,10 @@ function setKickConclusion(conclusion:boolean, kickedPlayerLogin?:string) {
   LobbyService.sendKickConclusionToRoom(conclusion, kickedPlayerLogin);
 }
 
+function startGame(gameInfo:GameModel) {
+  LobbyService.makeGameInRoom(gameInfo);
+}
+
 const ServerService = {
   setDispatch,
   registerNewUser,
@@ -113,6 +118,8 @@ const ServerService = {
   deleteIssue,
 
   kickPlayer,
-  setKickConclusion
+  setKickConclusion,
+
+  startGame
 }
 export default ServerService;

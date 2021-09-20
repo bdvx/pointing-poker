@@ -4,6 +4,7 @@ import { deleteVoit, updateVoits } from "../store/voitingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { DisconectModel } from "./models/disconnectModel";
+import { GameModel } from "./models/gameModel";
 import { IssueModel } from "./models/issueModel";
 import { Room } from "./models/roomModel";
 import { UserInfo } from "./models/userInfoModel";
@@ -114,6 +115,11 @@ function sendKickConclusionToRoom(conclusion:boolean, kickedPlayerLogin?:string)
   }
 }
 
+function makeGameInRoom(gameInfo:GameModel) {
+  const request = makeWSRequestString("MAKE_NEW_GAME", gameInfo);
+  wss.send(request);
+}
+
 const LobbyService = {
   connectToRoom,
   sendChatMessage,
@@ -124,7 +130,8 @@ const LobbyService = {
   updateIssueInRoom,
   deleteIssue,
   sendKickOfferToRoom,
-  sendKickConclusionToRoom
+  sendKickConclusionToRoom,
+  makeGameInRoom
 }
 export default LobbyService;
 
