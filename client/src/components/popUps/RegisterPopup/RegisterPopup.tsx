@@ -5,7 +5,6 @@ import IRegisterPopupProps from '../../../types/RegisterPopupProps.type';
 import { REGISTER_POPUP_FIELDS, REGISTER_POPUP_FIELDS_DEFAULT_VALUES } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { RegistrationModel } from '../../../serverService/models/registrationModel';
-import { HttpResponseModel } from '../../../serverService/models/httpResponseModel';
 import { useHistory } from 'react-router';
 import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpPopup';
 import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
@@ -15,9 +14,8 @@ import { RegisterSuccessPopup } from '../RegisterSuccessPopup/RegisterSuccessPop
 import { RegisterFailPopup } from '../RegisterFailPopup/RegisterFailPopup';
 import { PopUpLinearProgress } from '../PopUpLinearProgress/PopUpLinearProgress';
 
-export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
+export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterPopupState }: IRegisterPopupProps) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [role, setRole] = useState<boolean>(true);
   const [avatar, setAvatar] = useState<string>('');
   const router = useHistory();
   const dispatch = useDispatch();
@@ -83,33 +81,21 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       setLoading(false);
       setOpenRegisterFailPopup(true);
     }
-  
   }
 
   return (
     <>
-      <PopUpLinearProgress className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)} loading={ loading }>
-        <form className="register-popup__form">
-          <div className="register-popup__header">
-            <h3 className="register-popup__title">Register new user</h3>
-            {/* <label className="register-popup__role-block">
-              <span className="register-popup__role-title">Connect as<br/>Observer</span>
-              <Switch
-                className="register-popup__role"
-                checked={role}
-                onChange={() => setRole(!role)}
-                color="primary"
-              />
-            </label> */}
-          </div>
+      <PopUpLinearProgress className="RegisterPopup" open={ open } onClose={ () => onChangeRegisterPopupState(false) } loading={ loading }>
+        <form>
+          <h3 className="RegisterPopup__title">Register new user</h3>
 
           {
             REGISTER_POPUP_FIELDS.map((field) => (
-              <div className="register-popup__field-block" key={field.name}>
+              <div className="RegisterPopup__box" key={field.name}>
                 <label>
-                  <span className="register-popup__field-title">Your { field.title }:</span>
+                  <span className="RegisterPopup__boxTitle">Your { field.title }:</span>
                   <TextField
-                    className="register-popup__field"
+                    className="RegisterPopup__field"
                     defaultValue={ fieldsValues[field.name as keyof IFieldsValues] }
                     onChange={ (e) => handleFieldChange({ e, ...fieldsProps }) }
                     name={ field.name }
@@ -124,64 +110,21 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
             ))
           }
 
-          <div className="register-popup__avatar-block">
-            <span className="register-popup__field-title">Image:</span>
+          <div className="RegisterPopup__avatar">
+            <span className="RegisterPopup__boxTitle">Image:</span>
 
-            <div className="register-popup__avatar-btns">
-              <label
-                className="register-popup__avatar-btn-wrap"
-                htmlFor="register-popup__avatar-file"
-              >
-                <Input
-                  id="register-popup__avatar-file"
-                  type="file"
-                  onChange={(e) => changeAvatar(e.target)}
-                />
-                <Button
-                  className="register-popup__avatar-btn"
-                  variant="contained"
-                  size="large"
-                  component="span"
-                >
-                  Choose file
-                </Button>
+            <div className="RegisterPopup__avatarBtns">
+              <label className="RegisterPopup__avatarUpload">
+                <Input type="file" onChange={ (e) => changeAvatar(e.target) } />
+                <Avatar src={ avatar } children={ changeStringAvatar(fieldsValues.firstName) } alt="Avatar" />
               </label>
-              <Button
-                className="register-popup__avatar-block-btn"
-                variant="contained"
-                color="primary"
-                size="large"
-                onClick={() => setAvatar('')}
-              >
-                Reset 
-              </Button>
+              <button className="RegisterPopup__avatarReset" onClick={ () => setAvatar('') } type="button">&times;</button>
             </div>
-
-            <Avatar
-              className="register-popup__avatar"
-              alt="Avatar"
-              src={ avatar }
-              children={changeStringAvatar(fieldsValues.firstName)}
-            />
           </div>
-          <DialogActions className="register-popup__btns">
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              disabled={errors.length > 0}
-              onClick={() => HandleConfirmRegistration()}
-            >
-              Confirm
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              onClick={() => onChangeRegisterPopupState(false)}
-            >
-              Cancel
-            </Button>
+
+          <DialogActions className="RegisterPopup__btns">
+            <Button onClick={ () => HandleConfirmRegistration() } disabled={ errors.length > 0 } variant="contained" color="primary" size="large">Confirm</Button>
+            <Button onClick={ () => onChangeRegisterPopupState(false) } variant="outlined" color="primary" size="large">Cancel</Button>
           </DialogActions>
         </form>
       </PopUpLinearProgress>
