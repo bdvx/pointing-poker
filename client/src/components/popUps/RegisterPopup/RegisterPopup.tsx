@@ -2,7 +2,7 @@ import './RegisterPopup.scss';
 import { FC, useState } from 'react';
 import { Avatar, Button, DialogActions, Input, TextField } from '@material-ui/core';
 import IRegisterPopupProps from '../../../types/RegisterPopupProps.type';
-import { REGISTER_POPUP_FIELDS } from '../../../constants';
+import { REGISTER_POPUP_FIELDS, REGISTER_POPUP_FIELDS_DEFAULT_VALUES } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { RegistrationModel } from '../../../serverService/models/registrationModel';
 import { HttpResponseModel } from '../../../serverService/models/httpResponseModel';
@@ -22,14 +22,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   const router = useHistory();
   const dispatch = useDispatch();
 
-  const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({
-    login: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    jobPosition: '',
-    avatar: ''
-  });
+  const [fieldsValues, setFieldsValues] = useState<IFieldsValues>(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
   const [errors, setErrors] = useState<string[]>([]);
 
   const fieldsProps = { fieldsValues, setFieldsValues, errors, setErrors };
@@ -72,7 +65,9 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
       //alert - временная замена попАпу
       //история должна пушится после закрытия попапа успешной регистрации
       dispatch(setUserInfo(fieldsValues));
-      //!сброс полей только после диспатча
+
+      setFieldsValues(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
+
       router.push('/welcomePage');
       alert(response.message);
 
