@@ -14,8 +14,8 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <div className="App">
-          <main>
-            <Header></Header>
+          <Header></Header>
+          <main>  
             <AppRouter></AppRouter>
           </main>
           <Footer />
