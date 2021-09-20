@@ -50,6 +50,7 @@ function onConnectUserToWebSocket(ws:WebSocket, connectInfo:ConnectUserToWS) {
     closeConnection(ws);
   }
 }
+
 function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket) {
   const room = rooms.find((room)=>room.roomId === roomId);
   if(room) {
@@ -58,7 +59,6 @@ function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket)
     console.log("Ошибка подключения к комнате");
   }
 }
-
 
 function onDisconnectUser(userWs:WebSocket, disconnectInfo:DisconectModel) {
   closeConnection(userWs);

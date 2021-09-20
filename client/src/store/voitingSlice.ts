@@ -1,20 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { voitingModel } from "../serverService/models/voitingModel";
+import { VoitingModel } from "../serverService/models/voitingModel";
 
-const initialState: Array<voitingModel> = []
+const initialState: Array<VoitingModel> = []
 
 const voitingSlice = createSlice({
   name: "voitingSlice",
   initialState,
   reducers: {
-    updateVoiting(state, action) {
-      return action.payload;
+    updateVoits(state, action) {
+      state.push(action.payload);
     },
-    resetVoiting() {
-      return initialState;
+    deleteVoit(state, action) {
+      const index = state.findIndex((voit) => voit.whoKick === action.payload)
+      state.splice(index, 1);
+      //! Проверить на работоспособность
     }
   }
 })
 
 export default voitingSlice.reducer;
-export const {updateVoiting, resetVoiting} = voitingSlice.actions;
+export const {updateVoits, deleteVoit} = voitingSlice.actions;

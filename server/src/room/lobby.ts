@@ -95,29 +95,50 @@ function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
   })
 }
 
-//TODO где хранить подсчет голосов (room?)
+//чуть позже перепешу эту ф-ю
 function onOfferKickPlayer(room:Room, voitInfo:VoitingModel) {
-  if(voitInfo.whoOffer === room.scrumInfo.login) {
-/*     const kickedPlayer:KickedPlayer = {
+
+  const deletePlayerFromRoom = (playerLogin: string) => {
+    room.playersWS.filter((playerWs) => playerWs.userInfo.login !== playerLogin);
+    room.voits.filter((voit) => voit.whoKick !== playerLogin);
+    //TODO техническое сообщение в чат
+    /*     const kickedPlayer:KickedPlayer = {
       kickedLogin: kickInfo.whoKick,
       reason: `user ${kickInfo.whoKick} was kicked by scrum master`
     } */
-    //возможно, стоит добавить сообщение в чат о кике
-    voitInfo.isVoiting = false;
-    room.voits.push(voitInfo);
+
     room.playersWS.forEach((player) => {
       sendUpdatedRoom(room, player.ws);
     })
-  } else {
+  }
+
+  if(voitInfo.whoOffer === room.scrumInfo.login) { //если удаляет масте
+    deletePlayerFromRoom(voitInfo.whoKick);
+    room.playersWS.forEach((player) => {
+      sendUpdatedRoom(room, player.ws);
+    })
+  } else { //голосование
+    room.voits.push(voitInfo);
     room.playersWS.forEach((playerWS) => {
       const response = makeWSResponseMessage("KICK_OFFER", voitInfo);
 
       if(playerWS.userInfo.login !== voitInfo.whoKick &&
          playerWS.userInfo.login !== voitInfo.whoOffer) {
            playerWS.ws.send(response);
-           //!здесь заюзаем все прелести замыкания и сет тайм аут
       }
-    })
+    });
+
+    const stopVoiting = (whoKick: string) => {
+      const currentVoit = room.voits.find((voit) => voit.whoKick !== whoKick);
+
+      if(currentVoit?.amountAgree && currentVoit?.amountAgree > room.playersWS.length/2 +1) {
+        deletePlayerFromRoom(currentVoit.whoKick);
+      }
+    }
+
+    setTimeout(() => {
+      stopVoiting(voitInfo.whoKick);
+    }, 60000);
   }
 }
 

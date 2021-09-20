@@ -1,5 +1,6 @@
 import { newMessage } from "../store/chatSlice";
 import { setRoomInfo } from "../store/roomSlice";
+import { deleteVoit, updateVoits } from "../store/voitingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { DisconectModel } from "./models/disconnectModel";
@@ -33,7 +34,11 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(newMessage(message));
   }
 
-  const onKickOffer = (kickInfo:VoitingModel) => {
+  const onKickOffer = (voitInfo:VoitingModel) => {
+    lobbyDispatch(updateVoits(voitInfo)); //можно сделать ход голосования
+    setTimeout(() => {
+      lobbyDispatch(deleteVoit(voitInfo.whoKick))
+    },59000)
     //TODO попап кика
   }
 

@@ -6,6 +6,8 @@ const initialState: Room = {
   roomId: '',
   roomUrl: '',
   isPlaying: false,
+  isVoiting:false,
+  amountAgreeWithKick: 1,
   scrumInfo: {
     firstName: '',
     isScrum: true,
