@@ -25,4 +25,13 @@ export const REGISTER_POPUP_FIELDS = [
   }
 ];
 
+export const REGISTER_POPUP_FIELDS_DEFAULT_VALUES = {
+  login: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  jobPosition: '',
+  avatar: ''
+};
+
 export const APP_AUTHORS_GITHUB_USERNAME = ['WFZ1', 'JxmJuice', 'FURY-PERSON', 'bdvx'];
