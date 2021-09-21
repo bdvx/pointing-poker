@@ -4,13 +4,13 @@ import chatSlice from "./chatSlice";
 import currentUserSlice from "./currentUserSlice";
 import gameSlice from "./gameSlice";
 import roomSlice from "./roomSlice";
-import voitingSlice from "./voitingSlice";
+import votingSlice from "./votingSlice";
 
 const rootReducer = combineReducers({
   userInfo: currentUserSlice,
   roomInfo: roomSlice,
   chat: chatSlice,
-  voiting: voitingSlice,
+  voting: votingSlice,
   game: gameSlice
 })
 

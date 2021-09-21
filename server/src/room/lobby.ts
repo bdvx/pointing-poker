@@ -9,7 +9,7 @@ import { RoomToClient } from "../models/socketModels/roomToClient";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
 import { IssueModel } from "../models/socketModels/issueModel";
 import { KickedPlayer } from "../models/socketModels/kickedPlayerMOdel";
-import { VoitingModel } from "../models/socketModels/voitingModel";
+import { VotingModel } from "../models/socketModels/votingModel";
 import Game from "./game";
 import { GameModel } from "../../../client/src/serverService/models/gameModel";
 
@@ -23,7 +23,7 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     scrumInfo: scrumInfo.userInfo,
     playersWS: [scrumInfo],
     issues: [],
-    voits: [],
+    votes: [],
     inGame: [],
     queue: []
   }
@@ -103,11 +103,11 @@ function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
 }
 
 //чуть позже перепешу эту ф-ю
-function onOfferKickPlayer(room:Room, voitInfo:VoitingModel) {
+function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
 
   const deletePlayerFromRoom = (playerLogin: string) => {
     room.playersWS.filter((playerWs) => playerWs.userInfo.login !== playerLogin);
-    room.voits.filter((voit) => voit.whoKick !== playerLogin);
+    room.votes.filter((vote) => vote.whoKick !== playerLogin);
     //TODO техническое сообщение в чат
     /*     const kickedPlayer:KickedPlayer = {
       kickedLogin: kickInfo.whoKick,
@@ -119,24 +119,24 @@ function onOfferKickPlayer(room:Room, voitInfo:VoitingModel) {
     })
   }
 
-  if(voitInfo.whoOffer === room.scrumInfo.login) { //если удаляет масте
-    deletePlayerFromRoom(voitInfo.whoKick);
+  if(voteInfo.whoOffer === room.scrumInfo.login) { //если удаляет масте
+    deletePlayerFromRoom(voteInfo.whoKick);
     room.playersWS.forEach((player) => {
       sendUpdatedRoom(room, player.ws);
     })
   } else { //голосование
-    room.voits.push(voitInfo);
+    room.votes.push(voteInfo);
     room.playersWS.forEach((playerWS) => {
-      const response = makeWSResponseMessage("KICK_OFFER", voitInfo);
+      const response = makeWSResponseMessage("KICK_OFFER", voteInfo);
 
-      if(playerWS.userInfo.login !== voitInfo.whoKick &&
-         playerWS.userInfo.login !== voitInfo.whoOffer) {
+      if(playerWS.userInfo.login !== voteInfo.whoKick &&
+         playerWS.userInfo.login !== voteInfo.whoOffer) {
            playerWS.ws.send(response);
       }
     });
 
     const stopVoiting = (whoKick: string) => {
-      const currentVoit = room.voits.find((voit) => voit.whoKick !== whoKick);
+      const currentVoit = room.votes.find((vote) => vote.whoKick !== whoKick);
 
       if(currentVoit?.amountAgree && currentVoit?.amountAgree > room.playersWS.length/2 +1) {
         deletePlayerFromRoom(currentVoit.whoKick);
@@ -144,7 +144,7 @@ function onOfferKickPlayer(room:Room, voitInfo:VoitingModel) {
     }
 
     setTimeout(() => {
-      stopVoiting(voitInfo.whoKick);
+      stopVoiting(voteInfo.whoKick);
     }, 60000);
   }
 }
@@ -175,8 +175,8 @@ function onDeleteIssue(room:Room, newIssueId: string) {
 }
 
 function onAgreeWithKick(room:Room, kickedPlayerLogin:string) {
-  const index = room.voits.findIndex((voit) => voit.whoKick === kickedPlayerLogin);
-  room.voits[index].amountAgree++;
+  const index = room.votes.findIndex((vote) => vote.whoKick === kickedPlayerLogin);
+  room.votes[index].amountAgree++;
 }
 
 function onMakeNewGame(room:Room, gameInfo:GameModel) {

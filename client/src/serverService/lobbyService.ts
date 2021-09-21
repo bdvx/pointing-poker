@@ -1,6 +1,6 @@
 import { newMessage } from "../store/chatSlice";
 import { setRoomInfo } from "../store/roomSlice";
-import { deleteVoit, updateVoits } from "../store/voitingSlice";
+import { deleteVoit, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { DisconectModel } from "./models/disconnectModel";
@@ -8,7 +8,7 @@ import { GameModel } from "./models/gameModel";
 import { IssueModel } from "./models/issueModel";
 import { Room } from "./models/roomModel";
 import { UserInfo } from "./models/userInfoModel";
-import { VoitingModel } from "./models/voitingModel";
+import { VotingModel } from "./models/votingModel";
 import { WSRequest } from "./models/WSRequestModel";
 import { WSResponse } from "./models/WSResponseModel";
 
@@ -35,10 +35,10 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(newMessage(message));
   }
 
-  const onKickOffer = (voitInfo:VoitingModel) => {
-    lobbyDispatch(updateVoits(voitInfo)); //можно сделать ход голосования
+  const onKickOffer = (voteInfo:VotingModel) => {
+    lobbyDispatch(updateVoits(voteInfo)); //можно сделать ход голосования
     setTimeout(() => {
-      lobbyDispatch(deleteVoit(voitInfo.whoKick))
+      lobbyDispatch(deleteVoit(voteInfo.whoKick))
     },59000)
     //TODO попап кика
   }
@@ -103,7 +103,7 @@ function deleteIssue(issueId:string) {
   wss.send(request);
 }
 
-function sendKickOfferToRoom(kickInfo: VoitingModel) {
+function sendKickOfferToRoom(kickInfo: VotingModel) {
   const request = makeWSRequestString("KICK_PLAYER_OFFER", kickInfo);
   wss.send(request);
 }

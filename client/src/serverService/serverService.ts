@@ -7,7 +7,7 @@ import { SignInModel } from "./models/signInModel";
 import { DisconectModel } from "./models/disconnectModel";
 import { IssueModel } from "./models/issueModel";
 import { hashCode } from "../tool/hashFunction";
-import { VoitingModel } from "./models/voitingModel";
+import { VotingModel } from "./models/votingModel";
 import { GameModel } from "./models/gameModel";
 
 const url = "http://localhost:5000/";
@@ -93,7 +93,7 @@ function deleteIssue(issueId:string) {
   LobbyService.deleteIssue(issueId);
 }
 
-function kickPlayer(kickInfo:VoitingModel) {
+function kickPlayer(kickInfo:VotingModel) {
   LobbyService.sendKickOfferToRoom(kickInfo);
 }
 

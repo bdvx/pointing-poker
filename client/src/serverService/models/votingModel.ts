@@ -1,4 +1,4 @@
-export interface VoitingModel {
+export interface VotingModel {
   whoOffer: string, //login
   whoKick: string, //login
   message: string,
