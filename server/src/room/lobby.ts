@@ -52,7 +52,6 @@ function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
   if (index !== -1) {
     room.playersWS.splice(index, 1);
   }
-
   //!Какого фига в этом месте не работает filter?
 /*   room.playersWS.filter((playerWS) => playerWS.userInfo.login !== disconnectInfo.login); */
 

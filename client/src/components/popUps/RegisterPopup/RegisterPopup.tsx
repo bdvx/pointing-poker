@@ -62,7 +62,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
       //попап
       //alert - временная замена попАпу
       //история должна пушится после закрытия попапа успешной регистрации
-      dispatch(setUserInfo(fieldsValues));
+      dispatch(setUserInfo({...fieldsValues, isLogin:true}));
 
       setFieldsValues(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
 

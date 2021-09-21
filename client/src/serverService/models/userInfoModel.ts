@@ -4,5 +4,6 @@ export interface UserInfo {
   jobPosition: string,
   login: string,
   avatar: string,
-  isScrum: boolean
+  isScrum: boolean,
+  isLogin?: boolean
 }

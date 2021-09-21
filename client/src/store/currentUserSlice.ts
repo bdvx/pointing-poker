@@ -7,6 +7,7 @@ const initialState: UserInfo = {
   jobPosition: '',
   login: '',
   avatar: '',
+  isLogin: false,
   isScrum: false
 }
 
