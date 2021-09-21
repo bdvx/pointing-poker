@@ -3,6 +3,8 @@ import { Room } from "../serverService/models/roomModel";
 
 const initialState: Room = {
   players: [],
+  queue: [],
+  inGame: [],
   roomId: '',
   roomUrl: '',
   isPlaying: false,

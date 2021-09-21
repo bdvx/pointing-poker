@@ -24,6 +24,8 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     playersWS: [scrumInfo],
     issues: [],
     voits: [],
+    inGame: [],
+    queue: []
   }
 
   const scramWS = scrumInfo.ws as WebSocket;
@@ -42,6 +44,7 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
   userWS.onmessage = (ev) => { lobbyMessageHandler(room, ev.data) };
 
   room.playersWS.push(newPlayer);
+  room.queue.push(newPlayer);
   room.playersWS.forEach((player) => {
     sendUpdatedRoom(room, player.ws);
   });
@@ -198,11 +201,13 @@ function sendUpdatedRoom(room:Room, ws:WebSocket) {
 function transformServerRoomToClient(serverRoom:Room) {
   const clientRoom:RoomToClient = {
     isPlaying: serverRoom.isPlaying,
-    players: serverRoom.playersWS.map((playerWs)=>playerWs.userInfo),
+    players: serverRoom.playersWS.map((playerWs) => playerWs.userInfo),
     roomId: serverRoom.roomId,
     roomUrl: serverRoom.roomUrl,
     scrumInfo: serverRoom.scrumInfo,
-    issues: serverRoom.issues
+    issues: serverRoom.issues,
+    inGame: serverRoom.inGame.map((player) => player.userInfo),
+    queue: serverRoom.queue.map((player) => player.userInfo)
   }
   return clientRoom;
 }

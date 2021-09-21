@@ -9,4 +9,6 @@ export interface RoomToClient {
   isPlaying: boolean,
   scrumInfo: UserInfoModel,
   issues: Array<IssueModel>,
+  queue: Array<UserInfoModel>,
+  inGame: Array<UserInfoModel>,
 }

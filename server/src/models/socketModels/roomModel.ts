@@ -8,10 +8,12 @@ import { UserInfoModel } from "./userInfoModel";
 export interface Room {
   roomId: string,
   roomUrl: string,
+  queue: Array<WSClientModel>,
+  inGame: Array<WSClientModel>,
+  playersWS: Array<WSClientModel>,
   chat: Array<ChatMessageInfo>,
   isPlaying: boolean,
   scrumInfo: UserInfoModel,
-  playersWS: Array<WSClientModel>,
   issues: Array<IssueModel>,
   game?: GameModel,
   voits: Array<VoitingModel>

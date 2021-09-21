@@ -33,7 +33,7 @@ const LobbyMain = () => {
       <div className="Lobby__members">
         <div className='Lobby__members_title'>Members:</div>
           <div className="Lobby__members_cards">
-            {roomInfo.players.map((player) => {
+            {roomInfo.inGame.map((player) => {
               return <PlayerCard image={player.avatar || './logo192.png'} name={player.firstName} 
                           surname={player.lastName} position={player.jobPosition}/>
             })}
