@@ -94,10 +94,8 @@ function lobbyMessageHandler(room:Room, message:string) {
 }
 
 function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
-  const response = makeWSResponseMessage("NEW_MESSAGE", messageInfo);
-
-  room.playersWS.forEach((playerWS)=>{
-    if(messageInfo.login !== playerWS.userInfo.login) 
+  const response = makeWSResponseMessage("CHAT_MESSAGE", messageInfo);
+  room.playersWS.forEach((playerWS) => {
       playerWS.ws.send(response);
   })
 }

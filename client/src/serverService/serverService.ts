@@ -9,6 +9,7 @@ import { IssueModel } from "./models/issueModel";
 import { hashCode } from "../tool/hashFunction";
 import { VotingModel } from "./models/votingModel";
 import { GameModel } from "./models/gameModel";
+import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -105,6 +106,10 @@ function startGame(gameInfo:GameModel) {
   LobbyService.makeGameInRoom(gameInfo);
 }
 
+function sendChatMessage(messageInfo:ChatMessageInfo) {
+  LobbyService.sendChatMessage(messageInfo);
+}
+
 const ServerService = {
   setDispatch,
   registerNewUser,
@@ -120,6 +125,8 @@ const ServerService = {
   kickPlayer,
   setKickConclusion,
 
-  startGame
+  startGame,
+
+  sendChatMessage
 }
 export default ServerService;

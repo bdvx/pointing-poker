@@ -1,84 +1,63 @@
+import { useTypedSelector } from "../../hooky/useTypedSelector";
+import { ChatMessageInfo } from "../../serverService/models/chatMessageInfoModel";
+import { handleDragAndDrop } from "../../tool/dragAndDrop";
 import IconButton from "@material-ui/core/IconButton";
 import SendIcon from "@material-ui/icons/Send";
 import ChatMessage from "./ChatMessage/ChatMessage";
-import "./Chat.scss";
-import { useTypedSelector } from "../../hooky/useTypedSelector";
 import clientService from "../../clientService/clientService";
-import { newMessage } from "../../store/chatSlice";
-import { useDispatch } from "react-redux";
+import ServerService from "../../serverService/serverService";
+import "./Chat.scss";
 
 const Chat = () => {
-  const chatState = useTypedSelector((store) => store.chat);
-  const currentUserState = useTypedSelector((store) => store.userInfo);
+  const chat = useTypedSelector((store) => store.chat);
+  const currentUser = useTypedSelector((store) => store.userInfo);
   const room = useTypedSelector((store) => store.roomInfo);
-  const dispatch = useDispatch();
 
-  clientService.setDispatch(dispatch);
   const sendMessage = (event: any) => {
-    const input = (event.target as HTMLElement)
-      .closest(".Chat")
-      ?.querySelector(".Chat_input__text");
-    if ((input as HTMLInputElement).value === "") return;
-    dispatch(
-      newMessage({
-        message: (input as HTMLInputElement).value,
-        login: currentUserState.login,
-      })
-    );
-    (input as HTMLInputElement).value = "";
-  };
+    //!Вот эту страашилку желательно переписать
+    const targetInput = (event.target as HTMLElement).closest(".Chat")
+                        ?.querySelector(".Chat_input__text") as HTMLInputElement;
 
-  const handleDragAndDrop = (event: any) => {
-    console.log(event.target)
-    const chat = event.target;
-
-    let shiftX = event.clientX - chat.getBoundingClientRect().left;
-    let shiftY = event.clientY - chat.getBoundingClientRect().top;
-
-    moveAt(event.pageX, event.pageY);
-    function moveAt(pageX: number, pageY: number) {
-      chat.style.left = pageX - shiftX + "px";
-      chat.style.top = pageY - shiftY + "px";
+    const message = targetInput.value;
+    if (message) {
+      const messageInfo = makeNewMessage(currentUser.login, message);
+      ServerService.sendChatMessage(messageInfo);
+    } else {
+      return;
     }
 
-    function onMouseMove(event: any) {
-      moveAt(event.pageX, event.pageY);
-    }
-    document.addEventListener("mousemove", onMouseMove);
-    chat.onmouseup = function () {
-      document.removeEventListener("mousemove", onMouseMove);
-      chat.onmouseup = null;
-    };
-
-    chat.ondragstart = function () {
-      return false;
-    };
+    targetInput.value = "";
   };
+
 
   return (
     <div className="Chat" onMouseDown={handleDragAndDrop}>
+
       <ul className="Chat_messages">
-        {chatState.map((message) => {
-          const user = clientService.getUserByLogin(room, message.login);
-          return (
-            <ChatMessage
-              message={message.message}
-              name={user?.firstName}
-              surname={user?.lastName}
-              src={user?.avatar}
-              position={user?.jobPosition}
-            />
-          );
+        {chat.map((messageInfo) => {
+          const user = clientService.getUserByLogin(room, messageInfo.login);
+          return (<ChatMessage {...user} message = {messageInfo.message}/>);
         })}
       </ul>
+
       <div className="Chat_input">
         <input placeholder="Type something..." className="Chat_input__text" />
         <IconButton>
           <SendIcon onClick={sendMessage} />
         </IconButton>
       </div>
+
     </div>
   );
 };
 
 export default Chat;
+
+
+function makeNewMessage(login:string, message:string) {
+  const messageInfo:ChatMessageInfo = {
+    login,
+    message
+  }
+  return messageInfo;
+}

@@ -4,10 +4,10 @@ let clientDispatch:any;
 
 function setDispatch(dispatch:any) {
     clientDispatch = dispatch;
-  }
+}
 
 function getUserByLogin(room:Room,userlogin: string) {
-  const user = room.players.find((player) => player.login==userlogin);
+  const user = room.players.find((player) => player.login == userlogin);
   return user;
 }
 

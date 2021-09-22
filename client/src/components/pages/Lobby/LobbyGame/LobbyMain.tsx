@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import clientService from "../../../../clientService/clientService";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import ServerService from "../../../../serverService/serverService";
 import { resetRoomInfo } from "../../../../store/roomSlice";
@@ -12,6 +13,7 @@ const LobbyMain = () => {
   const roomInfo = useTypedSelector(store => store.roomInfo);
   const userInfo = useTypedSelector(store => store.userInfo);
   const dispatch = useDispatch();
+  clientService.setDispatch(dispatch);
   const router = useHistory();
 
   const onDisconnectBtnClick = () => {
