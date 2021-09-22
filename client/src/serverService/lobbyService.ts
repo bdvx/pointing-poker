@@ -1,4 +1,5 @@
 import { newMessage } from "../store/chatSlice";
+import { setGame } from "../store/gameSlice";
 import { setRoomInfo } from "../store/roomSlice";
 import { deleteVoit, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
@@ -14,9 +15,14 @@ import { WSResponse } from "./models/WSResponseModel";
 
 let wss:WebSocket;
 let lobbyDispatch:any;
+let lobbyRouter:any;
 
 function setLobbyDispatch(dispatch:any) {
   lobbyDispatch = dispatch;
+}
+
+function setLobbyRouter(router:any) {
+  lobbyRouter = router;
 }
 
 function RoomMessageHandler(message:string) {
@@ -39,8 +45,18 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(updateVoits(voteInfo)); //можно сделать ход голосования
     setTimeout(() => {
       lobbyDispatch(deleteVoit(voteInfo.whoKick))
-    },59000)
+    }, 59000)
     //TODO попап кика
+  }
+
+  const onGameStart = (gameInfo:GameModel) => {
+    lobbyDispatch(setGame(gameInfo));
+    lobbyRouter.push("/game");
+    //! Добавить этот роут в роутинг
+  }
+
+  const onGameUpdate = (gameInfo:GameModel) => {
+    lobbyDispatch(setGame(gameInfo));
   }
 
   switch(type) {
@@ -58,6 +74,12 @@ function RoomMessageHandler(message:string) {
 
     case "KICK_OFFER":
       onKickOffer(payLoad);
+      break;
+    case "START_GAME":
+      onGameStart(payLoad);
+      break;
+    case "UPDATE_GAME":
+      onGameUpdate(payLoad);
       break;
   }  
 }
@@ -137,7 +159,8 @@ const LobbyService = {
   sendKickOfferToRoom,
   sendKickConclusionToRoom,
   makeGameInRoom,
-  movePlayerInRoom
+  movePlayerInRoom,
+  setLobbyRouter
 }
 export default LobbyService;
 

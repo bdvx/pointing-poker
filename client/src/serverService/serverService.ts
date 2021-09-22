@@ -8,7 +8,6 @@ import { DisconectModel } from "./models/disconnectModel";
 import { IssueModel } from "./models/issueModel";
 import { hashCode } from "../tool/hashFunction";
 import { VotingModel } from "./models/votingModel";
-import { GameModel } from "./models/gameModel";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 
 const url = "http://localhost:5000/";
@@ -16,10 +15,16 @@ const wsUrl = "ws://localhost:5000/";
 let wss:WebSocket;
 let isConnect = false;
 let serverDispatch:any;
+let serverRouter:any;
 
 function setDispatch(dispatch:any) {
   serverDispatch = dispatch;
   LobbyService.setLobbyDispatch(dispatch);
+}
+
+function setRouter(router:any) {
+  serverRouter = router;
+  LobbyService.setLobbyRouter(router);
 }
 
 
@@ -116,6 +121,8 @@ function movePlayerFromQueueToGame(userLogin:string) {
 
 const ServerService = {
   setDispatch,
+  setRouter,
+
   registerNewUser,
   signInUser,
   connectToRoom,
