@@ -1,0 +1,100 @@
+.Chat {
+  position: absolute;
+  z-index: 100;
+  right: 0;
+  top: 10px;
+  width: 300px;
+  height: 500px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  &_messages {
+      height: 420px;
+      width: 320px;
+      overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+      padding-left: 10px;
+      margin-bottom: 10px;
+  }
+  &_input {
+    width: 280px;
+    height: 56px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    border: solid 4px;
+    border-color: plum;
+    border-radius: 30px;
+    box-shadow: 6px 5px 10px rgba(0, 0, 0, 0.281),
+      inset 3px 3px 5px rgba(0, 0, 0, 0.2),
+      -5px -5px 10px rgba(255, 255, 255, 0.8),
+      inset -5px -5px 10px rgba(255, 255, 255, 0.8);
+    &__text {
+      font: 20px Roboto, sans-serif;
+      width: 395px;
+      height: 50px;
+      box-sizing: border-box;
+      border: none;
+      background-color: transparent;
+      padding-left: 20px;
+      overflow: hidden;
+      &:focus {
+        outline: none;
+      }
+    }
+    // &__button {
+    //   font: 15px Roboto, sans-serif;
+    //   width: 47px;
+    //   height: 47px;
+    //   border-radius: 50%;
+    //   background-color: blueviolet;
+    //   border: none;
+    //   background-image: url(../../assets/images/magnifying-glass.png);
+    //   background-size: 26px 26px;
+    //   background-repeat: no-repeat;
+    //   background-position: center;
+    //   cursor: pointer;
+    //   box-shadow: 0 0 5px rgba(0, 0, 0, 0.474);
+    //   transition: all 0.3s;
+    //   &:hover {
+    //     transform: scale(1.05);
+    //     box-shadow: 0 0 7px rgba(0, 0, 0, 0.781);
+    //   }
+  }
+  &_message {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 280px;
+    margin-bottom: 5px;
+    &__text {
+      width: 230px;
+      box-sizing: border-box;
+      background-color: rgb(185, 210, 255);
+      margin-bottom: 5px;
+      font: Roboto, sans-serif;
+      font-size: 1em;
+      padding: 10px 10px 10px 12px;
+      border-radius: 20px;
+    }
+    &__avatar {
+      align-self: flex-start;
+    }
+  }
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+}

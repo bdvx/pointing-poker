@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import ServerService from "../../../../serverService/serverService";
 import { resetRoomInfo } from "../../../../store/roomSlice";
+import Chat from "../../../Chat/Chat";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import './LobbyMain.scss';
 
@@ -22,6 +23,7 @@ const LobbyMain = () => {
     //TODO на страничку нужно разместить url инвайта roomInfo.roomUrl
   return (
     <div className="Lobby__main">
+      <Chat/>
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
           <PlayerCard image={roomInfo.scrumInfo.avatar || './logo192.png'} name={roomInfo.scrumInfo.firstName} 
