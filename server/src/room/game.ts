@@ -1,3 +1,4 @@
+import { ChoiceModel } from "../models/socketModels/choiceModel";
 import { GameModel, IssueInfo } from "../models/socketModels/gameModel";
 import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
@@ -24,6 +25,7 @@ function makeIssueInfo(issue:IssueModel) {
     isVoting: false,
     issue: issue,
     votes: [],
+    isSelected: false
   }
   return issueInfo;
 }

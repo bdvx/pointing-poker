@@ -3,6 +3,7 @@ import { setGame } from "../store/gameSlice";
 import { setRoomInfo } from "../store/roomSlice";
 import { deleteVoit, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
+import { ChoiceModel } from "./models/choiceModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
 import { DisconectModel } from "./models/disconnectModel";
 import { GameModel } from "./models/gameModel";
@@ -75,9 +76,11 @@ function RoomMessageHandler(message:string) {
     case "KICK_OFFER":
       onKickOffer(payLoad);
       break;
+
     case "START_GAME":
       onGameStart(payLoad);
       break;
+
     case "UPDATE_GAME":
       onGameUpdate(payLoad);
       break;
@@ -147,6 +150,26 @@ function movePlayerInRoom(userLogin:string) {
   wss.send(request);
 }
 
+function sendChoiceToGame(choiceInfo:ChoiceModel) {
+  const request = makeWSRequestString("USER_MAKE_CHOICE", choiceInfo);
+  wss.send(request);
+}
+
+function selectIssueInRoom(issueId:string) {
+  const request = makeWSRequestString("SELECT_ISSUE", issueId);
+  wss.send(request);
+}
+
+function startVoteInRoom(issueId:string) {
+  const request = makeWSRequestString("START_ISSUE_VOTE", issueId);
+  wss.send(request);
+}
+
+function stopVoteInRoom(issueId:string) {
+  const request = makeWSRequestString("STOP_ISSUE_VOTE", issueId);
+  wss.send(request);
+}
+
 const LobbyService = {
   connectToRoom,
   sendChatMessage,
@@ -160,7 +183,11 @@ const LobbyService = {
   sendKickConclusionToRoom,
   makeGameInRoom,
   movePlayerInRoom,
-  setLobbyRouter
+  setLobbyRouter,
+  sendChoiceToGame,
+  startVoteInRoom,
+  stopVoteInRoom,
+  selectIssueInRoom
 }
 export default LobbyService;
 

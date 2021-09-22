@@ -6,6 +6,7 @@ import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
 import { makeWSResponseMessage, sendUpdatedRoom, transformServerRoomToClient } from "../tools/queryFunctions";
 import LobbyEventHandler from "./lobbyEventHandler";
+import GameEventHandler from "./gameEventHandler";
 
 function makeNewRoom(scrumInfo:WSClientModel) {
   const roomId = String(hashCode(scrumInfo.userInfo.login + Date.now()))
@@ -86,6 +87,19 @@ function lobbyMessageHandler(room:Room, message:string) {
       break;
     case "MOVE_FROM_QUEUE":
       LobbyEventHandler.onMoveFromQueue(room, payLoad);
+      break;
+    
+    case "USER_MAKE_CHOICE":
+      GameEventHandler.onUserMakeNewChoice(room, payLoad);
+      break;
+    case "START_ISSUE_VOTE":
+      GameEventHandler.onStartIssueVote(room, payLoad);
+      break;
+    case "STOP_ISSUE_VOTE":
+      GameEventHandler.onStopIssueVote(room, payLoad);
+      break;
+    case "SELECT_ISSUE":
+      GameEventHandler.onSelectIssue(room, payLoad);
       break;
   }
 }

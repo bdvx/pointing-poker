@@ -9,6 +9,7 @@ import { IssueModel } from "./models/issueModel";
 import { hashCode } from "../tool/hashFunction";
 import { VotingModel } from "./models/votingModel";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
+import { ChoiceModel } from "./models/choiceModel";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -119,6 +120,22 @@ function movePlayerFromQueueToGame(userLogin:string) {
   LobbyService.movePlayerInRoom(userLogin);
 }
 
+function startVote(issueId:string) {
+  LobbyService.startVoteInRoom(issueId);
+}
+
+function selectIssue(issueId:string) {
+  LobbyService.selectIssueInRoom(issueId);
+}
+
+function stopVote(issueId:string) {
+  LobbyService.stopVoteInRoom(issueId);
+}
+
+function makeChoice(choiceInfo:ChoiceModel) {
+  LobbyService.sendChoiceToGame(choiceInfo);
+}
+
 const ServerService = {
   setDispatch,
   setRouter,
@@ -140,6 +157,11 @@ const ServerService = {
 
   sendChatMessage,
 
-  movePlayerFromQueueToGame
+  movePlayerFromQueueToGame,
+
+  makeChoice,
+  startVote,
+  stopVote,
+  selectIssue
 }
 export default ServerService;
