@@ -102,8 +102,8 @@ function setKickConclusion(conclusion:boolean, kickedPlayerLogin?:string) {
   LobbyService.sendKickConclusionToRoom(conclusion, kickedPlayerLogin);
 }
 
-function startGame(gameInfo:GameModel) {
-  LobbyService.makeGameInRoom(gameInfo);
+function startGame() {
+  LobbyService.makeGameInRoom();
 }
 
 function sendChatMessage(messageInfo:ChatMessageInfo) {

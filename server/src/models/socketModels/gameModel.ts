@@ -1,5 +1,16 @@
-import { IssueModel } from "../../../../client/src/serverService/models/issueModel";
+import { WSClientModel } from "./clientModel";
+import { IssueModel } from "./issueModel";
+
+export interface IssueInfo {
+  issue: IssueModel,
+  isVoting: boolean,
+  votes: Array<{login:string, score:number}>,
+  result?: number
+}
 
 export interface GameModel {
-  issues: Array<IssueModel>
+  issuesInfo: Array<IssueInfo>,
+  players: Array<WSClientModel>,
+ // master
+  isVoting: boolean
 }

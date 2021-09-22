@@ -22,6 +22,10 @@ const LobbyMain = () => {
     router.push('/welcomePage');
   }
 
+  const onStartGameBtnClick = () => {
+    ServerService.startGame();
+  }
+
     //TODO на страничку нужно разместить url инвайта roomInfo.roomUrl
   return (
     <div className="Lobby__main">

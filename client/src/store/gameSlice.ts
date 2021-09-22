@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { GameModel } from "../serverService/models/gameModel";
 
 const initialState:GameModel = {
-  issues: []
+  isVoting:false,
+  issuesInfo: [],
+  players: [],
 }
 
 const gameSlice = createSlice({

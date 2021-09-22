@@ -7,7 +7,7 @@ export interface Room {
   roomUrl: string,
   isPlaying: boolean,
   scrumInfo: UserInfo,
-  isVoiting: boolean,
+  isVoting: boolean,
   players: Array<UserInfo>,
   queue: Array<UserInfo>,
   inGame: Array<UserInfo>,

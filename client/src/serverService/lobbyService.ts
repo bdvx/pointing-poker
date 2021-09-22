@@ -115,8 +115,8 @@ function sendKickConclusionToRoom(conclusion:boolean, kickedPlayerLogin?:string)
   }
 }
 
-function makeGameInRoom(gameInfo:GameModel) {
-  const request = makeWSRequestString("MAKE_NEW_GAME", gameInfo);
+function makeGameInRoom() {
+  const request = makeWSRequestString("MAKE_NEW_GAME", 'make new game');
   wss.send(request);
 }
 
