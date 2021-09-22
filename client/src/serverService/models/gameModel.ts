@@ -4,6 +4,7 @@ import { UserInfo } from "./userInfoModel";
 interface IssueInfo {
   issue: IssueModel,
   isVoting: boolean,
+  isSelected: boolean,
   votes: Array<{login:string, score:number}>,
   result?: number
 }
