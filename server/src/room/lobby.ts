@@ -90,6 +90,9 @@ function lobbyMessageHandler(room:Room, message:string) {
     case "MAKE_NEW_GAME":
       onMakeNewGame(room, payLoad);
       break;
+    case "MOVE_FROM_QUEUE":
+      onMoveFromQueue(room, payLoad);
+      break;
   }
 }
 
@@ -169,7 +172,7 @@ function onDeleteIssue(room:Room, newIssueId: string) {
 
   room.playersWS.forEach((player) => {
     sendUpdatedRoom(room, player.ws);
-  })
+  });
 }
 
 function onAgreeWithKick(room:Room, kickedPlayerLogin:string) {
@@ -181,6 +184,15 @@ function onMakeNewGame(room:Room, gameInfo:GameModel) {
   Game.makeNewGame(gameInfo);
 }
 
+function onMoveFromQueue(room:Room, userLogin:string) {
+  const index = room.queue.findIndex((observer) => observer.userInfo.login === userLogin);
+  room.inGame.push(room.queue[index]);
+
+  room.queue.splice(index, 1);
+  room.playersWS.forEach((player) => {
+    sendUpdatedRoom(room, player.ws);
+  });
+}
 
 const Lobby = {
   makeNewRoom,

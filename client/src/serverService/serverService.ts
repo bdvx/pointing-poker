@@ -110,6 +110,10 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
   LobbyService.sendChatMessage(messageInfo);
 }
 
+function movePlayerFromQueueToGame(userLogin:string) {
+  LobbyService.movePlayerInRoom(userLogin);
+}
+
 const ServerService = {
   setDispatch,
   registerNewUser,
@@ -127,6 +131,8 @@ const ServerService = {
 
   startGame,
 
-  sendChatMessage
+  sendChatMessage,
+
+  movePlayerFromQueueToGame
 }
 export default ServerService;

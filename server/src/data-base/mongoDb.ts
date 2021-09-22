@@ -76,12 +76,7 @@ const MongoDB = {
 export default MongoDB;
 
 function makeUserInfoWithOutPassword(userInfoFromBD:RegistrationModel) {
-  const userInfo:UserInfoModel = {
-    firstName: userInfoFromBD.firstName,
-    jobPosition: userInfoFromBD.jobPosition,
-    lastName: userInfoFromBD.lastName,
-    login: userInfoFromBD.login,
-    avatar: userInfoFromBD.avatar,
-  }
+  const { firstName, lastName, jobPosition, avatar, login } = userInfoFromBD;
+  const userInfo:UserInfoModel = {firstName, lastName, jobPosition, avatar, login};
   return userInfo;
 }

@@ -120,6 +120,11 @@ function makeGameInRoom(gameInfo:GameModel) {
   wss.send(request);
 }
 
+function movePlayerInRoom(userLogin:string) {
+  const request = makeWSRequestString("MOVE_FROM_QUEUE", userLogin);
+  wss.send(request);
+}
+
 const LobbyService = {
   connectToRoom,
   sendChatMessage,
@@ -131,7 +136,8 @@ const LobbyService = {
   deleteIssue,
   sendKickOfferToRoom,
   sendKickConclusionToRoom,
-  makeGameInRoom
+  makeGameInRoom,
+  movePlayerInRoom
 }
 export default LobbyService;
 
