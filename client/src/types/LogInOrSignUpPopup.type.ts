@@ -6,6 +6,7 @@ export default interface IFieldsValues {
   firstName?: string;
   lastName?: string;
   jobPosition?: string;
+  avatar?: string;
 };
 
 export interface IFieldProps {

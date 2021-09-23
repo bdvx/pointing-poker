@@ -1,14 +1,11 @@
-import { ClientModel } from "./models/socketModels/clientModel";
+import { WSClientModel } from "./models/socketModels/clientModel";
 import { app } from "./http";
-import DataService from "./tools/dataService";
 import { ConnectUserToWS } from "./models/socketModels/connectUserToWSModel";
 import { WSResponse } from "./models/socketModels/WSresponseModel";
 import { Room } from "./models/socketModels/roomModel";
-import { NewLobbyModel } from "./models/socketModels/newLobbyModel";
 import  Lobby  from "./room/lobby";
-import { UserInfoFromDB } from "./models/httpModels/useFromDBModel";
 import { DisconectModel } from "./models/socketModels/disconectModel";
-//import { Request, Response } from 'express';
+import { UserInfoModel } from "./models/socketModels/userInfoModel";
 
 const http = require('http');
 const webSocket = require('ws');
@@ -16,7 +13,7 @@ const server = http.createServer(app);
 const wsServer = new webSocket.Server({server});
 const port = process.env.PORT || 5000;
 
-let connectUsers:Array<ClientModel> = [];
+let connectUsers:Array<WSClientModel> = [];
 const rooms:Array<Room> = []
 
 server.listen(port, () => console.log("Server started"))
@@ -30,23 +27,31 @@ setInterval(() => {
   });
 }, 10000);
 
+function onMakeNewLobby(masterWs:WebSocket, scramInfo:UserInfoModel) {
+  const roomScramInfo: WSClientModel = {
+    ws:masterWs,
+    userInfo: scramInfo
+  }
 
-async function connectUserToWebSocket(ws:WebSocket, payLoad:string) {
-  const userInfo = JSON.parse(payLoad) as ConnectUserToWS;
-  const userInfoFromDB = await DataService.getUserByLogin(userInfo.login);
+  const newRoom = Lobby.makeNewRoom(roomScramInfo);
+  rooms.push(newRoom);
+}
 
-  if(userInfoFromDB) {
-    let client:ClientModel = { ws:ws, userInfo:userInfoFromDB };
+function onConnectUserToWebSocket(ws:WebSocket, connectInfo:ConnectUserToWS) {
+  const userInfo = connectInfo.userInfo;
+
+  if(userInfo.login) {
+    let client:WSClientModel = { ws:ws, userInfo:userInfo };
     connectUsers.push(client);
-    addUserToRoom(userInfo.roomId, userInfoFromDB, ws);
+    addUserToRoom(connectInfo.roomId, userInfo, ws);
   } else {
-    const response:WSResponse = { type:"CONNECTION_FAILURE", payLOad:"you should register before playing" }; 
+    const response:WSResponse = { type:"CONNECTION_FAILURE", payLoad:"you should register before playing" }; 
     ws.send(JSON.stringify(response));
     closeConnection(ws);
   }
 }
 
-function addUserToRoom(roomId: string,userInfo: UserInfoFromDB, userWs:WebSocket) {
+function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket) {
   const room = rooms.find((room)=>room.roomId === roomId);
   if(room) {
     Lobby.connectUserToRoom(room, userInfo, userWs);
@@ -55,46 +60,24 @@ function addUserToRoom(roomId: string,userInfo: UserInfoFromDB, userWs:WebSocket
   }
 }
 
-function closeConnection(ws:WebSocket){
-  connectUsers = connectUsers.filter((user)=>user.ws !== ws);
-  ws.close();
-}
-
-async function makeNewLobby(masterWs:WebSocket, payLoad:string) {
-  const regInfo = JSON.parse(payLoad) as NewLobbyModel;
-  const userInfo = await DataService.getUserByLogin(regInfo.scramLogin);
-
-  if(userInfo) {
-    const scramInfo: ClientModel = {
-      ws:masterWs,
-      userInfo: userInfo
-    }
-  
-    const newRoom = Lobby.makeNewRoom(scramInfo);
-    rooms.push(newRoom);
-  }
-}
-
-function disconnectUSer(userWs:WebSocket, payLoad:string) {
-  const userInfo = JSON.parse(payLoad) as DisconectModel;
-  closeConnection(userWs);
-
-  const room = rooms.find((room)=>room.roomId === userInfo.roomId);
+function onDisconnectUser(userWs:WebSocket, disconnectInfo:DisconectModel) {
+  const room = rooms.find((room)=>room.roomId === disconnectInfo.roomId);
   if(room) {
-    Lobby.disconnectUserFromRoom(room, userInfo.login);
+    Lobby.disconnectUserFromRoom(room, disconnectInfo);
   } else {
     console.log("ошибка: отключение от несуществующей комнаты");
   }
 }
 
-/* function joinLobbyByUrl(req: Request, res:Response) {
-  //TODO  джоин в комнату
-  //connectUserToWebSocket()
-} */
+function closeConnection(ws:WebSocket){
+  connectUsers = connectUsers.filter((user)=>user.ws !== ws);
+  ws.close();
+}
 
 export {
   wsServer,
-  connectUserToWebSocket,
-  makeNewLobby,
-  disconnectUSer,
+  onConnectUserToWebSocket,
+  onMakeNewLobby,
+  onDisconnectUser,
+  closeConnection
 }

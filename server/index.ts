@@ -1,16 +1,17 @@
-import { wsServer, connectUserToWebSocket, makeNewLobby, disconnectUSer } from "./src/socket";
-import { app, regNewUser, signIn } from "./src/http";
+import { wsServer, onConnectUserToWebSocket, onMakeNewLobby, onDisconnectUser } from "./src/socket";
+import { app, joinLobbyByUrl, regNewUser, signIn } from "./src/http";
 import { QueryModel } from "./src/models/socketModels/WSqueryModel";
 
 
-app.get('/regNewUser', regNewUser);
-app.get('/singIn', signIn);
-//app.get('/joinLobby/:id', joinLobbyByUrl);
+app.post('/regNewUser', regNewUser);
+app.post('/singIn', signIn);
+/* app.get('/joinLobby', joinLobbyByUrl); */
+app.post('/joinLobby', joinLobbyByUrl);
 
 
 wsServer.on('connection', (clientWs:any) => {
   clientWs.isAlive = true;
-  
+
   clientWs.on('message', (message:string) => { 
     messageHandler(message, clientWs);
   })
@@ -29,12 +30,12 @@ function messageHandler(message:string, clientWs:WebSocket) {
 
   switch(type) {
     case 'MAKE_NEW_LOBBY':
-      makeNewLobby(clientWs, payLoad);
+      onMakeNewLobby(clientWs, payLoad);
       break;
     case 'CONNECT_TO_ROOM':
-      connectUserToWebSocket(clientWs, payLoad);
+      onConnectUserToWebSocket(clientWs, payLoad);
       break;
     case 'DISCONNECT':
-      disconnectUSer(clientWs, payLoad);
+      onDisconnectUser(clientWs, payLoad);
   }
 }

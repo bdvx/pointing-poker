@@ -1,0 +1,43 @@
+.Lobby {
+    &__wrapper {
+        max-width: 1000px;
+        box-sizing: border-box;
+        padding: 50px 100px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    &__title {
+        font: 28px Roboto, sans-serif;
+        margin-bottom: 30px;
+    }
+    &__routing{
+        width: 1000px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 60px;
+    }
+    &__link {
+        position: relative;
+        text-decoration: none;
+        font: 24px Roboto, sans-serif;
+        color: black;
+        &:after {
+            display: block;
+            position: absolute;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: black;
+            content: "";
+            transition: width 0.2s ease-out;
+          }
+          &:hover:after,
+          &:focus:after {
+            width: 100%;
+          }
+    }
+}

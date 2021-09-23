@@ -4,6 +4,7 @@ import { SignInModel } from "../models/httpModels/signInModel";
 import HashServise from "./hashServise";
 import RegModel from "./mongoDBShcema";
 import { UserInfoFromDB } from "../models/httpModels/useFromDBModel";
+import { UserInfoModel } from "../models/socketModels/userInfoModel";
 
 const mongoose = require('mongoose')
 const bdUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/planing-pocker?retryWrites=true&w=majority';
@@ -31,7 +32,7 @@ async function signIn(user:SignInModel) {
   const userInfoFromBD = await RegModel.findOne({login: user.login});
   if(userInfoFromBD) {
     if(HashServise.comparePassWithHash(user.password, userInfoFromBD.password)) {
-      return makeResponse(true, `user ${user.login} login successfully`);
+      return makeResponse(true, `user ${user.login} login successfully`, makeUserInfoWithOutPassword(userInfoFromBD));
     } else {
       return makeResponse(false, `wrong password`);
     }
@@ -62,8 +63,8 @@ async function connectToDB() {
   }
 }
 
-function makeResponse(isSuccess:boolean, message:string) {
-  const status: ResponseModel = { isSuccess, message };
+function makeResponse(isSuccess:boolean, message:string, body?:any) {
+  const status: ResponseModel = { isSuccess, message, body };
   return status;
 }
 
@@ -73,3 +74,9 @@ const MongoDB = {
   getUserByLogin
 }
 export default MongoDB;
+
+function makeUserInfoWithOutPassword(userInfoFromBD:RegistrationModel) {
+  const { firstName, lastName, jobPosition, avatar, login } = userInfoFromBD;
+  const userInfo:UserInfoModel = {firstName, lastName, jobPosition, avatar, login};
+  return userInfo;
+}

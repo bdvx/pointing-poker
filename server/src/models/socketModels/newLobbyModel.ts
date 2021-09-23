@@ -1,4 +1,6 @@
+import { UserInfoModel } from "./userInfoModel";
+
 export interface NewLobbyModel {
-  scramLogin: string,
-  isScram: boolean
+  scramInfo: UserInfoModel,
+  roomId: string
 } 

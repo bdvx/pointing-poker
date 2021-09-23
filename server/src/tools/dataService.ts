@@ -4,18 +4,18 @@ import { SignInModel } from "../models/httpModels/signInModel";
 
 export default class DataService {
   static async addNewUser(user:RegistrationModel) {
-    const status = await MongoDB.addNewUser(user);
-    return status;
+    const response = await MongoDB.addNewUser(user);
+    return response;
   }
  
   static async signInUser(user:SignInModel) {
-    const status = await MongoDB.signIn(user);
-    return status;
+    const response = await MongoDB.signIn(user);
+    return response;
   }
 
   static async getUserByLogin(login:string) {
-    const status = await MongoDB.getUserByLogin(login);
-    return status;
+    const response = await MongoDB.getUserByLogin(login);
+    return response;
   }
  
 }

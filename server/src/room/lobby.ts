@@ -1,54 +1,54 @@
 import { Room } from "../models/socketModels/roomModel";
-import { ClientModel } from "../models/socketModels/clientModel"
+import { WSClientModel } from "../models/socketModels/clientModel"
 import { hashCode } from "../tools/hashFunction";
-import { UserInfoFromDB } from "../models/httpModels/useFromDBModel";
-import { WSResponse } from "../models/socketModels/WSresponseModel";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
-import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
-import { KickInfo } from "../models/socketModels/kickInfoModel";
+import { UserInfoModel } from "../models/socketModels/userInfoModel";
+import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
+import { deletePersonFromRoom, makeWSResponseMessage, sendUpdatedRoom, transformServerRoomToClient } from "../tools/roomunctions";
+import LobbyEventHandler, { updateLobbyForEveryOne } from "./lobbyEventHandler";
+import GameEventHandler from "./gameEventHandler";
 
-function makeNewRoom(scramInfo:ClientModel) {
+function makeNewRoom(scrumInfo:WSClientModel) {
+  const roomId = String(hashCode(scrumInfo.userInfo.login + Date.now()))
   const newRoom:Room = {
-    players: [scramInfo],
-    roomId: String(hashCode(scramInfo.userInfo.login)),
+    roomId: roomId,
+    roomUrl: `http://localhost:5000/joinLobby/${roomId}`,
+    chat: [],
+    isPlaying: false,
+    scrumInfo: scrumInfo.userInfo,
+    playersWS: [scrumInfo],
+    issues: [],
+    votes: [],
+    inGame: [],
+    queue: []
   }
 
+  const scramWS = scrumInfo.ws as WebSocket;
+
+  scramWS.onmessage = (ev) => { lobbyMessageHandler(newRoom, ev.data) };
+  const roomToClient = transformServerRoomToClient(newRoom);
+  scramWS.send(makeWSResponseMessage("ROOM_BUILD", roomToClient));
   return newRoom;
 }
 
-function connectUserToRoom(room:Room, userInfo:UserInfoFromDB, userWS:WebSocket) {
-  const newPlayer:ClientModel = {
+function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) {
+  const newPlayer:WSClientModel = {
     ws: userWS,
     userInfo: userInfo
   }
   userWS.onmessage = (ev) => { lobbyMessageHandler(room, ev.data) };
 
-  const response = makeWSResponseMessage("NEW_USER_JOIN_ROOM", userInfo);
-  room.players.forEach((player)=>player.ws.send(JSON.stringify(response)));
-  room.players.push(newPlayer);
+  room.playersWS.push(newPlayer);
+  room.queue.push(newPlayer);
+  updateLobbyForEveryOne(room);
 }
 
-function disconnectUserFromRoom(room:Room, userLogin:string) {
-  room.players.filter((player)=>player.userInfo.login !== userLogin);
-
-  const response = makeWSResponseMessage("DISCONNECT_USER", userLogin);
-  room.players.forEach((player) => {
-    player.ws.send(JSON.stringify(response));
-  })
+//то чуть позже перепешу
+function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
+  deletePersonFromRoom(room, disconnectInfo.login);
+  updateLobbyForEveryOne(room);
 }
 
-function sendPlayerRoomConfiguration(room:Room, userWs:WebSocket) {
-  const response = makeWSResponseMessage("UPDATE_ROOM", room);
-  userWs.send(response);
-
-/*   room.players.forEach((player)=>{
-    player.ws.send(JSON.stringify(eventInfo));
-  }) */
-}
-
-function makeConnectionEndPoint() {
-
-}
 
 function lobbyMessageHandler(room:Room, message:string) {
   const type = (JSON.parse(message) as QueryModel).type;
@@ -56,45 +56,43 @@ function lobbyMessageHandler(room:Room, message:string) {
   //!Для обработки запросов связанных чисто с игрой
   switch(type) {
     case "CHAT_MESSAGE":
-      chatMessageHandler(room, payLoad);
+      LobbyEventHandler.onChatMessage(room, payLoad);
+      break;
+    case "NEW_ISSUE":
+      LobbyEventHandler.onNewIssue(room, payLoad);
+      break;
+    case "UPDATE_ISSUE":
+      LobbyEventHandler.onUpdateIssue(room, payLoad);
+      break;
+    case "DELETE_ISSUE":
+      LobbyEventHandler.onDeleteIssue(room, payLoad);
       break;
     case "KICK_PLAYER_OFFER":
-      offerKickPlayer(room, payLoad);
+      LobbyEventHandler.onOfferKickPlayer(room, payLoad);
+      break;
+    case "AGREE_WITH_KICK":
+      LobbyEventHandler.onAgreeWithKick(room, payLoad);
+      break;
+    case "MAKE_NEW_GAME":
+      LobbyEventHandler.onMakeNewGame(room);
+      break;
+    case "MOVE_FROM_QUEUE":
+      LobbyEventHandler.onMoveFromQueue(room, payLoad);
+      break;
+    
+    case "USER_MAKE_CHOICE":
+      GameEventHandler.onUserMakeNewChoice(room, payLoad);
+      break;
+    case "START_ISSUE_VOTE":
+      GameEventHandler.onStartIssueVote(room, payLoad);
+      break;
+    case "STOP_ISSUE_VOTE":
+      GameEventHandler.onStopIssueVote(room, payLoad);
+      break;
+    case "SELECT_ISSUE":
+      GameEventHandler.onSelectIssue(room, payLoad);
       break;
   }
-}
-
-function chatMessageHandler(room:Room, payLoad: string) {
-  const messageInfo = JSON.parse(payLoad) as ChatMessageInfo;
-  const response = makeWSResponseMessage("NEW_MESSAGE", messageInfo);
-
-  room.players.forEach((player)=>{
-    if(messageInfo.login !== player.userInfo.login) 
-      player.ws.send(response);
-  })
-}
-
-//TODO где хранить подсчет голосов (room?)
-function offerKickPlayer(room:Room, payLoad:string) {
-  const kickInfo = JSON.parse(payLoad) as KickInfo;
-  const response = makeWSResponseMessage("KICK_OFFER", kickInfo);
-
-  room.players.forEach((player)=>{
-    if(player.userInfo.login !== kickInfo.whoKick &&
-       player.userInfo.login !== kickInfo.whoOffer) {
-        player.ws.send(response);
-    }
-  })
-}
-
-function makeWSResponseMessage(type: string, payLoadObj:any) {
-  const payLoadStr = JSON.stringify(payLoadObj);
-  const response: WSResponse = {
-    type: type,
-    payLOad: payLoadStr
-  }
-
-  return payLoadStr;
 }
 
 const Lobby = {
