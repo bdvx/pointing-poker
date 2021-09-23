@@ -3,7 +3,7 @@ import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
 import { VotingModel } from "../models/socketModels/votingModel";
 import { closeConnection } from "../socket";
-import { makeWSResponseMessage, sendUpdatedRoom } from "../tools/queryFunctions";
+import { deletePersonFromRoom, makeWSResponseMessage, sendUpdatedRoom } from "../tools/roomunctions";
 import Game from "./game";
 
 function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
@@ -113,22 +113,3 @@ export function updateLobbyForEveryOne(room:Room) {
     sendUpdatedRoom(room, player.ws);
   });
 }
-
-export function deletePersonFromRoom(room:Room, login:string) {
-  const gameIndex = room.inGame.findIndex(playerWs => playerWs.userInfo.login === login);
-  if (gameIndex !== -1) {
-    room.inGame.splice(gameIndex, 1);
-  }
-
-  const queueIndex = room.queue.findIndex(playerWs => playerWs.userInfo.login === login);
-  if (queueIndex !== -1) {
-    room.queue.splice(queueIndex, 1);
-  }
-
-  const roomIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === login);
-  if (roomIndex !== -1) {
-    room.playersWS.splice(roomIndex, 1);
-  }
-  return roomIndex;
-}
-

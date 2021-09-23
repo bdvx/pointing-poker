@@ -47,3 +47,22 @@ export function makeWSResponseMessage(type: string, payLoadObj:any) {
 
   return JSON.stringify(response);
 }
+
+export function deletePersonFromRoom(room:Room, login:string) {
+  const gameIndex = room.inGame.findIndex(playerWs => playerWs.userInfo.login === login);
+  if (gameIndex !== -1) {
+    room.inGame.splice(gameIndex, 1);
+  }
+
+  const queueIndex = room.queue.findIndex(playerWs => playerWs.userInfo.login === login);
+  if (queueIndex !== -1) {
+    room.queue.splice(queueIndex, 1);
+  }
+
+  const roomIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === login);
+  if (roomIndex !== -1) {
+    room.playersWS.splice(roomIndex, 1);
+  }
+  return roomIndex;
+}
+

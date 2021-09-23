@@ -1,7 +1,7 @@
 import { ChoiceModel } from "../models/socketModels/choiceModel";
 import { IssueInfo } from "../models/socketModels/gameModel";
 import { Room } from "../models/socketModels/roomModel";
-import { sendUpdatedGame } from "../tools/queryFunctions";
+import { sendUpdatedGame } from "../tools/roomunctions";
 
 function onUserMakeNewChoice(room:Room, userChoiceInfo:ChoiceModel) {
   const { issueId, login, score } = userChoiceInfo;

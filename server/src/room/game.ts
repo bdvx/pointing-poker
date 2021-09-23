@@ -2,7 +2,7 @@ import { ChoiceModel } from "../models/socketModels/choiceModel";
 import { GameModel, IssueInfo } from "../models/socketModels/gameModel";
 import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
-import { makeWSResponseMessage, transformServerRoomToClient } from "../tools/queryFunctions";
+import { makeWSResponseMessage, transformServerRoomToClient } from "../tools/roomunctions";
 
 function makeNewGame(room:Room) {
   const gameInfo:GameModel = {
@@ -34,8 +34,3 @@ const Game = {
   makeNewGame
 }
 export default Game;
-
-
-/* room.playersWS.forEach((player) => {
-  sendUpdatedGame(room, player.ws);
-}) */
