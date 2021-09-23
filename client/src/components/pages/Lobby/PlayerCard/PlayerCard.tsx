@@ -1,37 +1,53 @@
 import { Avatar, IconButton } from "@material-ui/core";
 import BlockIcon from "@material-ui/icons/Block";
+import { useTypedSelector } from "../../../../hooky/useTypedSelector";
+import { VotingModel } from "../../../../serverService/models/votingModel";
+import ServerService from "../../../../serverService/serverService";
 import "./PlayerCard.scss";
 
-interface MyProps {
-  image: string;
-  name: string;
-  surname: string;
-  position: string;
+interface PlayerCardProps {
+  avatar: string;
+  firstName: string;
+  lastName: string;
+  jobPosition: string;
+  login: string
 }
 
-const PlayerCard = (props: MyProps) => {
-  const { image, name, surname, position } = props;
-  let avatar;
-  if (image === undefined || image === "") {
-    avatar = name[0];
-    if (surname !== undefined && surname !== "") {
-      avatar += surname[0];
+const PlayerCard = (props: PlayerCardProps) => {
+  const currentUserLogin = useTypedSelector(store => store.userInfo.login);
+  const { avatar, firstName, lastName, jobPosition } = props;
+  let letterAvatar;
+  if (avatar === undefined || avatar === "") {
+    letterAvatar = firstName[0];
+    if (lastName !== undefined && lastName !== "") {
+      letterAvatar += lastName[0];
     }
+  }
+
+  const onKickBtnClick = () => {
+    const kickVoting:VotingModel = {
+      whoKick: props.login,
+      amountAgree: 0,
+      isVoiting: false,
+      message: "kick",
+      whoOffer: currentUserLogin
+    }
+    ServerService.kickPlayer(kickVoting);
   }
 
   return (
     <div className="PlayerCard">
-      <Avatar className="PlayerCard_avatar" src={image}>
+      <Avatar className="PlayerCard_avatar" src={avatar}>
         {avatar}
       </Avatar>
       <div className="PlayerCard_info">
         <div className="PlayerCard_info__name">
-          {name} {surname}
+          {firstName} {lastName}
         </div>
-        <div className="PlayerCard_info__position">{position}</div>
+        <div className="PlayerCard_info__position">{jobPosition}</div>
       </div>
       <IconButton>
-        <BlockIcon />
+        <BlockIcon onClick={onKickBtnClick}/>
       </IconButton>
     </div>
   );

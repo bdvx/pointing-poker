@@ -8,17 +8,24 @@ import { DisconectModel } from "./models/disconnectModel";
 import { IssueModel } from "./models/issueModel";
 import { hashCode } from "../tool/hashFunction";
 import { VotingModel } from "./models/votingModel";
-import { GameModel } from "./models/gameModel";
+import { ChatMessageInfo } from "./models/chatMessageInfoModel";
+import { ChoiceModel } from "./models/choiceModel";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
 let wss:WebSocket;
 let isConnect = false;
 let serverDispatch:any;
+let serverRouter:any;
 
 function setDispatch(dispatch:any) {
   serverDispatch = dispatch;
   LobbyService.setLobbyDispatch(dispatch);
+}
+
+function setRouter(router:any) {
+  serverRouter = router;
+  LobbyService.setLobbyRouter(router);
 }
 
 
@@ -101,12 +108,38 @@ function setKickConclusion(conclusion:boolean, kickedPlayerLogin?:string) {
   LobbyService.sendKickConclusionToRoom(conclusion, kickedPlayerLogin);
 }
 
-function startGame(gameInfo:GameModel) {
-  LobbyService.makeGameInRoom(gameInfo);
+function startGame() {
+  LobbyService.makeGameInRoom();
+}
+
+function sendChatMessage(messageInfo:ChatMessageInfo) {
+  LobbyService.sendChatMessage(messageInfo);
+}
+
+function movePlayerFromQueueToGame(userLogin:string) {
+  LobbyService.movePlayerInRoom(userLogin);
+}
+
+function startVote(issueId:string) {
+  LobbyService.startVoteInRoom(issueId);
+}
+
+function selectIssue(issueId:string) {
+  LobbyService.selectIssueInRoom(issueId);
+}
+
+function stopVote(issueId:string) {
+  LobbyService.stopVoteInRoom(issueId);
+}
+
+function makeChoice(choiceInfo:ChoiceModel) {
+  LobbyService.sendChoiceToGame(choiceInfo);
 }
 
 const ServerService = {
   setDispatch,
+  setRouter,
+
   registerNewUser,
   signInUser,
   connectToRoom,
@@ -120,6 +153,15 @@ const ServerService = {
   kickPlayer,
   setKickConclusion,
 
-  startGame
+  startGame,
+
+  sendChatMessage,
+
+  movePlayerFromQueueToGame,
+
+  makeChoice,
+  startVote,
+  stopVote,
+  selectIssue
 }
 export default ServerService;
