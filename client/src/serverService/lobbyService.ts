@@ -1,6 +1,6 @@
 import { newMessage } from "../store/chatSlice";
 import { setGame } from "../store/gameSlice";
-import { setRoomInfo } from "../store/roomSlice";
+import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
 import { deleteVoit, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
@@ -61,8 +61,8 @@ function RoomMessageHandler(message:string) {
   }
 
   const onYouAreKicked = (message:string) => {
-    console.log(lobbyRouter)
     lobbyRouter.push("/welcomePage");
+    lobbyDispatch(resetRoomInfo());
     alert(message);
   }
 
