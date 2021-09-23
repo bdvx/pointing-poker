@@ -3,6 +3,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import "./Issue.scss";
 
+// TODO: совместить с client\src\serverService\models\issueModel.ts
 interface MyProps {
   title: string;
   priority: string;
