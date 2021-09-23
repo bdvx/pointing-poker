@@ -3,6 +3,7 @@ import { StartPage } from "./components/pages/StartPage/StartPage";
 import { AboutPage } from "./components/pages/AboutPage/aboutPage";
 import { WelcomePage } from "./components/pages/WelcomePage/WelcomePage";
 import Lobby from "./components/pages/Lobby/LobbyStart/Lobby";
+import { Game } from './components/pages/GamePage/Game/Game';
 
 export default function AppRouter() {
   let location =  useLocation();

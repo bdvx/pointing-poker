@@ -1,6 +1,6 @@
 export interface IssueModel {
   title: string,
-  priorety: string,
+  priority: string,
   link: string,
   id?: string
 }
