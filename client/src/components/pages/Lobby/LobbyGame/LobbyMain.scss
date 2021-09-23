@@ -1,0 +1,76 @@
+.Lobby {
+  &__main {
+    display: flex;
+    flex-direction: column;
+  }
+  &__master {
+    width: 1000px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+    &_title {
+      box-sizing: border-box;
+      font: 24px Roboto, sans-serif;
+    }
+  }
+  &__exit-btn {
+    position: relative;
+    display: inline-flex;
+    width: 150px;
+    height: 55px;
+    perspective: 1000px;
+    cursor: pointer;
+    & div {
+      font-size: 19px;
+      letter-spacing: 1px;
+      transform-style: preserve-3d;
+      transform: translateZ(-25px);
+      transition: transform 0.25s;
+      font: 20px Roboto, sans-serif;
+    }
+    & div:before,
+    & div:after {
+      position: absolute;
+      content: "Exit";
+      height: 55px;
+      width: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 5px solid #2b3a67;
+      box-sizing: border-box;
+      border-radius: 5px;
+    }
+    & div:before {
+      color: #fff;
+      background: #2b3a67;
+      transform: rotateY(0deg) translateZ(25px);
+    }
+    & div:after {
+      color: #2b3a67;
+      transform: rotateX(90deg) translateZ(25px);
+    }
+    & div:hover {
+      transform: translateZ(-25px) rotateX(-90deg);
+    }
+  }
+  &__members {
+    &_title {
+      font: 24px Roboto, sans-serif;
+      margin-bottom: 20px;
+    }
+    &_cards {
+      display: flex;
+      width: 1000px;
+      justify-content: space-evenly;
+      flex-direction: row;
+      flex-wrap: wrap;
+      & > * {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

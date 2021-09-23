@@ -1,0 +1,10 @@
+.App {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.App__startPage,
+.App__welcomePage {
+  margin: 0 auto;
+}
