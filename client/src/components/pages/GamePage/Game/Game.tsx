@@ -16,36 +16,30 @@ import { setGame } from '../../../../store/gameSlice';
 export const Game: FC = () => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
-  const { issues } = useTypedSelector(store => store.game);
+  // const { issues } = useTypedSelector(store => store.game);
   const dispatch = useDispatch();
 
   const scrum = true;
-
-  // Для наглядности
-  useEffect(() => {
-    dispatch(setGame({
-      issues: [
-        {
-          title: 'Issue 1',
-          priority: 'Low priority',
-          link: '/issue-1',
-          id: '1'
-        },
-        {
-          title: 'Issue 2',
-          priority: 'Low priority',
-          link: '/issue-2',
-          id: '2'
-        },
-        {
-          title: 'Issue 3',
-          priority: 'Low priority',
-          link: '/issue-3',
-          id: '3'
-        }
-      ]
-    }));
-  }, []);
+  const issues = [
+    {
+      title: 'Issue 1',
+      priority: 'Low priority',
+      link: '/issue-1',
+      id: '1'
+    },
+    {
+      title: 'Issue 2',
+      priority: 'Low priority',
+      link: '/issue-2',
+      id: '2'
+    },
+    {
+      title: 'Issue 3',
+      priority: 'Low priority',
+      link: '/issue-3',
+      id: '3'
+    }
+  ];
 
   return (
     <div className="Game">
@@ -55,7 +49,7 @@ export const Game: FC = () => {
         <span className="Game__masterTitle">Scrum master:</span>
 
         {/* TODO: нужно убрать для карточки мастера кик */}
-        <PlayerCard image={ scrumInfo.avatar || './logo192.png' } name={ scrumInfo.firstName } surname={ scrumInfo.lastName } position={ scrumInfo.jobPosition } />
+        <PlayerCard avatar={ scrumInfo.avatar || './logo192.png' } firstName={ scrumInfo.firstName } lastName={ scrumInfo.lastName } jobPosition={ scrumInfo.jobPosition } login="" />
 
         { scrum ?
             <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Stop Game</Button>
