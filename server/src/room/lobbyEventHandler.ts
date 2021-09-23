@@ -36,24 +36,11 @@ function onDeleteIssue(room:Room, newIssueId: string) {
 function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
 
   const deletePlayerFromRoom = (playerLogin: string) => {
-    const gameIndex = room.inGame.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
-    if (gameIndex !== -1) {
-      room.inGame.splice(gameIndex, 1);
-    }
 
-    const queueIndex = room.queue.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
-    if (queueIndex !== -1) {
-      room.queue.splice(queueIndex, 1);
-    }
-
-    const roomIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
-    if (roomIndex !== -1) {
-      const response = makeWSResponseMessage("YOU_ARE_KICKED", "you were kicked by the master");
-      room.playersWS[roomIndex].ws.send(response);
-      closeConnection(room.playersWS[roomIndex].ws);
-      room.playersWS.splice(roomIndex, 1);
-    }
-
+    const deletedPlayerIndex = deletePersonFromRoom(room, voteInfo.whoKick);
+    const response = makeWSResponseMessage("YOU_ARE_KICKED", "you were kicked by the master");
+    room.playersWS[deletedPlayerIndex].ws.send(response);
+    closeConnection(room.playersWS[deletedPlayerIndex].ws);
     //TODO техническое сообщение в чат
     /*     const kickedPlayer:KickedPlayer = {
       kickedLogin: kickInfo.whoKick,
@@ -121,9 +108,27 @@ const LobbyEventHandler = {
 export default LobbyEventHandler;
 
 
-function updateLobbyForEveryOne(room:Room) {
+export function updateLobbyForEveryOne(room:Room) {
   room.playersWS.forEach((player) => {
     sendUpdatedRoom(room, player.ws);
   });
+}
+
+export function deletePersonFromRoom(room:Room, login:string) {
+  const gameIndex = room.inGame.findIndex(playerWs => playerWs.userInfo.login === login);
+  if (gameIndex !== -1) {
+    room.inGame.splice(gameIndex, 1);
+  }
+
+  const queueIndex = room.queue.findIndex(playerWs => playerWs.userInfo.login === login);
+  if (queueIndex !== -1) {
+    room.queue.splice(queueIndex, 1);
+  }
+
+  const roomIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === login);
+  if (roomIndex !== -1) {
+    room.playersWS.splice(roomIndex, 1);
+  }
+  return roomIndex;
 }
 

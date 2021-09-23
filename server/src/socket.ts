@@ -61,8 +61,6 @@ function addUserToRoom(roomId: string,userInfo: UserInfoModel, userWs:WebSocket)
 }
 
 function onDisconnectUser(userWs:WebSocket, disconnectInfo:DisconectModel) {
-  closeConnection(userWs);
-  
   const room = rooms.find((room)=>room.roomId === disconnectInfo.roomId);
   if(room) {
     Lobby.disconnectUserFromRoom(room, disconnectInfo);

@@ -5,7 +5,7 @@ import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
 import { makeWSResponseMessage, sendUpdatedRoom, transformServerRoomToClient } from "../tools/queryFunctions";
-import LobbyEventHandler from "./lobbyEventHandler";
+import LobbyEventHandler, { deletePersonFromRoom, updateLobbyForEveryOne } from "./lobbyEventHandler";
 import GameEventHandler from "./gameEventHandler";
 
 function makeNewRoom(scrumInfo:WSClientModel) {
@@ -40,22 +40,13 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
 
   room.playersWS.push(newPlayer);
   room.queue.push(newPlayer);
-  room.playersWS.forEach((player) => {
-    sendUpdatedRoom(room, player.ws);
-  });
+  updateLobbyForEveryOne(room);
 }
 
+//то чуть позже перепешу
 function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
-  const index = room.playersWS.findIndex(player => player.userInfo.login === disconnectInfo.login);
-  if (index !== -1) {
-    room.playersWS.splice(index, 1);
-  }
-  //!Какого фига в этом месте не работает filter?
-/*   room.playersWS.filter((playerWS) => playerWS.userInfo.login !== disconnectInfo.login); */
-
-  room.playersWS.forEach((playerWS) => {
-    sendUpdatedRoom(room, playerWS.ws);
-  })
+  deletePersonFromRoom(room, disconnectInfo.login);
+  updateLobbyForEveryOne(room);
 }
 
 
