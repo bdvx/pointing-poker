@@ -1,4 +1,5 @@
 import { newMessage } from "../store/chatSlice";
+import { setCurrentUserScrumStatus } from "../store/currentUserSlice";
 import { setGame } from "../store/gameSlice";
 import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
 import { deleteVoit, updateVoits } from "../store/votingSlice";
@@ -36,6 +37,7 @@ function RoomMessageHandler(message:string) {
   
   const onSuccessRoomBuild = (roomInfo: Room) => {
     lobbyDispatch(setRoomInfo(roomInfo));
+    lobbyDispatch(setCurrentUserScrumStatus());
   }
 
   const onChatMessage = (message:ChatMessageInfo) => {

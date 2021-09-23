@@ -20,9 +20,12 @@ const currentUserSlice = createSlice({
     },
     setScrumStatus(state, action) {
       state.isScrum = action.payload;
+    },
+    setCurrentUserScrumStatus(state) {
+      state.isScrum = true;
     }
   }
 })
 
 export default currentUserSlice.reducer;
-export const {setUserInfo, setScrumStatus} = currentUserSlice.actions;
+export const {setUserInfo, setScrumStatus, setCurrentUserScrumStatus} = currentUserSlice.actions;
