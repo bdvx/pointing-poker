@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import clientService from "../../../../clientService/clientService";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import ServerService from "../../../../serverService/serverService";
+import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
 import Chat from "../../../Chat/Chat";
 import PlayerCard from "../PlayerCard/PlayerCard";
@@ -22,6 +23,7 @@ const LobbyMain = () => {
   const onDisconnectBtnClick = () => {
     ServerService.disconect(userInfo, roomInfo.roomId, `user ${userInfo.login} disconnect the room`);
     dispatch(resetRoomInfo());
+    dispatch(resetChat());
     router.push('/welcomePage');
   }
 
