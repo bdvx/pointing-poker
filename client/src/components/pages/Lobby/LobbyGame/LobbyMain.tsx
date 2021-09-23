@@ -7,6 +7,7 @@ import ServerService from "../../../../serverService/serverService";
 import { resetRoomInfo } from "../../../../store/roomSlice";
 import Chat from "../../../Chat/Chat";
 import PlayerCard from "../PlayerCard/PlayerCard";
+import { Queue } from "../Queue/queue";
 import './LobbyMain.scss';
 
 const LobbyMain = () => {
@@ -30,10 +31,11 @@ const LobbyMain = () => {
   return (
     <div className="Lobby__main">
       <Chat/>
+      <Queue />
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
-          <PlayerCard image={roomInfo.scrumInfo.avatar || './logo192.png'} name={roomInfo.scrumInfo.firstName} 
-                      surname={roomInfo.scrumInfo.lastName} position={roomInfo.scrumInfo.jobPosition}/>
+          <PlayerCard avatar={roomInfo.scrumInfo.avatar || './logo192.png'} firstName={roomInfo.scrumInfo.firstName} 
+                      lastName={roomInfo.scrumInfo.lastName} jobPosition={roomInfo.scrumInfo.jobPosition}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
         </div>
         <h1>{roomInfo.roomUrl}</h1>
@@ -42,8 +44,8 @@ const LobbyMain = () => {
         <div className='Lobby__members_title'>Members:</div>
           <div className="Lobby__members_cards">
             {roomInfo.inGame.map((player) => {
-              return <PlayerCard image={player.avatar || './logo192.png'} name={player.firstName} 
-                          surname={player.lastName} position={player.jobPosition}/>
+              return <PlayerCard avatar={player.avatar || './logo192.png'} firstName={player.firstName} 
+                        lastName={player.lastName} jobPosition={player.jobPosition}/>
             })}
         </div>
       </div>
