@@ -70,6 +70,7 @@ function onDisconnectUser(userWs:WebSocket, disconnectInfo:DisconectModel) {
     console.log("ошибка: отключение от несуществующей комнаты");
   }
 }
+
 function closeConnection(ws:WebSocket){
   connectUsers = connectUsers.filter((user)=>user.ws !== ws);
   ws.close();
@@ -80,4 +81,5 @@ export {
   onConnectUserToWebSocket,
   onMakeNewLobby,
   onDisconnectUser,
+  closeConnection
 }

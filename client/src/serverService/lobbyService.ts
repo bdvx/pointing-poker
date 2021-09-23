@@ -60,6 +60,12 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(setGame(gameInfo));
   }
 
+  const onYouAreKicked = (message:string) => {
+    console.log(lobbyRouter)
+    lobbyRouter.push("/welcomePage");
+    alert(message);
+  }
+
   switch(type) {
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
@@ -83,6 +89,10 @@ function RoomMessageHandler(message:string) {
 
     case "UPDATE_GAME":
       onGameUpdate(payLoad);
+      break;
+    
+    case "YOU_ARE_KICKED":
+      onYouAreKicked(payLoad);
       break;
   }  
 }
@@ -130,6 +140,7 @@ function deleteIssue(issueId:string) {
 
 function sendKickOfferToRoom(kickInfo: VotingModel) {
   const request = makeWSRequestString("KICK_PLAYER_OFFER", kickInfo);
+  console.log(333,request)
   wss.send(request);
 }
 

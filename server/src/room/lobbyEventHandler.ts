@@ -2,6 +2,7 @@ import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
 import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
 import { VotingModel } from "../models/socketModels/votingModel";
+import { closeConnection } from "../socket";
 import { makeWSResponseMessage, sendUpdatedRoom } from "../tools/queryFunctions";
 import Game from "./game";
 
@@ -35,8 +36,24 @@ function onDeleteIssue(room:Room, newIssueId: string) {
 function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
 
   const deletePlayerFromRoom = (playerLogin: string) => {
-    room.playersWS.filter((playerWs) => playerWs.userInfo.login !== playerLogin);
-    room.votes.filter((vote) => vote.whoKick !== playerLogin);
+    const gameIndex = room.inGame.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
+    if (gameIndex !== -1) {
+      room.inGame.splice(gameIndex, 1);
+    }
+
+    const queueIndex = room.queue.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
+    if (queueIndex !== -1) {
+      room.queue.splice(queueIndex, 1);
+    }
+
+    const roomIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
+    if (roomIndex !== -1) {
+      const response = makeWSResponseMessage("YOU_ARE_KICKED", "you were kicked by the master");
+      room.playersWS[roomIndex].ws.send(response);
+      closeConnection(room.playersWS[roomIndex].ws);
+      room.playersWS.splice(roomIndex, 1);
+    }
+
     //TODO техническое сообщение в чат
     /*     const kickedPlayer:KickedPlayer = {
       kickedLogin: kickInfo.whoKick,
