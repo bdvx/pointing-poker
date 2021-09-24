@@ -136,6 +136,10 @@ function makeChoice(choiceInfo:ChoiceModel) {
   LobbyService.sendChoiceToGame(choiceInfo);
 }
 
+function stopGame() {
+  LobbyService.stopGameInRoom();
+}
+
 const ServerService = {
   setDispatch,
   setRouter,
@@ -154,6 +158,7 @@ const ServerService = {
   setKickConclusion,
 
   startGame,
+  stopGame,
 
   sendChatMessage,
 

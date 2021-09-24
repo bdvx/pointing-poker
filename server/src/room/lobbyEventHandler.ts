@@ -95,6 +95,19 @@ function onMoveFromQueue(room:Room, userLogin:string) {
   updateLobbyForEveryOne(room);
 }
 
+function onStopGame(room:Room, reason:string) {
+  //TODO сохранение игры в БД
+  room.isPlaying = false;
+  delete room.game;
+  room.issues = [];
+
+  const response = makeWSResponseMessage("STOP_GAME", reason);
+  room.playersWS.forEach((player) => {
+    player.ws.send(response);
+  })
+  updateLobbyForEveryOne(room);
+}
+
 const LobbyEventHandler = {
   onChatMessage,
   onNewIssue,
@@ -103,7 +116,8 @@ const LobbyEventHandler = {
   onOfferKickPlayer,
   onAgreeWithKick,
   onMakeNewGame,
-  onMoveFromQueue
+  onMoveFromQueue,
+  onStopGame
 }
 export default LobbyEventHandler;
 

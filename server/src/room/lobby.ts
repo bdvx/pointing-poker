@@ -76,6 +76,9 @@ function lobbyMessageHandler(room:Room, message:string) {
     case "MAKE_NEW_GAME":
       LobbyEventHandler.onMakeNewGame(room);
       break;
+    case "STOP_GAME":
+      LobbyEventHandler.onStopGame(room, payLoad);
+      break;
     case "MOVE_FROM_QUEUE":
       LobbyEventHandler.onMoveFromQueue(room, payLoad);
       break;

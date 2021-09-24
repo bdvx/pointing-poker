@@ -7,6 +7,7 @@ import { GameIssue } from '../GameIssue/GameIssue';
 import { useDispatch } from 'react-redux';
 import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
+import ServerService from '../../../../serverService/serverService';
 
 /* 
   TODO:
@@ -18,7 +19,12 @@ export const Game: FC = () => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
   const game = useTypedSelector(store => store.game);
-  console.log(game)
+
+  const onStopGameBtnClick = () => {
+    ServerService.stopGame();
+  }
+
+
   return (
     <div className="Game">
       {isScrum?<Queue></Queue>:<></>}
@@ -33,7 +39,7 @@ export const Game: FC = () => {
                     lastName={ scrumInfo.lastName } jobPosition={ scrumInfo.jobPosition } login="" />
 
         { isScrum ?
-            <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Stop Game</Button>
+            <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
           : 
             <div>
               <div className="Game__timer"></div>

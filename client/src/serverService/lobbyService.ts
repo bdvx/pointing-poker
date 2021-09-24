@@ -1,6 +1,6 @@
 import { newMessage } from "../store/chatSlice";
 import { setCurrentUserScrumStatus } from "../store/currentUserSlice";
-import { setGame } from "../store/gameSlice";
+import { resetGame, setGame } from "../store/gameSlice";
 import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
 import { deleteVoit, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
@@ -68,6 +68,12 @@ function RoomMessageHandler(message:string) {
     alert(message);
   }
 
+  const onStopGame = (reason:string) => {
+    lobbyRouter.push("/lobbyStart");
+    lobbyDispatch(resetGame());
+    alert(reason);
+  }
+
   switch(type) {
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
@@ -87,6 +93,10 @@ function RoomMessageHandler(message:string) {
 
     case "START_GAME":
       onGameStart(payLoad);
+      break;
+    
+    case "STOP_GAME":
+      onStopGame(payLoad);
       break;
 
     case "UPDATE_GAME":
@@ -183,6 +193,11 @@ function stopVoteInRoom(issueId:string) {
   wss.send(request);
 }
 
+function stopGameInRoom() {
+  const request = makeWSRequestString("STOP_GAME", "master stopped the game");
+  wss.send(request);
+}
+
 const LobbyService = {
   connectToRoom,
   sendChatMessage,
@@ -200,7 +215,8 @@ const LobbyService = {
   sendChoiceToGame,
   startVoteInRoom,
   stopVoteInRoom,
-  selectIssueInRoom
+  selectIssueInRoom,
+  stopGameInRoom
 }
 export default LobbyService;
 
