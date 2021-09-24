@@ -8,6 +8,7 @@ import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
 import { IssueModel } from '../../../../serverService/models/issueModel';
+import { ChoiceModel } from '../../../../serverService/models/choiceModel';
 /* 
   TODO:
     Проверить чтобы isScrum менялся для scrum master
@@ -15,9 +16,9 @@ import { IssueModel } from '../../../../serverService/models/issueModel';
 */
 
 export const Game: FC = () => {
-  const { isScrum } = useTypedSelector(store => store.userInfo);
+  const { isScrum,login } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
-  const { issuesInfo } = useTypedSelector(store => store.game);
+  const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -55,6 +56,20 @@ export const Game: FC = () => {
     }
   }
 
+  const testBtnForVoting = () => {
+    if(isVoting) {
+      const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+      if(currentIssueInfo) {
+        const choiceInfo:ChoiceModel = {
+          issueId:currentIssueInfo.issue.id,
+          login:login,
+          score:5
+        }
+        ServerService.makeChoice(choiceInfo);
+      }
+    }
+  }
+
 
   return (
     <div className="Game">
@@ -82,13 +97,14 @@ export const Game: FC = () => {
       
       <div className="Game__issues">
         <h3>Issues:</h3>
-
+        <button onClick={testBtnForVoting}>Голосование</button>
         <ul className="Game__issuesContainer">
           {
             issuesInfo.map((issueInfo) => (
               <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""} onClick={() => onIssueClick(issueInfo.issue.id)}>
                 <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority }
                           link={ issueInfo.issue.link } key={ issueInfo.issue.id } id={ issueInfo.issue.id }/>
+                <h1>Issue Result: {issueInfo.result}</h1>
               </li>
             ))
           }

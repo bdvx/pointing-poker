@@ -59,6 +59,7 @@ function RoomMessageHandler(message:string) {
   }
 
   const onGameUpdate = (gameInfo:GameModel) => {
+    console.log(gameInfo)
     lobbyDispatch(setGame(gameInfo));
   }
 
@@ -72,6 +73,11 @@ function RoomMessageHandler(message:string) {
     lobbyRouter.push("/lobbyStart");
     lobbyDispatch(resetGame());
     alert(reason);
+  }
+
+  const onStartIssueVote = (gameInfo:GameModel) => {
+    lobbyDispatch(setGame(gameInfo));
+    alert("Голосование");
   }
 
   switch(type) {
@@ -105,6 +111,10 @@ function RoomMessageHandler(message:string) {
     
     case "YOU_ARE_KICKED":
       onYouAreKicked(payLoad);
+      break;
+    
+    case "START_ISSUE_VOTE":
+      onStartIssueVote(payLoad);
       break;
   }  
 }
