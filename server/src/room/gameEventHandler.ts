@@ -55,12 +55,23 @@ function onSelectIssue(room:Room, issueId:string) {
   } 
 }
 
+function onResetIssueVote(room:Room, issueId:string) {
+  const issueInfo = findIssueById(room, issueId);
+
+  if(issueInfo && !issueInfo.isVoting) {
+    issueInfo.votes = [];
+    issueInfo.result = 0;
+    updateGameForEveryOne(room);
+  } 
+}
+
 
 const GameEventHandler = {
   onUserMakeNewChoice,
   onStartIssueVote,
   onStopIssueVote,
-  onSelectIssue
+  onSelectIssue,
+  onResetIssueVote
 }
 
 export default GameEventHandler;

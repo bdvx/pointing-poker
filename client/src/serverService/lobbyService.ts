@@ -188,8 +188,13 @@ function startVoteIssueInRoom(issueId:string) {
   wss.send(request);
 }
 
-function stopVoteInRoom(issueId:string) {
+function stopVoteIssueInRoom(issueId:string) {
   const request = makeWSRequestString("STOP_ISSUE_VOTE", issueId);
+  wss.send(request);
+}
+
+function resetVoteIssueInRoom(issueId:string) {
+  const request = makeWSRequestString("RESET_ISSUE_VOTE", issueId);
   wss.send(request);
 }
 
@@ -214,9 +219,10 @@ const LobbyService = {
   setLobbyRouter,
   sendChoiceToGame,
   startVoteIssueInRoom,
-  stopVoteInRoom,
+  stopVoteIssueInRoom,
   selectIssueInRoom,
-  stopGameInRoom
+  stopGameInRoom,
+  resetVoteIssueInRoom
 }
 export default LobbyService;
 

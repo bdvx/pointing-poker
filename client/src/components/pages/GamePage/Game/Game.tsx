@@ -30,14 +30,29 @@ export const Game: FC = () => {
     }
   }
 
-  const onStartRunBtnClick = () => {
+  const onRunIssueBtnClick = () => {
     const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
     if(currentIssueInfo) {
-      ServerService.startVoteIssue(currentIssueInfo?.issue.id);
+      ServerService.startVoteIssue(currentIssueInfo.issue.id);
     } else {
       alert("Сначала выберите issue")
     }
-  
+  }
+
+  const onResetIssueBtnClick = () => {
+    const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+    if(currentIssueInfo) {
+      ServerService.resetVoteIssue(currentIssueInfo.issue.id);
+    } else {
+      alert("нечего сбрасывать :(")
+    }
+  }
+
+  const onStopIssueBtnClick = () => {
+    const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+    if(currentIssueInfo) {
+      ServerService.stopVoteIssue(currentIssueInfo.issue.id);
+    }
   }
 
 
@@ -84,9 +99,9 @@ export const Game: FC = () => {
         <div>
           <div className="Game__timer"></div>
 
-          <Button className="Game__runRoundBtn" onClick={ onStartRunBtnClick } variant="contained" color="primary" size="large">Run round</Button>
-          <Button className="Game__restartRoundBtn" onClick={ () => false } variant="contained" color="primary" size="large">Restart round</Button>
-          <Button className="Game__nextIssueBtn" onClick={ () => false } variant="contained" color="primary" size="large">Next issue</Button>
+          <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
+          <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>
+          <Button className="Game__nextIssueBtn" onClick={ onStopIssueBtnClick } variant="contained" color="primary" size="large">Stop issue</Button>
 
           <div className="Game__statistics">
             <h3>Statistics:</h3>

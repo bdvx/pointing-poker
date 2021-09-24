@@ -128,8 +128,12 @@ function selectIssue(issueId:string) {
   LobbyService.selectIssueInRoom(issueId);
 }
 
-function stopVote(issueId:string) {
-  LobbyService.stopVoteInRoom(issueId);
+function stopVoteIssue(issueId:string) {
+  LobbyService.stopVoteIssueInRoom(issueId);
+}
+
+function resetVoteIssue(issueId:string) {
+  LobbyService.resetVoteIssueInRoom(issueId);
 }
 
 function makeChoice(choiceInfo:ChoiceModel) {
@@ -166,7 +170,8 @@ const ServerService = {
 
   makeChoice,
   startVoteIssue,
-  stopVote,
-  selectIssue
+  stopVoteIssue,
+  selectIssue,
+  resetVoteIssue,
 }
 export default ServerService;

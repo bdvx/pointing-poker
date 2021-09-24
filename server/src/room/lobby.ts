@@ -92,6 +92,9 @@ function lobbyMessageHandler(room:Room, message:string) {
     case "STOP_ISSUE_VOTE":
       GameEventHandler.onStopIssueVote(room, payLoad);
       break;
+    case "RESET_ISSUE_VOTE":
+      GameEventHandler.onResetIssueVote(room, payLoad);
+      break;
     case "SELECT_ISSUE":
       GameEventHandler.onSelectIssue(room, payLoad);
       break;
