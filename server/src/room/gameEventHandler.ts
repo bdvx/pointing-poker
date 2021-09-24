@@ -1,21 +1,19 @@
 import { ChoiceModel } from "../models/socketModels/choiceModel";
 import { IssueInfo } from "../models/socketModels/gameModel";
 import { Room } from "../models/socketModels/roomModel";
-import { makeWSResponseMessage, transformServerGameToClient, updateGameForEveryOne } from "../tools/roomunctions";
+import { makeWSResponseMessage, transformServerGameToClient, updateGameForEveryOne } from "../tools/roomFunctions";
 
 function onUserMakeNewChoice(room:Room, userChoiceInfo:ChoiceModel) {
   const { issueId, login, score } = userChoiceInfo;
   const issueInfo = findIssueById(room, issueId);
-  console.log(111, issueInfo, issueInfo?.isVoting)
+
   if(issueInfo && issueInfo.isVoting) {
     const index = issueInfo.votes.findIndex((vote) => vote.login === userChoiceInfo.login);
-    console.log(222, index)
+
     if(index === -1) {
-      console.log({ login, score })
       issueInfo.votes.push({ login, score });
     } else {
       issueInfo.votes[index] = { login, score };
-      console.log(333,{ login, score })
     }
     updateGameForEveryOne(room);
 
@@ -27,6 +25,7 @@ function onStartIssueVote(room:Room, issueId:string) {
   if(issueInfo && room.game) {
     issueInfo.isVoting = true;
     room.game.isVoting = true;
+
     if(room.game) {
       const gameToClient = transformServerGameToClient(room.game);
       const response = makeWSResponseMessage("START_ISSUE_VOTE", gameToClient);
@@ -43,8 +42,8 @@ function onStopIssueVote(room:Room, issueId:string) {
   if(issueInfo && room.game) {
     issueInfo.isVoting = false;
     room.game.isVoting = true;
-    issueInfo.result = makeVoteResult(issueInfo);
 
+    issueInfo.result = makeVoteResult(issueInfo);
     updateGameForEveryOne(room);
   }
 }

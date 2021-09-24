@@ -22,16 +22,6 @@ const LobbyMain = () => {
   ServerService.setDispatch(dispatch);
   ServerService.setRouter(router);
 
-/*   useEffect(()=>{//!Это удалить как появится логика добавление issue
-    const issue1:IssueModel = {
-      link:"https",
-      priority:"low",
-      title:"test 1",
-      id:"1"
-    }
-    setTimeout(()=>ServerService.makeIssue(issue1),250);
-  }, []) */
-
   const onDisconnectBtnClick = () => {
     ServerService.disconect(userInfo, roomInfo.roomId, `user ${userInfo.login} disconnect the room`);
     dispatch(resetRoomInfo());
@@ -40,7 +30,6 @@ const LobbyMain = () => {
   }
 
   const onStartGameBtnClick = () => {
-    console.log('start');
     ServerService.startGame();
   }
 

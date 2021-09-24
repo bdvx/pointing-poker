@@ -36,7 +36,7 @@ export function transformServerGameToClient(serverGame:GameModel) {
     isVoting, issuesInfo,
     players: players.map((player) => player.userInfo),
   }
-  console.log(444, clientGame)
+
   return clientGame;
 }
 

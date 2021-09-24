@@ -56,7 +56,7 @@ export const Game: FC = () => {
     }
   }
 
-  const testBtnForVoting = () => {
+  const testBtnForVoting = () => { //!Пока нет карточек голосования
     if(isVoting) {
       const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
       if(currentIssueInfo) {
