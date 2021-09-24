@@ -1,11 +1,12 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import './Game.scss';
 import { useTypedSelector } from '../../../../hooky/useTypedSelector';
 import PlayerCard from '../../Lobby/PlayerCard/PlayerCard';
 import { Button } from '@material-ui/core';
 import { GameIssue } from '../GameIssue/GameIssue';
 import { useDispatch } from 'react-redux';
-import { setGame } from '../../../../store/gameSlice';
+import Chat from '../../../Chat/Chat';
+import { Queue } from '../../Lobby/Queue/queue';
 
 /* 
   TODO:
@@ -16,42 +17,22 @@ import { setGame } from '../../../../store/gameSlice';
 export const Game: FC = () => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
-  // const { issues } = useTypedSelector(store => store.game);
-  const dispatch = useDispatch();
-
-  const scrum = true;
-  const issues = [
-    {
-      title: 'Issue 1',
-      priority: 'Low priority',
-      link: '/issue-1',
-      id: '1'
-    },
-    {
-      title: 'Issue 2',
-      priority: 'Low priority',
-      link: '/issue-2',
-      id: '2'
-    },
-    {
-      title: 'Issue 3',
-      priority: 'Low priority',
-      link: '/issue-3',
-      id: '3'
-    }
-  ];
-
+  const game = useTypedSelector(store => store.game);
+  console.log(game)
   return (
     <div className="Game">
+      {isScrum?<Queue></Queue>:<></>}
+      <Chat></Chat>
       <h2 className="Game__title">Some random game name</h2>
 
       <div className="Game__master">
         <span className="Game__masterTitle">Scrum master:</span>
 
         {/* TODO: нужно убрать для карточки мастера кик */}
-        <PlayerCard avatar={ scrumInfo.avatar || './logo192.png' } firstName={ scrumInfo.firstName } lastName={ scrumInfo.lastName } jobPosition={ scrumInfo.jobPosition } login="" />
+        <PlayerCard avatar={ scrumInfo.avatar || './logo192.png' } firstName={ scrumInfo.firstName } 
+                    lastName={ scrumInfo.lastName } jobPosition={ scrumInfo.jobPosition } login="" />
 
-        { scrum ?
+        { isScrum ?
             <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Stop Game</Button>
           : 
             <div>
@@ -67,14 +48,15 @@ export const Game: FC = () => {
 
         <div className="Game__issuesContainer">
           {
-            issues.map((issue) => (
-              <GameIssue title={ issue.title } priority={ issue.priority } link={ issue.link } key={ issue.id } />
+            game.issuesInfo.map((issueInfo) => (
+              <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority }
+                             link={ issueInfo.issue.link } key={ issueInfo.issue.id } />
             ))
           }
         </div>
       </div>
 
-      { scrum &&
+      { isScrum &&
         <div>
           <div className="Game__timer"></div>
 

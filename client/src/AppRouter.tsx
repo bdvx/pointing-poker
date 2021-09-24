@@ -26,6 +26,9 @@ export default function AppRouter() {
         <Route exact path="/">
           <Redirect to='/home'></Redirect>
         </Route>
+        <Route exact path={'/game'}>
+          <Game></Game>
+        </Route>
       </Switch>
     </>
   );

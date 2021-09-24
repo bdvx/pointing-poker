@@ -28,6 +28,7 @@ const LobbyMain = () => {
   }
 
   const onStartGameBtnClick = () => {
+    console.log('start');
     ServerService.startGame();
   }
 
@@ -38,6 +39,7 @@ const LobbyMain = () => {
       <Queue />
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
+          <button onClick={onStartGameBtnClick}>STart Game</button>
           <PlayerCard avatar={roomInfo.scrumInfo.avatar || './logo192.png'} firstName={roomInfo.scrumInfo.firstName} 
                       lastName={roomInfo.scrumInfo.lastName} jobPosition={roomInfo.scrumInfo.jobPosition} login={roomInfo.scrumInfo.login}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>

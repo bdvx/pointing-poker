@@ -1,22 +1,23 @@
-import { ChoiceModel } from "../models/socketModels/choiceModel";
 import { GameModel, IssueInfo } from "../models/socketModels/gameModel";
 import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
-import { makeWSResponseMessage, transformServerRoomToClient } from "../tools/roomunctions";
+import { makeWSResponseMessage, transformServerGameToClient } from "../tools/roomunctions";
 
 function makeNewGame(room:Room) {
   const gameInfo:GameModel = {
-    issuesInfo: room.issues.map((issue) => makeIssueInfo(issue)),
+    issuesInfo: room.issues.map((issue) => makeIssueInfo(issue)) || [],
     isVoting:false,
-    players: room.playersWS
+    players: room.playersWS,
   }
   room.game = gameInfo;
   room.isPlaying = true;
 
   room.playersWS.forEach((player) => {
-    const gameToClient = transformServerRoomToClient(room);
-    const response = makeWSResponseMessage("START_GAME", gameToClient);
-    player.ws.send(response);
+    if(room.game) {
+      const gameToClient = transformServerGameToClient(room.game);
+      const response = makeWSResponseMessage("START_GAME", gameToClient);
+      player.ws.send(response);
+    }
   })
 }
 
