@@ -1,5 +1,6 @@
 export const handleDragAndDrop = (event: any) => {
   const chat = event.target;
+  if (!chat.classList.contains("draggable")) return;
 
   let shiftX = event.clientX - chat.getBoundingClientRect().left;
   let shiftY = event.clientY - chat.getBoundingClientRect().top;

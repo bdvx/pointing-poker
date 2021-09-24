@@ -6,7 +6,7 @@ import { handleDragAndDrop } from "../../../../tool/dragAndDrop";
 export function Queue() {
   const room = useTypedSelector(store => store.roomInfo);
   return(
-  <ul className="queue" onMouseDown={handleDragAndDrop}>
+  <ul className="queue draggable" onMouseDown={handleDragAndDrop}>
     {room.queue.map((playerInQ) => <QueuePerson {...playerInQ} />)}
   </ul>);
 }
