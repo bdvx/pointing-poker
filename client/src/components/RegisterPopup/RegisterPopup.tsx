@@ -6,7 +6,7 @@ import { REGISTER_POPUP_FIELDS } from '../../constants';
 import { LogInOrSignUpPopup } from '../Base/LogInOrSignUpPopup/LogInOrSignUpPopup';
 import IFieldsValues from '../../types/LogInOrSignUpPopup.type';
 
-export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
+export const RegisterPopup: FC<IRegisterPopupProps> = ({open, onChangeRegisterPopupState}: IRegisterPopupProps) => {
   const [role, setRole] = useState<boolean>(true);
   const [avatar, setAvatar] = useState<string>('');
 
@@ -46,7 +46,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({classes, open, onChangeR
   };
 
   return (
-    <Dialog className={`register-popup ${ classes }`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
+    <Dialog className={`register-popup`} open={open} onClose={() => onChangeRegisterPopupState(false)}>
       <form className="register-popup__form">
         <div className="register-popup__header">
           <h3 className="register-popup__title">Connect to lobby</h3>
