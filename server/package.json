@@ -1,5 +1,8 @@
 {
   "scripts": {
     "build server": "tsc"
+  },
+  "dependencies": {
+    "typescript": "^4.4.3"
   }
 }
