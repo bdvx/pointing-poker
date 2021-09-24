@@ -4,8 +4,8 @@ import { hashCode } from "../tools/hashFunction";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
-import { deletePersonFromRoom, makeWSResponseMessage, sendUpdatedRoom, transformServerRoomToClient } from "../tools/roomunctions";
-import LobbyEventHandler, { updateLobbyForEveryOne } from "./lobbyEventHandler";
+import { deletePersonFromRoom, makeWSResponseMessage, transformServerRoomToClient, updateLobbyForEveryOne } from "../tools/roomunctions";
+import LobbyEventHandler, {  } from "./lobbyEventHandler";
 import GameEventHandler from "./gameEventHandler";
 
 function makeNewRoom(scrumInfo:WSClientModel) {

@@ -136,6 +136,7 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
 }
 
 function sendIssueToRoom(issue:IssueModel) {
+  console.log(issue);
   const request = makeWSRequestString("NEW_ISSUE", issue);
   wss.send(request);
 }
@@ -152,7 +153,6 @@ function deleteIssue(issueId:string) {
 
 function sendKickOfferToRoom(kickInfo: VotingModel) {
   const request = makeWSRequestString("KICK_PLAYER_OFFER", kickInfo);
-  console.log(333,request)
   wss.send(request);
 }
 
@@ -183,7 +183,7 @@ function selectIssueInRoom(issueId:string) {
   wss.send(request);
 }
 
-function startVoteInRoom(issueId:string) {
+function startVoteIssueInRoom(issueId:string) {
   const request = makeWSRequestString("START_ISSUE_VOTE", issueId);
   wss.send(request);
 }
@@ -213,7 +213,7 @@ const LobbyService = {
   movePlayerInRoom,
   setLobbyRouter,
   sendChoiceToGame,
-  startVoteInRoom,
+  startVoteIssueInRoom,
   stopVoteInRoom,
   selectIssueInRoom,
   stopGameInRoom

@@ -3,7 +3,7 @@ import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
 import { VotingModel } from "../models/socketModels/votingModel";
 import { closeConnection } from "../socket";
-import { deletePersonFromRoom, makeWSResponseMessage, sendUpdatedRoom } from "../tools/roomunctions";
+import { deletePersonFromRoom, makeWSResponseMessage, updateLobbyForEveryOne } from "../tools/roomunctions";
 import Game from "./game";
 
 function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
@@ -121,9 +121,3 @@ const LobbyEventHandler = {
 }
 export default LobbyEventHandler;
 
-
-export function updateLobbyForEveryOne(room:Room) {
-  room.playersWS.forEach((player) => {
-    sendUpdatedRoom(room, player.ws);
-  });
-}

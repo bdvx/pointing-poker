@@ -1,14 +1,13 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import './Game.scss';
 import { useTypedSelector } from '../../../../hooky/useTypedSelector';
 import PlayerCard from '../../Lobby/PlayerCard/PlayerCard';
 import { Button } from '@material-ui/core';
 import { GameIssue } from '../GameIssue/GameIssue';
-import { useDispatch } from 'react-redux';
 import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
-
+import { IssueModel } from '../../../../serverService/models/issueModel';
 /* 
   TODO:
     Проверить чтобы isScrum менялся для scrum master
@@ -18,10 +17,27 @@ import ServerService from '../../../../serverService/serverService';
 export const Game: FC = () => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
-  const game = useTypedSelector(store => store.game);
+  const { issuesInfo } = useTypedSelector(store => store.game);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
+  }
+
+  const onIssueClick = (issueId:string) => {
+    const votingIssue = issuesInfo.find((ussueInfo) => ussueInfo.isVoting);
+    if(!votingIssue) {
+      ServerService.selectIssue(issueId);
+    }
+  }
+
+  const onStartRunBtnClick = () => {
+    const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+    if(currentIssueInfo) {
+      ServerService.startVoteIssue(currentIssueInfo?.issue.id);
+    } else {
+      alert("Сначала выберите issue")
+    }
+  
   }
 
 
@@ -52,21 +68,23 @@ export const Game: FC = () => {
       <div className="Game__issues">
         <h3>Issues:</h3>
 
-        <div className="Game__issuesContainer">
+        <ul className="Game__issuesContainer">
           {
-            game.issuesInfo.map((issueInfo) => (
-              <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority }
-                             link={ issueInfo.issue.link } key={ issueInfo.issue.id } />
+            issuesInfo.map((issueInfo) => (
+              <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""} onClick={() => onIssueClick(issueInfo.issue.id)}>
+                <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority }
+                          link={ issueInfo.issue.link } key={ issueInfo.issue.id } id={ issueInfo.issue.id }/>
+              </li>
             ))
           }
-        </div>
+        </ul>
       </div>
 
       { isScrum &&
         <div>
           <div className="Game__timer"></div>
 
-          <Button className="Game__runRoundBtn" onClick={ () => false } variant="contained" color="primary" size="large">Run round</Button>
+          <Button className="Game__runRoundBtn" onClick={ onStartRunBtnClick } variant="contained" color="primary" size="large">Run round</Button>
           <Button className="Game__restartRoundBtn" onClick={ () => false } variant="contained" color="primary" size="large">Restart round</Button>
           <Button className="Game__nextIssueBtn" onClick={ () => false } variant="contained" color="primary" size="large">Next issue</Button>
 

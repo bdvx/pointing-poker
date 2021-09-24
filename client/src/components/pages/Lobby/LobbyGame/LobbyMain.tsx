@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import clientService from "../../../../clientService/clientService";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
+import { IssueModel } from "../../../../serverService/models/issueModel";
 import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
@@ -19,6 +21,16 @@ const LobbyMain = () => {
   //! ServerService.setDispatch(dispatch); возможно где-то дублируется
   ServerService.setDispatch(dispatch);
   ServerService.setRouter(router);
+
+/*   useEffect(()=>{//!Это удалить как появится логика добавление issue
+    const issue1:IssueModel = {
+      link:"https",
+      priority:"low",
+      title:"test 1",
+      id:"1"
+    }
+    setTimeout(()=>ServerService.makeIssue(issue1),250);
+  }, []) */
 
   const onDisconnectBtnClick = () => {
     ServerService.disconect(userInfo, roomInfo.roomId, `user ${userInfo.login} disconnect the room`);
@@ -40,6 +52,7 @@ const LobbyMain = () => {
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
           <button onClick={onStartGameBtnClick}>STart Game</button>
+          <button >Add Issue</button>
           <PlayerCard avatar={roomInfo.scrumInfo.avatar || './logo192.png'} firstName={roomInfo.scrumInfo.firstName} 
                       lastName={roomInfo.scrumInfo.lastName} jobPosition={roomInfo.scrumInfo.jobPosition} login={roomInfo.scrumInfo.login}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
