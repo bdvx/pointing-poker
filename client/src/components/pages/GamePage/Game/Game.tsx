@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import './Game.scss';
 import { useTypedSelector } from '../../../../hooky/useTypedSelector';
 import PlayerCard from '../../Lobby/PlayerCard/PlayerCard';
@@ -8,6 +8,8 @@ import { useDispatch } from 'react-redux';
 import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
+import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
+import { RoundTimeEditable } from '../../../RoundTimeEditable/RoundTimeEditable';
 
 /* 
   TODO:
@@ -19,6 +21,8 @@ export const Game: FC = () => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
   const game = useTypedSelector(store => store.game);
+
+  const [timeIsStop, setTimeIsStop] = useState<boolean>(true);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -42,7 +46,7 @@ export const Game: FC = () => {
             <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
           : 
             <div>
-              <div className="Game__timer"></div>
+              <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
 
               <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Exit</Button>
             </div>
@@ -64,9 +68,9 @@ export const Game: FC = () => {
 
       { isScrum &&
         <div>
-          <div className="Game__timer"></div>
+          <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
 
-          <Button className="Game__runRoundBtn" onClick={ () => false } variant="contained" color="primary" size="large">Run round</Button>
+          <Button className="Game__runRoundBtn" onClick={ () => setTimeIsStop(false) } variant="contained" color="primary" size="large">Run round</Button>
           <Button className="Game__restartRoundBtn" onClick={ () => false } variant="contained" color="primary" size="large">Restart round</Button>
           <Button className="Game__nextIssueBtn" onClick={ () => false } variant="contained" color="primary" size="large">Next issue</Button>
 
