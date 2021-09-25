@@ -1,4 +1,5 @@
-import { FC, useEffect } from 'react';
+
+import { FC, useState, useEffect } from 'react';
 import './Game.scss';
 import { useTypedSelector } from '../../../../hooky/useTypedSelector';
 import PlayerCard from '../../Lobby/PlayerCard/PlayerCard';
@@ -7,6 +8,7 @@ import { GameIssue } from '../GameIssue/GameIssue';
 import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
+import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
 import { IssueModel } from '../../../../serverService/models/issueModel';
 import { ChoiceModel } from '../../../../serverService/models/choiceModel';
 /* 
@@ -19,6 +21,8 @@ export const Game: FC = () => {
   const { isScrum,login } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
   const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
+
+  const [timeIsStop, setTimeIsStop] = useState<boolean>(true);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -34,6 +38,7 @@ export const Game: FC = () => {
   const onRunIssueBtnClick = () => {
     const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
     if(currentIssueInfo) {
+      setTimeIsStop(false);
       ServerService.startVoteIssue(currentIssueInfo.issue.id);
     } else {
       alert("Сначала выберите issue")
@@ -88,7 +93,7 @@ export const Game: FC = () => {
             <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
           : 
             <div>
-              <div className="Game__timer"></div>
+              <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
 
               <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Exit</Button>
             </div>
@@ -113,7 +118,7 @@ export const Game: FC = () => {
 
       { isScrum &&
         <div>
-          <div className="Game__timer"></div>
+          <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
 
           <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
           <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>

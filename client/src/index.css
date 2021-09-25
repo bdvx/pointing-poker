@@ -123,3 +123,7 @@ body {
 main {
   flex: 1;
 }
+
+input {
+  font-family: Roboto, sans-serif;
+}
