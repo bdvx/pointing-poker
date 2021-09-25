@@ -2,6 +2,7 @@ import { useTypedSelector } from "../../hooky/useTypedSelector";
 import { ChatMessageInfo } from "../../serverService/models/chatMessageInfoModel";
 import { handleDragAndDrop } from "../../tool/dragAndDrop";
 import IconButton from "@material-ui/core/IconButton";
+import ChatIcon from '@material-ui/icons/Chat';
 import SendIcon from "@material-ui/icons/Send";
 import ChatMessage from "./ChatMessage/ChatMessage";
 import clientService from "../../clientService/clientService";
@@ -15,8 +16,9 @@ const Chat = () => {
 
   const sendMessage = (event: any) => {
     //!Вот эту страашилку желательно переписать
-    const targetInput = (event.target as HTMLElement).closest(".Chat")
-                        ?.querySelector(".Chat_input__text") as HTMLInputElement;
+    const targetInput = (event.target as HTMLElement)
+      .closest(".Chat")
+      ?.querySelector(".Chat_input__text") as HTMLInputElement;
 
     const message = targetInput.value;
     if (message) {
@@ -29,35 +31,39 @@ const Chat = () => {
     targetInput.value = "";
   };
 
+  const handleChat = (event:any) => {
+    document.querySelector('.Chat')?.classList.toggle('Chat__hidden')
+  }
 
   return (
-    <div className="Chat" onMouseDown={handleDragAndDrop}>
+    <>
+      <IconButton className="Chat__hide-btn" onClick={handleChat}><ChatIcon/></IconButton>
+      <div className="Chat draggable" onMouseDown={handleDragAndDrop}>
+        <ul className="Chat_messages">
+          {chat.map((messageInfo) => {
+            const user = clientService.getUserByLogin(room, messageInfo.login);
+            console.log(user);
+            return <ChatMessage {...user} message={messageInfo.message} />;
+          })}
+        </ul>
 
-      <ul className="Chat_messages">
-        {chat.map((messageInfo) => {
-          const user = clientService.getUserByLogin(room, messageInfo.login);
-          return (<ChatMessage {...user} message = {messageInfo.message}/>);
-        })}
-      </ul>
-
-      <div className="Chat_input">
-        <input placeholder="Type something..." className="Chat_input__text" />
-        <IconButton>
-          <SendIcon onClick={sendMessage} />
-        </IconButton>
+        <div className="Chat_input">
+          <input placeholder="Type something..." className="Chat_input__text" />
+          <IconButton onClick={sendMessage} className="Chat_input__button">
+            <SendIcon />
+          </IconButton>
+        </div>
       </div>
-
-    </div>
+    </>
   );
 };
 
 export default Chat;
 
-
-function makeNewMessage(login:string, message:string) {
-  const messageInfo:ChatMessageInfo = {
+function makeNewMessage(login: string, message: string) {
+  const messageInfo: ChatMessageInfo = {
     login,
-    message
-  }
+    message,
+  };
   return messageInfo;
 }

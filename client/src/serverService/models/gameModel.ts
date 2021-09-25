@@ -1,7 +1,7 @@
 import { IssueModel } from "./issueModel";
 import { UserInfo } from "./userInfoModel";
 
-interface IssueInfo {
+export interface IssueInfo {
   issue: IssueModel,
   isVoting: boolean,
   isSelected: boolean,

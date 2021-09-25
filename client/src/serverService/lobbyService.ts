@@ -59,6 +59,7 @@ function RoomMessageHandler(message:string) {
   }
 
   const onGameUpdate = (gameInfo:GameModel) => {
+    console.log(gameInfo)
     lobbyDispatch(setGame(gameInfo));
   }
 
@@ -72,6 +73,11 @@ function RoomMessageHandler(message:string) {
     lobbyRouter.push("/lobbyStart");
     lobbyDispatch(resetGame());
     alert(reason);
+  }
+
+  const onStartIssueVote = (gameInfo:GameModel) => {
+    lobbyDispatch(setGame(gameInfo));
+    alert("Голосование");
   }
 
   switch(type) {
@@ -106,6 +112,10 @@ function RoomMessageHandler(message:string) {
     case "YOU_ARE_KICKED":
       onYouAreKicked(payLoad);
       break;
+    
+    case "START_ISSUE_VOTE":
+      onStartIssueVote(payLoad);
+      break;
   }  
 }
 
@@ -136,6 +146,7 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
 }
 
 function sendIssueToRoom(issue:IssueModel) {
+  console.log(issue);
   const request = makeWSRequestString("NEW_ISSUE", issue);
   wss.send(request);
 }
@@ -152,7 +163,6 @@ function deleteIssue(issueId:string) {
 
 function sendKickOfferToRoom(kickInfo: VotingModel) {
   const request = makeWSRequestString("KICK_PLAYER_OFFER", kickInfo);
-  console.log(333,request)
   wss.send(request);
 }
 
@@ -183,13 +193,18 @@ function selectIssueInRoom(issueId:string) {
   wss.send(request);
 }
 
-function startVoteInRoom(issueId:string) {
+function startVoteIssueInRoom(issueId:string) {
   const request = makeWSRequestString("START_ISSUE_VOTE", issueId);
   wss.send(request);
 }
 
-function stopVoteInRoom(issueId:string) {
+function stopVoteIssueInRoom(issueId:string) {
   const request = makeWSRequestString("STOP_ISSUE_VOTE", issueId);
+  wss.send(request);
+}
+
+function resetVoteIssueInRoom(issueId:string) {
+  const request = makeWSRequestString("RESET_ISSUE_VOTE", issueId);
   wss.send(request);
 }
 
@@ -213,10 +228,11 @@ const LobbyService = {
   movePlayerInRoom,
   setLobbyRouter,
   sendChoiceToGame,
-  startVoteInRoom,
-  stopVoteInRoom,
+  startVoteIssueInRoom,
+  stopVoteIssueInRoom,
   selectIssueInRoom,
-  stopGameInRoom
+  stopGameInRoom,
+  resetVoteIssueInRoom
 }
 export default LobbyService;
 

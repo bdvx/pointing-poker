@@ -10,6 +10,7 @@ import { hashCode } from "../tool/hashFunction";
 import { VotingModel } from "./models/votingModel";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
+import Lobby from "../components/pages/Lobby/LobbyStart/Lobby";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -87,7 +88,6 @@ function disconect(userInfo:UserInfo, roomId:string, reason?:string) {
 }
 
 function makeIssue(issue:IssueModel) {
-  //TODO сделать нормальный id
   issue.id = String(hashCode(issue.title));
   LobbyService.sendIssueToRoom(issue);
 }
@@ -120,16 +120,20 @@ function movePlayerFromQueueToGame(userLogin:string) {
   LobbyService.movePlayerInRoom(userLogin);
 }
 
-function startVote(issueId:string) {
-  LobbyService.startVoteInRoom(issueId);
+function startVoteIssue(issueId:string) {
+  LobbyService.startVoteIssueInRoom(issueId);
 }
 
 function selectIssue(issueId:string) {
   LobbyService.selectIssueInRoom(issueId);
 }
 
-function stopVote(issueId:string) {
-  LobbyService.stopVoteInRoom(issueId);
+function stopVoteIssue(issueId:string) {
+  LobbyService.stopVoteIssueInRoom(issueId);
+}
+
+function resetVoteIssue(issueId:string) {
+  LobbyService.resetVoteIssueInRoom(issueId);
 }
 
 function makeChoice(choiceInfo:ChoiceModel) {
@@ -165,8 +169,9 @@ const ServerService = {
   movePlayerFromQueueToGame,
 
   makeChoice,
-  startVote,
-  stopVote,
-  selectIssue
+  startVoteIssue,
+  stopVoteIssue,
+  selectIssue,
+  resetVoteIssue,
 }
 export default ServerService;

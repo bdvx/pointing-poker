@@ -36,6 +36,7 @@ export function transformServerGameToClient(serverGame:GameModel) {
     isVoting, issuesInfo,
     players: players.map((player) => player.userInfo),
   }
+
   return clientGame;
 }
 
@@ -66,3 +67,14 @@ export function deletePersonFromRoom(room:Room, login:string) {
   return roomIndex;
 }
 
+export function updateLobbyForEveryOne(room:Room) {
+  room.playersWS.forEach((player) => {
+    sendUpdatedRoom(room, player.ws);
+  });
+}
+
+export function updateGameForEveryOne(room:Room) {
+  room.playersWS.forEach((player) => {
+    sendUpdatedGame(room, player.ws);
+  });
+}

@@ -14,7 +14,6 @@ import IGameIssueProps from "../../../../types/GameIssueProps.type";
 export const GameIssue: FC<IGameIssueProps> = (props: IGameIssueProps) => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
   const scrum = true;
-
   const { title, priority } = props;
 
   return (

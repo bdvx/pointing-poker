@@ -1,7 +1,7 @@
 import { ChoiceModel } from "../models/socketModels/choiceModel";
 import { IssueInfo } from "../models/socketModels/gameModel";
 import { Room } from "../models/socketModels/roomModel";
-import { sendUpdatedGame } from "../tools/roomunctions";
+import { makeWSResponseMessage, transformServerGameToClient, updateGameForEveryOne } from "../tools/roomFunctions";
 
 function onUserMakeNewChoice(room:Room, userChoiceInfo:ChoiceModel) {
   const { issueId, login, score } = userChoiceInfo;
@@ -10,7 +10,7 @@ function onUserMakeNewChoice(room:Room, userChoiceInfo:ChoiceModel) {
   if(issueInfo && issueInfo.isVoting) {
     const index = issueInfo.votes.findIndex((vote) => vote.login === userChoiceInfo.login);
 
-    if(!index) {
+    if(index === -1) {
       issueInfo.votes.push({ login, score });
     } else {
       issueInfo.votes[index] = { login, score };
@@ -22,22 +22,28 @@ function onUserMakeNewChoice(room:Room, userChoiceInfo:ChoiceModel) {
 
 function onStartIssueVote(room:Room, issueId:string) {
   const issueInfo = findIssueById(room, issueId);
-  if(issueInfo) {
+  if(issueInfo && room.game) {
     issueInfo.isVoting = true;
+    room.game.isVoting = true;
 
-    updateGameForEveryOne(room);
+    if(room.game) {
+      const gameToClient = transformServerGameToClient(room.game);
+      const response = makeWSResponseMessage("START_ISSUE_VOTE", gameToClient);
+      room.game?.players.forEach((player)=>{ player.ws.send(response) });      
+      //!Сюда прикрутить сетТаймАймаут для остановки голосование (нужны настройки)
+    }
 
-    //!Сюда прикрутить сетТаймАймаут для остановки голосование (нужны настройки)
   }
 }
 
 function onStopIssueVote(room:Room, issueId:string) {
   const issueInfo = findIssueById(room, issueId);
 
-  if(issueInfo) {
+  if(issueInfo && room.game) {
     issueInfo.isVoting = false;
-    issueInfo.result = makeVoteResult(issueInfo);
+    room.game.isVoting = true;
 
+    issueInfo.result = makeVoteResult(issueInfo);
     updateGameForEveryOne(room);
   }
 }
@@ -55,12 +61,23 @@ function onSelectIssue(room:Room, issueId:string) {
   } 
 }
 
+function onResetIssueVote(room:Room, issueId:string) {
+  const issueInfo = findIssueById(room, issueId);
+
+  if(issueInfo && !issueInfo.isVoting) {
+    issueInfo.votes = [];
+    issueInfo.result = 0;
+    updateGameForEveryOne(room);
+  } 
+}
+
 
 const GameEventHandler = {
   onUserMakeNewChoice,
   onStartIssueVote,
   onStopIssueVote,
-  onSelectIssue
+  onSelectIssue,
+  onResetIssueVote
 }
 
 export default GameEventHandler;
@@ -83,10 +100,4 @@ function findIssueById(room:Room, issueId:string) {
   } else {
     console.log("Обсуждение не найдено");
   }
-}
-
-function updateGameForEveryOne(room:Room) {
-  room.playersWS.forEach((player) => {
-    sendUpdatedGame(room, player.ws);
-  });
 }

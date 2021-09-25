@@ -1,16 +1,16 @@
-import { FC, useState } from 'react';
+
+import { FC, useState, useEffect } from 'react';
 import './Game.scss';
 import { useTypedSelector } from '../../../../hooky/useTypedSelector';
 import PlayerCard from '../../Lobby/PlayerCard/PlayerCard';
 import { Button } from '@material-ui/core';
 import { GameIssue } from '../GameIssue/GameIssue';
-import { useDispatch } from 'react-redux';
 import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
 import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
-import { RoundTimeEditable } from '../../../RoundTimeEditable/RoundTimeEditable';
-
+import { IssueModel } from '../../../../serverService/models/issueModel';
+import { ChoiceModel } from '../../../../serverService/models/choiceModel';
 /* 
   TODO:
     Проверить чтобы isScrum менялся для scrum master
@@ -18,14 +18,61 @@ import { RoundTimeEditable } from '../../../RoundTimeEditable/RoundTimeEditable'
 */
 
 export const Game: FC = () => {
-  const { isScrum } = useTypedSelector(store => store.userInfo);
+  const { isScrum,login } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
-  const game = useTypedSelector(store => store.game);
+  const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
 
   const [timeIsStop, setTimeIsStop] = useState<boolean>(true);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
+  }
+
+  const onIssueClick = (issueId:string) => {
+    const votingIssue = issuesInfo.find((ussueInfo) => ussueInfo.isVoting);
+    if(!votingIssue) {
+      ServerService.selectIssue(issueId);
+    }
+  }
+
+  const onRunIssueBtnClick = () => {
+    const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+    if(currentIssueInfo) {
+      setTimeIsStop(false);
+      ServerService.startVoteIssue(currentIssueInfo.issue.id);
+    } else {
+      alert("Сначала выберите issue")
+    }
+  }
+
+  const onResetIssueBtnClick = () => {
+    const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+    if(currentIssueInfo) {
+      ServerService.resetVoteIssue(currentIssueInfo.issue.id);
+    } else {
+      alert("нечего сбрасывать :(")
+    }
+  }
+
+  const onStopIssueBtnClick = () => {
+    const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+    if(currentIssueInfo) {
+      ServerService.stopVoteIssue(currentIssueInfo.issue.id);
+    }
+  }
+
+  const testBtnForVoting = () => { //!Пока нет карточек голосования
+    if(isVoting) {
+      const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
+      if(currentIssueInfo) {
+        const choiceInfo:ChoiceModel = {
+          issueId:currentIssueInfo.issue.id,
+          login:login,
+          score:5
+        }
+        ServerService.makeChoice(choiceInfo);
+      }
+    }
   }
 
 
@@ -55,24 +102,27 @@ export const Game: FC = () => {
       
       <div className="Game__issues">
         <h3>Issues:</h3>
-
-        <div className="Game__issuesContainer">
+        <button onClick={testBtnForVoting}>Голосование</button>
+        <ul className="Game__issuesContainer">
           {
-            game.issuesInfo.map((issueInfo) => (
-              <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority }
-                             link={ issueInfo.issue.link } key={ issueInfo.issue.id } />
+            issuesInfo.map((issueInfo) => (
+              <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""} onClick={() => onIssueClick(issueInfo.issue.id)}>
+                <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority }
+                          link={ issueInfo.issue.link } key={ issueInfo.issue.id } id={ issueInfo.issue.id }/>
+                <h1>Issue Result: {issueInfo.result}</h1>
+              </li>
             ))
           }
-        </div>
+        </ul>
       </div>
 
       { isScrum &&
         <div>
           <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
 
-          <Button className="Game__runRoundBtn" onClick={ () => setTimeIsStop(false) } variant="contained" color="primary" size="large">Run round</Button>
-          <Button className="Game__restartRoundBtn" onClick={ () => false } variant="contained" color="primary" size="large">Restart round</Button>
-          <Button className="Game__nextIssueBtn" onClick={ () => false } variant="contained" color="primary" size="large">Next issue</Button>
+          <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
+          <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>
+          <Button className="Game__nextIssueBtn" onClick={ onStopIssueBtnClick } variant="contained" color="primary" size="large">Stop issue</Button>
 
           <div className="Game__statistics">
             <h3>Statistics:</h3>

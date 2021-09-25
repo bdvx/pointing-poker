@@ -1,32 +1,53 @@
-import { Route, Switch, useLocation, Redirect, BrowserRouter } from 'react-router-dom';
+import {
+  Route,
+  Switch,
+  useLocation,
+  Redirect,
+  BrowserRouter,
+} from "react-router-dom";
 import { StartPage } from "./components/pages/StartPage/StartPage";
-import { AboutPage } from "./components/pages/AboutPage/aboutPage";
 import { WelcomePage } from "./components/pages/WelcomePage/WelcomePage";
 import Lobby from "./components/pages/Lobby/LobbyStart/Lobby";
-import { Game } from './components/pages/GamePage/Game/Game';
+import { Game } from "./components/pages/GamePage/Game/Game";
+import { useTypedSelector } from "./hooky/useTypedSelector";
+import AboutPage from "./components/pages/AboutPage/AboutPage";
+
 
 export default function AppRouter() {
-  let location =  useLocation();
+  let location = useLocation();
+  const user = useTypedSelector((state) => state.userInfo);
 
-  return(
+  return (
     <>
-      <Switch  location={location}>
+      <Switch location={location}>
         <Route exact path={`/home`}>
-          <StartPage classes="App__startPage"></StartPage>
+          {() => {
+            if (user.isLogin === false) {
+             return <StartPage classes="App__startPage"></StartPage>;
+            } else {
+              return <Redirect to='/welcomePage'></Redirect>
+            }
+          }}
         </Route>
-        <Route exact path={'/about'}>
+        <Route exact path={"/about"}>
           <AboutPage></AboutPage>
         </Route>
-        <Route exact path={'/welcomePage'}>
-          <WelcomePage classes="App__welcomePage"></WelcomePage>
+        <Route exact path={"/welcomePage"}>
+        {() => {
+            if (user.isLogin === true) {
+             return <WelcomePage classes="App__welcomePage"></WelcomePage>
+            } else {
+              return <Redirect to='/home'></Redirect>
+            }
+          }}
         </Route>
-        <Route exact path={'/lobbyStart'}>
+        <Route exact path={"/lobbyStart"}>
           <Lobby></Lobby>
         </Route>
         <Route exact path="/">
-          <Redirect to='/home'></Redirect>
+          <Redirect to="/home"></Redirect>
         </Route>
-        <Route exact path={'/game'}>
+        <Route exact path="/game">
           <Game></Game>
         </Route>
       </Switch>
