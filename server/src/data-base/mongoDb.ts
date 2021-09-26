@@ -5,12 +5,14 @@ import HashServise from "./hashServise";
 import RegModel from "./mongoDBShcema";
 import { UserInfoFromDB } from "../models/httpModels/useFromDBModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
+import { Room } from "../models/socketModels/roomModel";
 
 const mongoose = require('mongoose')
 const bdUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/planing-pocker?retryWrites=true&w=majority';
+const bdGameUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/games?retryWrites=true&w=majority';
 
 async function addNewUser(user:RegistrationModel) {
-  const isConnect = await connectToDB();
+  const isConnect = await connectToDB(bdUrl);
   if(!isConnect) return makeResponse(false, "failed to connect to server");
 
   const userLogin = await RegModel.findOne({login: user.login});
@@ -27,7 +29,7 @@ async function addNewUser(user:RegistrationModel) {
 }
 
 async function signIn(user:SignInModel) {
-  await connectToDB();
+  await connectToDB(bdUrl);
 
   const userInfoFromBD = await RegModel.findOne({login: user.login});
   if(userInfoFromBD) {
@@ -43,7 +45,7 @@ async function signIn(user:SignInModel) {
 }
 
 async function getUserByLogin(login:string) {
-  await connectToDB();
+  await connectToDB(bdUrl);
 
   const userInfo = await RegModel.findOne({login: login});
   if(userInfo) {
@@ -53,9 +55,9 @@ async function getUserByLogin(login:string) {
   }
 }
 
-async function connectToDB() {
+async function connectToDB(url:string) {
   try {
-    await mongoose.connect(bdUrl);
+    await mongoose.connect(url);
     return true;
   } catch (e) {
     console.log('ошибка подключения к БД');
@@ -63,15 +65,28 @@ async function connectToDB() {
   }
 }
 
+
 function makeResponse(isSuccess:boolean, message:string, body?:any) {
   const status: ResponseModel = { isSuccess, message, body };
   return status;
 }
 
+async function saveRoom(room:Room) {
+  const isConnect = await connectToDB(bdGameUrl);
+  console.log(room, isConnect)
+  if(!isConnect) return makeResponse(false, "failed to connect to server");
+
+  const newRoom = new RegModel(room);
+  await newRoom.save(); 
+  mongoose.connection.close();
+  return makeResponse(true, `room ${room.roomId} registered successfully`);
+}
+
 const MongoDB = {
   addNewUser,
   signIn,
-  getUserByLogin
+  getUserByLogin,
+  saveRoom
 }
 export default MongoDB;
 

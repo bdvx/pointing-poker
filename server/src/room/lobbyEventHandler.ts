@@ -3,6 +3,7 @@ import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
 import { VotingModel } from "../models/socketModels/votingModel";
 import { closeConnection } from "../socket";
+import DataService from "../tools/dataService";
 import { deletePersonFromRoom, makeWSResponseMessage, updateGameForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
 import Game, { makeIssueInfo } from "./game";
 
@@ -124,6 +125,7 @@ function onStopGame(room:Room, reason:string) {
     player.ws.send(response);
   })
   updateLobbyForEveryOne(room);
+  DataService.saveRoom(room);
 }
 
 const LobbyEventHandler = {
