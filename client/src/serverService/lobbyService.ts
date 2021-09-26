@@ -55,7 +55,6 @@ function RoomMessageHandler(message:string) {
   const onGameStart = (gameInfo:GameModel) => {
     lobbyDispatch(setGame(gameInfo));
     lobbyRouter.push("/game");
-    //! Добавить этот роут в роутинг
   }
 
   const onGameUpdate = (gameInfo:GameModel) => {

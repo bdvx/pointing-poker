@@ -3,8 +3,8 @@ import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
 import { VotingModel } from "../models/socketModels/votingModel";
 import { closeConnection } from "../socket";
-import { deletePersonFromRoom, makeWSResponseMessage, updateLobbyForEveryOne } from "../tools/roomFunctions";
-import Game from "./game";
+import { deletePersonFromRoom, makeWSResponseMessage, updateGameForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
+import Game, { makeIssueInfo } from "./game";
 
 function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
   const response = makeWSResponseMessage("CHAT_MESSAGE", messageInfo);
@@ -15,6 +15,13 @@ function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
 
 function onNewIssue(room:Room, issue:IssueModel) {
   room.issues.push(issue);
+
+  if(room.game) {
+    room.game.issuesInfo.push(makeIssueInfo(issue));
+    updateGameForEveryOne(room);
+  }
+
+
   updateLobbyForEveryOne(room);
 }
 
@@ -22,12 +29,23 @@ function onUpdateIssue(room:Room, newIssue:IssueModel) {
   const index = room.issues.findIndex((issue) => issue.id === newIssue.id);
   room.issues[index] = newIssue;
 
+  if(room.game) {
+    const indexGame = room.game.issuesInfo.findIndex((issueInfo) => issueInfo.issue.id === newIssue.id);
+    room.game.issuesInfo[indexGame] = makeIssueInfo(newIssue);
+    updateGameForEveryOne(room);
+  } 
   updateLobbyForEveryOne(room);
 }
 
-function onDeleteIssue(room:Room, newIssueId: string) {
-  const index = room.issues.findIndex((issue) => issue.id === newIssueId);
+function onDeleteIssue(room:Room, deletedIssueId: string) {
+  const index = room.issues.findIndex((issue) => issue.id === deletedIssueId);
   room.issues.splice(index, 1);
+
+  if(room.game) {
+    const indexGame = room.game.issuesInfo.findIndex((issueInfo) => issueInfo.issue.id === deletedIssueId);
+    room.game.issuesInfo.splice(indexGame, 1);
+    updateGameForEveryOne(room);
+  }
 
   updateLobbyForEveryOne(room);
 }

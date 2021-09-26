@@ -4,6 +4,7 @@ import { IconButton } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import IGameIssueProps from "../../../../types/GameIssueProps.type";
+import ServerService from "../../../../serverService/serverService";
 
 /* 
   TODO:
@@ -16,6 +17,10 @@ export const GameIssue: FC<IGameIssueProps> = (props: IGameIssueProps) => {
   const scrum = true;
   const { title, priority } = props;
 
+  const onDeleteBtnClick = () => {
+    ServerService.deleteIssue(props.id);
+  }
+
   return (
     <div className="GameIssue">
       <div className="GameIssue__info">
@@ -25,7 +30,7 @@ export const GameIssue: FC<IGameIssueProps> = (props: IGameIssueProps) => {
 
       { scrum &&
         <IconButton>
-          <CloseIcon />
+          <CloseIcon onClick={onDeleteBtnClick}/>
         </IconButton>
       }
     </div>

@@ -43,8 +43,8 @@ function makeNewGame(room:Room) {
     }
   })
 }
-
-function makeIssueInfo(issue:IssueModel) {
+ 
+export function makeIssueInfo(issue:IssueModel) {
   const issueInfo:IssueInfo = {
     isVoting: false,
     issue: issue,

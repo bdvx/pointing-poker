@@ -13,7 +13,6 @@ const votingSlice = createSlice({
     deleteVoit(state, action) {
       const index = state.findIndex((vote) => vote.whoKick === action.payload)
       state.splice(index, 1);
-      //! Проверить на работоспособность
     }
   }
 })

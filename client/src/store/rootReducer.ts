@@ -4,6 +4,7 @@ import chatSlice from "./chatSlice";
 import currentUserSlice from "./currentUserSlice";
 import gameSlice from "./gameSlice";
 import roomSlice from "./roomSlice";
+import settingsSlice from "./settingsSlice";
 import votingSlice from "./votingSlice";
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
   roomInfo: roomSlice,
   chat: chatSlice,
   voting: votingSlice,
-  game: gameSlice
+  game: gameSlice,
+  settings: settingsSlice,
 })
 
 export const store = configureStore({

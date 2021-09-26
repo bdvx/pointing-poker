@@ -8,7 +8,6 @@ import { GameIssue } from '../GameIssue/GameIssue';
 import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
-import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
 import GameCard, { CardProps } from '../../../GameCard/GameCard';
 
 const cards:Array<CardProps> = [{value:1,type:"a"},{value:2,type:"a"},{value:3,type:"a"},
@@ -18,8 +17,6 @@ export const Game: FC = () => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
   const { issuesInfo } = useTypedSelector(store => store.game);
-
-  const [timeIsStop, setTimeIsStop] = useState<boolean>(true);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -35,7 +32,6 @@ export const Game: FC = () => {
   const onRunIssueBtnClick = () => {
     const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
     if(currentIssueInfo) {
-      setTimeIsStop(false);
       ServerService.startVoteIssue(currentIssueInfo.issue.id);
     } else {
       alert("Сначала выберите issue")
@@ -77,7 +73,7 @@ export const Game: FC = () => {
             <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
           : 
             <div>
-              <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
+{/*               <RoundTimePlayable /> */}
 
               <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Exit</Button>
             </div>
@@ -105,7 +101,7 @@ export const Game: FC = () => {
 
       { isScrum &&
         <div>
-          <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
+{/*           <RoundTimePlayable /> */}
 
           <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
           <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>
