@@ -7,3 +7,9 @@
   box-shadow: 0 0 8px rgb(49, 243, 0);
   display: inline-block;
 }
+
+.card__wrapper {
+  display: flex;
+  width: 70%;
+  justify-content: space-between;
+}

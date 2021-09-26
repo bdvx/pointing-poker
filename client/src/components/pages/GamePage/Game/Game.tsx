@@ -1,5 +1,5 @@
 
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 import './Game.scss';
 import { useTypedSelector } from '../../../../hooky/useTypedSelector';
 import PlayerCard from '../../Lobby/PlayerCard/PlayerCard';
@@ -9,18 +9,15 @@ import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
 import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
-import { IssueModel } from '../../../../serverService/models/issueModel';
-import { ChoiceModel } from '../../../../serverService/models/choiceModel';
-/* 
-  TODO:
-    Проверить чтобы isScrum менялся для scrum master
-    Пока что вместо будет использоватся переменная scrum, позже ее нужно будет заменить на isScrum
-*/
+import GameCard, { CardProps } from '../../../GameCard/GameCard';
+
+const cards:Array<CardProps> = [{value:1,type:"a"},{value:2,type:"a"},{value:3,type:"a"},
+{value:5,type:"a"},{value:8,type:"a"},{value:13,type:"a"},{value:21,type:"a"}]
 
 export const Game: FC = () => {
-  const { isScrum,login } = useTypedSelector(store => store.userInfo);
+  const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
-  const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
+  const { issuesInfo } = useTypedSelector(store => store.game);
 
   const [timeIsStop, setTimeIsStop] = useState<boolean>(true);
 
@@ -61,19 +58,6 @@ export const Game: FC = () => {
     }
   }
 
-  const testBtnForVoting = () => { //!Пока нет карточек голосования
-    if(isVoting) {
-      const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
-      if(currentIssueInfo) {
-        const choiceInfo:ChoiceModel = {
-          issueId:currentIssueInfo.issue.id,
-          login:login,
-          score:5
-        }
-        ServerService.makeChoice(choiceInfo);
-      }
-    }
-  }
 
 
   return (
@@ -102,7 +86,6 @@ export const Game: FC = () => {
       
       <div className="Game__issues">
         <h3>Issues:</h3>
-        <button onClick={testBtnForVoting}>Голосование</button>
         <ul className="Game__issuesContainer">
           {
             issuesInfo.map((issueInfo) => (
@@ -115,6 +98,10 @@ export const Game: FC = () => {
           }
         </ul>
       </div>
+
+        <div className="card__wrapper">
+          {cards.map((card) => <GameCard {...card}></GameCard>)}
+        </div>
 
       { isScrum &&
         <div>
