@@ -30,7 +30,10 @@ function onStartIssueVote(room:Room, issueId:string) {
       const gameToClient = transformServerGameToClient(room.game);
       const response = makeWSResponseMessage("START_ISSUE_VOTE", gameToClient);
       room.game?.players.forEach((player)=>{ player.ws.send(response) });      
-      //!Сюда прикрутить сетТаймАймаут для остановки голосование (нужны настройки)
+
+      setTimeout(() => {
+        onStopIssueVote(room, issueId);
+      }, room.game.voteTime);
     }
 
   }
@@ -39,7 +42,7 @@ function onStartIssueVote(room:Room, issueId:string) {
 function onStopIssueVote(room:Room, issueId:string) {
   const issueInfo = findIssueById(room, issueId);
 
-  if(issueInfo && room.game) {
+  if(issueInfo && room.game && issueInfo.isVoting) { //последняя проверка если голосование закончилось досрочно
     issueInfo.isVoting = false;
     room.game.isVoting = true;
 

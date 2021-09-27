@@ -20,7 +20,7 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     issues: [],
     votes: [],
     inGame: [],
-    queue: []
+    queue: [],
   }
 
   const scramWS = scrumInfo.ws as WebSocket;

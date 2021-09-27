@@ -31,6 +31,7 @@ function makeNewGame(room:Room) {
   ],
     isVoting:false,
     players: room.playersWS,
+    voteTime: 3000 //!заменить на значение из настроек
   }
   room.game = gameInfo;
   room.isPlaying = true;

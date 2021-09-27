@@ -97,7 +97,6 @@ function updateIssue(issue:IssueModel) {
 }
 
 function deleteIssue(issueId:string) {
-  console.log('del')
   LobbyService.deleteIssue(issueId);
 }
 
