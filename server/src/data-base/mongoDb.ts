@@ -6,10 +6,10 @@ import RegModel from "./mongoDBShcema";
 import { UserInfoFromDB } from "../models/httpModels/useFromDBModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { Room } from "../models/socketModels/roomModel";
+import RoomModel from "./mongoDBRoomShema";
 
 const mongoose = require('mongoose')
 const bdUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/planing-pocker?retryWrites=true&w=majority';
-const bdGameUrl = 'mongodb+srv://fury:9558985@cluster0.4gdys.mongodb.net/games?retryWrites=true&w=majority';
 
 async function addNewUser(user:RegistrationModel) {
   const isConnect = await connectToDB(bdUrl);
@@ -72,11 +72,11 @@ function makeResponse(isSuccess:boolean, message:string, body?:any) {
 }
 
 async function saveRoom(room:Room) {
-  const isConnect = await connectToDB(bdGameUrl);
-  console.log(room, isConnect)
+  const isConnect = await connectToDB(bdUrl);
   if(!isConnect) return makeResponse(false, "failed to connect to server");
-
-  const newRoom = new RegModel(room);
+  console.log(1, room)
+  const newRoom = new RoomModel(room);
+  console.log(2, newRoom)
   await newRoom.save(); 
   mongoose.connection.close();
   return makeResponse(true, `room ${room.roomId} registered successfully`);
