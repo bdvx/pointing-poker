@@ -21,6 +21,7 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     votes: [],
     inGame: [],
     queue: [],
+    settings: { roundTime: 8000 } //!Добавить в отправку инфы от скрам мастера + настройки по дефолту
   }
 
   const scramWS = scrumInfo.ws as WebSocket;
@@ -81,6 +82,9 @@ function lobbyMessageHandler(room:Room, message:string) {
       break;
     case "MOVE_FROM_QUEUE":
       LobbyEventHandler.onMoveFromQueue(room, payLoad);
+      break;
+    case "SET_SETTINGS":
+      LobbyEventHandler.onSetSettings(room, payLoad);
       break;
     
     case "USER_MAKE_CHOICE":

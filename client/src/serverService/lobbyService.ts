@@ -2,6 +2,7 @@ import { newMessage } from "../store/chatSlice";
 import { setCurrentUserScrumStatus } from "../store/currentUserSlice";
 import { resetGame, setGame } from "../store/gameSlice";
 import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
+import { setSettings, SettingsModel } from "../store/settingsSlice";
 import { deleteVoit, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
@@ -79,6 +80,10 @@ function RoomMessageHandler(message:string) {
     alert("Голосование");
   }
 
+  const onSetSettings = (settings:SettingsModel) => {
+    lobbyDispatch(setSettings(settings));
+  }
+
   switch(type) {
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
@@ -114,6 +119,10 @@ function RoomMessageHandler(message:string) {
     
     case "START_ISSUE_VOTE":
       onStartIssueVote(payLoad);
+      break;
+    
+    case "SET_SETTINGS":
+      onSetSettings(payLoad);
       break;
   }  
 }
@@ -212,6 +221,11 @@ function stopGameInRoom() {
   wss.send(request);
 }
 
+function setSettingsInRoom(settings:SettingsModel) {
+  const request = makeWSRequestString("SET_SETTINGS", settings);
+  wss.send(request);
+}
+
 const LobbyService = {
   connectToRoom,
   sendChatMessage,
@@ -231,7 +245,8 @@ const LobbyService = {
   stopVoteIssueInRoom,
   selectIssueInRoom,
   stopGameInRoom,
-  resetVoteIssueInRoom
+  resetVoteIssueInRoom,
+  setSettingsInRoom
 }
 export default LobbyService;
 

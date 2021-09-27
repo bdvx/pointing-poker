@@ -1,6 +1,7 @@
 import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
 import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
+import { SettingsModel } from "../models/socketModels/settingsModel";
 import { VotingModel } from "../models/socketModels/votingModel";
 import { closeConnection } from "../socket";
 import DataService from "../tools/dataService";
@@ -115,7 +116,6 @@ function onMoveFromQueue(room:Room, userLogin:string) {
 }
 
 function onStopGame(room:Room, reason:string) {
-  //TODO сохранение игры в БД
   room.isPlaying = false;
   delete room.game;
   room.issues = [];
@@ -125,7 +125,17 @@ function onStopGame(room:Room, reason:string) {
     player.ws.send(response);
   })
   updateLobbyForEveryOne(room);
+
   DataService.saveRoom(room);
+}
+
+function onSetSettings(room:Room, settings:SettingsModel) {
+  room.settings = settings;
+
+  const response = makeWSResponseMessage("SET_SETTINGS", settings);
+  room.playersWS.forEach((player) => {
+    player.ws.send(response);
+  })
 }
 
 const LobbyEventHandler = {
@@ -137,7 +147,8 @@ const LobbyEventHandler = {
   onAgreeWithKick,
   onMakeNewGame,
   onMoveFromQueue,
-  onStopGame
+  onStopGame,
+  onSetSettings
 }
 export default LobbyEventHandler;
 

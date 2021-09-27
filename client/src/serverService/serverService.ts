@@ -11,6 +11,7 @@ import { VotingModel } from "./models/votingModel";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
 import Lobby from "../components/pages/Lobby/LobbyStart/Lobby";
+import { SettingsModel } from "../store/settingsSlice";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -144,6 +145,10 @@ function stopGame() {
   LobbyService.stopGameInRoom();
 }
 
+function setSettings(settings:SettingsModel) {
+  LobbyService.setSettingsInRoom(settings);
+}
+
 const ServerService = {
   setDispatch,
   setRouter,
@@ -173,5 +178,7 @@ const ServerService = {
   stopVoteIssue,
   selectIssue,
   resetVoteIssue,
+
+  setSettings
 }
 export default ServerService;

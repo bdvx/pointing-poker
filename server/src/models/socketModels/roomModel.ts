@@ -4,6 +4,7 @@ import { WSClientModel } from "./clientModel";
 import { GameModel } from "./gameModel";
 import { IssueModel } from "./issueModel";
 import { UserInfoModel } from "./userInfoModel";
+import { SettingsModel } from "./settingsModel";
 
 export interface Room {
   roomId: string,
@@ -16,5 +17,6 @@ export interface Room {
   scrumInfo: UserInfoModel,
   issues: Array<IssueModel>,
   game?: GameModel,
-  votes: Array<VotingModel>
+  votes: Array<VotingModel>,
+  settings: SettingsModel
 }
