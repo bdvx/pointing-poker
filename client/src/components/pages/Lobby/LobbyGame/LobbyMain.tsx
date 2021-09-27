@@ -1,9 +1,6 @@
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import clientService from "../../../../clientService/clientService";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
-import { IssueModel } from "../../../../serverService/models/issueModel";
 import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
@@ -17,7 +14,6 @@ const LobbyMain = () => {
   const userInfo = useTypedSelector(store => store.userInfo);
   const dispatch = useDispatch();
   const router = useHistory();
-  clientService.setDispatch(dispatch);
   //! ServerService.setDispatch(dispatch); возможно где-то дублируется
   ServerService.setDispatch(dispatch);
   ServerService.setRouter(router);

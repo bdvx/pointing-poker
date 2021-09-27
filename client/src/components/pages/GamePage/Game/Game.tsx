@@ -9,6 +9,7 @@ import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
 import GameCard, { CardProps } from '../../../GameCard/GameCard';
+import { GameSideBar } from '../GameSideBar/GameSideBar';
 
 const cards:Array<CardProps> = [{value:1,type:"a"},{value:2,type:"a"},{value:3,type:"a"},
 {value:5,type:"a"},{value:8,type:"a"},{value:13,type:"a"},{value:21,type:"a"}]
@@ -60,6 +61,7 @@ export const Game: FC = () => {
     <div className="Game">
       {isScrum?<Queue></Queue>:<></>}
       <Chat></Chat>
+      <GameSideBar></GameSideBar>
       <h2 className="Game__title">Some random game name</h2>
 
       <div className="Game__master">
