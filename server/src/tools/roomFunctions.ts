@@ -64,7 +64,6 @@ export function deletePersonFromRoom(room:Room, login:string) {
   if (roomIndex !== -1) {
     room.playersWS.splice(roomIndex, 1);
   }
-  return roomIndex;
 }
 
 export function updateLobbyForEveryOne(room:Room) {

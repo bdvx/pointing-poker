@@ -56,11 +56,13 @@ function onDeleteIssue(room:Room, deletedIssueId: string) {
 function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
 
   const deletePlayerFromRoom = (playerLogin: string) => {
+    const deletedPlayerIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
 
-    const deletedPlayerIndex = deletePersonFromRoom(room, voteInfo.whoKick);
     const response = makeWSResponseMessage("YOU_ARE_KICKED", "you were kicked by the master");
     room.playersWS[deletedPlayerIndex].ws.send(response);
+    
     closeConnection(room.playersWS[deletedPlayerIndex].ws);
+    deletePersonFromRoom(room, voteInfo.whoKick);
     //TODO техническое сообщение в чат
     /*     const kickedPlayer:KickedPlayer = {
       kickedLogin: kickInfo.whoKick,

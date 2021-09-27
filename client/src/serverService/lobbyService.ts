@@ -59,7 +59,6 @@ function RoomMessageHandler(message:string) {
   }
 
   const onGameUpdate = (gameInfo:GameModel) => {
-    console.log(gameInfo)
     lobbyDispatch(setGame(gameInfo));
   }
 
