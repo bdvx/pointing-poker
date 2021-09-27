@@ -16,6 +16,9 @@ const settingsSlice = createSlice({
     setSettings(state, action) {
       return action.payload;
     },
+    setTimer(state, action) {
+      state.roundTime = action.payload;
+    },
     deleteSettings() {
       return initialState;
     }
@@ -23,4 +26,4 @@ const settingsSlice = createSlice({
 })
 
 export default settingsSlice.reducer;
-export const {setSettings, deleteSettings} = settingsSlice.actions;
+export const {setSettings, deleteSettings, setTimer} = settingsSlice.actions;
