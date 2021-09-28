@@ -27,7 +27,8 @@ export const IssueEditable = (props: IIssueEditableProps) => {
         </IconButton>
       </div>
 
-      <UpdateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } issue={ props } onUpdateIssue={ onUpdateIssue } />
+      <UpdateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } 
+                        issue={ props } onUpdateIssue={ onUpdateIssue } />
     </Issue>
   );
 };

@@ -68,8 +68,7 @@ export const Game: FC = () => {
         <span className="Game__masterTitle">Scrum master:</span>
 
         {/* TODO: нужно убрать для карточки мастера кик */}
-        <PlayerCard avatar={ scrumInfo.avatar || './logo192.png' } firstName={ scrumInfo.firstName } 
-                    lastName={ scrumInfo.lastName } jobPosition={ scrumInfo.jobPosition } login="" />
+        <PlayerCard {...scrumInfo} avatar={ scrumInfo.avatar || './logo192.png' } login="" />
 
         { isScrum ?
             <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
@@ -87,8 +86,10 @@ export const Game: FC = () => {
         <ul className="Game__issuesContainer">
           {
             issuesInfo.map((issueInfo) => (
-              <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""} onClick={() => onIssueClick(issueInfo.issue.id)}>
-                <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority } score={ issueInfo.result } isActive={ issueInfo.isSelected } link={ issueInfo.issue.link } key={ issueInfo.issue.id } id={ issueInfo.issue.id } />
+              <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""} 
+                               onClick={() => onIssueClick(issueInfo.issue.id)}>
+
+                <GameIssue {...issueInfo.issue} isActive={issueInfo.isSelected} score={issueInfo.result}/>
               </li>
             ))
           }

@@ -58,8 +58,7 @@ const LobbyMain = () => {
           <div className="Lobby__master_title">Scrum master:</div>
           <button onClick={onStartGameBtnClick}>STart Game</button>
           <button >Add Issue</button>
-          <PlayerCard avatar={roomInfo.scrumInfo.avatar || './logo192.png'} firstName={roomInfo.scrumInfo.firstName} 
-                      lastName={roomInfo.scrumInfo.lastName} jobPosition={roomInfo.scrumInfo.jobPosition} login={roomInfo.scrumInfo.login}/>
+          <PlayerCard {...roomInfo.scrumInfo} avatar={roomInfo.scrumInfo.avatar || './logo192.png'}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
         </div>
         <h1>{roomInfo.roomUrl}</h1>
@@ -67,8 +66,7 @@ const LobbyMain = () => {
         <div className='Lobby__members_title'>Members:</div>
           <div className="Lobby__members_cards">
             {roomInfo.inGame.map((player) => {
-              return <PlayerCard avatar={player.avatar || './logo192.png'} firstName={player.firstName} 
-                        lastName={player.lastName} jobPosition={player.jobPosition} login={player.login}/>
+              return <PlayerCard {...player} avatar={player.avatar || './logo192.png'} />
             })}
         </div>
       </div>
@@ -81,7 +79,8 @@ const LobbyMain = () => {
         <div>
           {
             issues.map((issue) => (
-              <IssueEditable title={ issue.title } priority={ issue.priority } link={ issue.link } id={ issue.id } key={ issue.id } onDeleteIssue={ () => deleteIssue(issue) } onUpdateIssue={ (issue) => updateIssue(issue) } />
+              <IssueEditable {...issue} onDeleteIssue={ () => deleteIssue(issue) } 
+                             onUpdateIssue={ (issue) => updateIssue(issue) } />
             ))
           }
           <br />
