@@ -3,13 +3,22 @@ import { Issue } from '../../../Base/Issue/Issue';
 import { IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import IIssueEditableProps from '../../../../types/IssueEditableProps.type';
 import { useState } from 'react';
 import { UpdateIssuePopup } from '../../../UpdateIssuePopup/UpdateIssuePopup';
+import { IssueModel } from '../../../../serverService/models/issueModel';
+import ServerService from '../../../../serverService/serverService';
 
-export const IssueEditable = (props: IIssueEditableProps) => {
-  const { title, priority, link, onDeleteIssue, onUpdateIssue } = props;
+export const IssueEditable = (props: IssueModel) => {
+  const { title, priority, link, id } = props;
   const [openPopup, setOpenPopup] = useState<boolean>(false);
+
+  const onDeleteIssue = () => {
+    ServerService.deleteIssue(id);
+  }
+  //!С обновлением скорей всего будет проблема на стороне фронта
+  const onUpdateIssue = () => {
+    ServerService.updateIssue(props)
+  }
 
   return (
     <Issue classes="IssueEditable">
@@ -27,7 +36,8 @@ export const IssueEditable = (props: IIssueEditableProps) => {
         </IconButton>
       </div>
 
-      <UpdateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } issue={ props } onUpdateIssue={ onUpdateIssue } />
+      <UpdateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } 
+      issue={ props } onUpdateIssue={ onUpdateIssue } />
     </Issue>
   );
 };

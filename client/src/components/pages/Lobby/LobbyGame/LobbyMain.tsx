@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
-import { IssueModel } from "../../../../serverService/models/issueModel";
-import { Room } from "../../../../serverService/models/roomModel";
 import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
@@ -15,7 +12,7 @@ import { Queue } from "../Queue/queue";
 import './LobbyMain.scss';
 
 const LobbyMain = () => {
-  const roomInfo = useTypedSelector(store => store.roomInfo) as Room;
+  const roomInfo = useTypedSelector(store => store.roomInfo);
   const userInfo = useTypedSelector(store => store.userInfo);
   const dispatch = useDispatch();
   const router = useHistory();
@@ -23,20 +20,7 @@ const LobbyMain = () => {
   ServerService.setDispatch(dispatch);
   ServerService.setRouter(router);
 
-  const [issues, setIssues] = useState<IssueModel[]>([]);
 
-  const deleteIssue = (currentIssue: IssueModel): void => {
-    const updIssues = issues.filter((issue) => issue.id !== currentIssue.id);
-    setIssues(updIssues);
-  };
-
-  const updateIssue = (currentIssue: IssueModel): void => {
-    const updIssues = [...issues];
-    const currentIssueIndex = issues.findIndex((issue) => issue.id === currentIssue.id);
-    updIssues[currentIssueIndex] = { ...currentIssue };
-
-    setIssues(updIssues);
-  };
 
   const onDisconnectBtnClick = () => {
     ServerService.disconect(userInfo, roomInfo.roomId, `user ${userInfo.login} disconnect the room`);
@@ -58,8 +42,7 @@ const LobbyMain = () => {
           <div className="Lobby__master_title">Scrum master:</div>
           <button onClick={onStartGameBtnClick}>STart Game</button>
           <button >Add Issue</button>
-          <PlayerCard avatar={roomInfo.scrumInfo.avatar || './logo192.png'} firstName={roomInfo.scrumInfo.firstName} 
-                      lastName={roomInfo.scrumInfo.lastName} jobPosition={roomInfo.scrumInfo.jobPosition} login={roomInfo.scrumInfo.login}/>
+          <PlayerCard {...roomInfo.scrumInfo} avatar={roomInfo.scrumInfo.avatar || './logo192.png'}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
         </div>
         <h1>{roomInfo.roomUrl}</h1>
@@ -67,8 +50,7 @@ const LobbyMain = () => {
         <div className='Lobby__members_title'>Members:</div>
           <div className="Lobby__members_cards">
             {roomInfo.inGame.map((player) => {
-              return <PlayerCard avatar={player.avatar || './logo192.png'} firstName={player.firstName} 
-                        lastName={player.lastName} jobPosition={player.jobPosition} login={player.login}/>
+              return <PlayerCard {...player} avatar={player.avatar || './logo192.png'} />
             })}
         </div>
       </div>
@@ -80,14 +62,16 @@ const LobbyMain = () => {
         <h1>Issues:</h1>
         <div>
           {
-            issues.map((issue) => (
-              <IssueEditable title={ issue.title } priority={ issue.priority } link={ issue.link } id={ issue.id } key={ issue.id } onDeleteIssue={ () => deleteIssue(issue) } onUpdateIssue={ (issue) => updateIssue(issue) } />
-            ))
+            roomInfo.issues.length !==0 ?
+            roomInfo.issues.map((issue) => (
+              <IssueEditable {...issue} />
+            )) :
+            <></>
           }
           <br />
         </div>
 
-        <CreateIssue onAddIssue={ (issue) => setIssues([issue, ...issues]) } />
+        <CreateIssue />
       </div>
     </div>
   );
