@@ -16,7 +16,6 @@ function onUserMakeNewChoice(room:Room, userChoiceInfo:ChoiceModel) {
       issueInfo.votes[index] = { login, score };
     }
     updateGameForEveryOne(room);
-
   }
 }
 

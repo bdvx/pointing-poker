@@ -74,9 +74,8 @@ function makeResponse(isSuccess:boolean, message:string, body?:any) {
 async function saveRoom(room:Room) {
   const isConnect = await connectToDB(bdUrl);
   if(!isConnect) return makeResponse(false, "failed to connect to server");
-  console.log(1, room)
+
   const newRoom = new RoomModel(room);
-  console.log(2, newRoom)
   await newRoom.save(); 
   mongoose.connection.close();
   return makeResponse(true, `room ${room.roomId} registered successfully`);

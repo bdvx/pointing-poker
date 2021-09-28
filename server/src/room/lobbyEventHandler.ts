@@ -10,6 +10,8 @@ import Game, { makeIssueInfo } from "./game";
 
 function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
   const response = makeWSResponseMessage("CHAT_MESSAGE", messageInfo);
+  room.chat.push(messageInfo);
+
   room.playersWS.forEach((playerWS) => {
       playerWS.ws.send(response);
   })
@@ -119,16 +121,16 @@ function onMoveFromQueue(room:Room, userLogin:string) {
 
 function onStopGame(room:Room, reason:string) {
   room.isPlaying = false;
-  delete room.game;
-  room.issues = [];
+  DataService.saveRoom(room);
+  //! Сделать окончание игры
+/*   delete room.game;
+  room.issues = []; */
 
   const response = makeWSResponseMessage("STOP_GAME", reason);
   room.playersWS.forEach((player) => {
     player.ws.send(response);
   })
   updateLobbyForEveryOne(room);
-
-  DataService.saveRoom(room);
 }
 
 function onSetSettings(room:Room, settings:SettingsModel) {
