@@ -3,10 +3,10 @@ import { Issue } from '../../../Base/Issue/Issue';
 import { IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { IssueModel } from '../../../../serverService/models/issueModel';
+import IIssueEditableProps from '../../../../types/IssueEditableProps.type';
 
-export const IssueEditable = (props: IssueModel) => {
-  const { title, priority, link } = props;
+export const IssueEditable = (props: IIssueEditableProps) => {
+  const { title, priority, link, onDeleteIssue } = props;
 
   return (
     <Issue classes="IssueEditable">
@@ -19,7 +19,7 @@ export const IssueEditable = (props: IssueModel) => {
         <IconButton>
           <EditIcon />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={ onDeleteIssue }>
           <DeleteIcon />
         </IconButton>
       </div>

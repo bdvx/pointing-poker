@@ -25,6 +25,14 @@ const LobbyMain = () => {
 
   const [issues, setIssues] = useState<IssueModel[]>([]);
 
+  const deleteIssue = (currentIssue: IssueModel): void => {
+    const updIssues = [...issues];
+    const currentIssueIndex = issues.findIndex((issue) => issue.id === currentIssue.id);
+    updIssues.splice(currentIssueIndex, 1);
+
+    setIssues(updIssues);
+  };
+
   const onDisconnectBtnClick = () => {
     ServerService.disconect(userInfo, roomInfo.roomId, `user ${userInfo.login} disconnect the room`);
     dispatch(resetRoomInfo());
@@ -68,7 +76,7 @@ const LobbyMain = () => {
         <div>
           {
             issues.map((issue) => (
-              <IssueEditable title={ issue.title } priority={ issue.priority } link={ issue.link } id={ issue.id } key={ issue.id } />
+              <IssueEditable title={ issue.title } priority={ issue.priority } link={ issue.link } id={ issue.id } key={ issue.id } onDeleteIssue={ () => deleteIssue(issue) } />
             ))
           }
           <br />

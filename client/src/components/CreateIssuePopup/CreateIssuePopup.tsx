@@ -1,5 +1,5 @@
 import './CreateIssuePopup.scss';
-import { FC, FormEvent, useState } from 'react';
+import { FC, useState } from 'react';
 import { Button, DialogActions, FormControl, MenuItem, Select, TextField } from '@material-ui/core';
 import { PopUpLinearProgress } from '../Base/PopUpLinearProgress/PopUpLinearProgress';
 import ICreateIssuePopupProps from '../../types/CreateIssuePopupProps.type';
@@ -13,18 +13,20 @@ export const CreateIssuePopup: FC<ICreateIssuePopupProps> = (props: ICreateIssue
   const [link, setLink] = useState<string>('');
   const [priority, setPriority] = useState<TIssuePriority>('low');
 
-  const addIssue = (): void => {
+  const resetFields = (): void => {
+    setTitle('');
+    setLink('');
+    setPriority('low');
+  }
+
+  const addNewIssue = (): void => {
     setLoading(true);
 
-    onCreateIssue({
-      title,
-      priority,
-      link,
-      id: title
-    });
+    onCreateIssue({ title, priority, link, id: title });
 
     setLoading(false);
     onChangePopupState(false);
+    resetFields();
   };
 
   return (
@@ -69,7 +71,7 @@ export const CreateIssuePopup: FC<ICreateIssuePopupProps> = (props: ICreateIssue
         </label>
 
         <DialogActions className="CreateIssuePopup__btns">
-          <Button onClick={ addIssue } variant="contained" color="primary" size="large">Confirm</Button>
+          <Button onClick={ addNewIssue } variant="contained" color="primary" size="large">Confirm</Button>
           <Button onClick={ () => onChangePopupState(false) } variant="outlined" color="primary" size="large">Cancel</Button>
         </DialogActions>
       </form>
