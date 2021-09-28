@@ -26,9 +26,14 @@ const LobbyMain = () => {
   const [issues, setIssues] = useState<IssueModel[]>([]);
 
   const deleteIssue = (currentIssue: IssueModel): void => {
+    const updIssues = issues.filter((issue) => issue.id !== currentIssue.id);
+    setIssues(updIssues);
+  };
+
+  const updateIssue = (currentIssue: IssueModel): void => {
     const updIssues = [...issues];
     const currentIssueIndex = issues.findIndex((issue) => issue.id === currentIssue.id);
-    updIssues.splice(currentIssueIndex, 1);
+    updIssues[currentIssueIndex] = { ...currentIssue };
 
     setIssues(updIssues);
   };
@@ -76,7 +81,7 @@ const LobbyMain = () => {
         <div>
           {
             issues.map((issue) => (
-              <IssueEditable title={ issue.title } priority={ issue.priority } link={ issue.link } id={ issue.id } key={ issue.id } onDeleteIssue={ () => deleteIssue(issue) } />
+              <IssueEditable title={ issue.title } priority={ issue.priority } link={ issue.link } id={ issue.id } key={ issue.id } onDeleteIssue={ () => deleteIssue(issue) } onUpdateIssue={ (issue) => updateIssue(issue) } />
             ))
           }
           <br />
