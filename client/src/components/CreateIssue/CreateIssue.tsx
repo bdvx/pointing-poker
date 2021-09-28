@@ -4,8 +4,9 @@ import { Issue } from '../Base/Issue/Issue';
 import { IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { CreateIssuePopup } from '../CreateIssuePopup/CreateIssuePopup';
+import ICreateIssueProps from '../../types/CreateIssueProps.type';
 
-export const CreateIssue: FC = () => {
+export const CreateIssue: FC<ICreateIssueProps> = ({ onAddIssue }: ICreateIssueProps) => {
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   
   return (
@@ -18,7 +19,7 @@ export const CreateIssue: FC = () => {
         <AddIcon />
       </IconButton>
 
-      <CreateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } />
+      <CreateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } onCreateIssue={ onAddIssue } />
     </Issue>
   );
 };

@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
+import { IssueModel } from "../../../../serverService/models/issueModel";
+import { Room } from "../../../../serverService/models/roomModel";
 import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
@@ -12,13 +15,15 @@ import { Queue } from "../Queue/queue";
 import './LobbyMain.scss';
 
 const LobbyMain = () => {
-  const roomInfo = useTypedSelector(store => store.roomInfo);
+  const roomInfo = useTypedSelector(store => store.roomInfo) as Room;
   const userInfo = useTypedSelector(store => store.userInfo);
   const dispatch = useDispatch();
   const router = useHistory();
   //! ServerService.setDispatch(dispatch); возможно где-то дублируется
   ServerService.setDispatch(dispatch);
   ServerService.setRouter(router);
+
+  const [issues, setIssues] = useState<IssueModel[]>([]);
 
   const onDisconnectBtnClick = () => {
     ServerService.disconect(userInfo, roomInfo.roomId, `user ${userInfo.login} disconnect the room`);
@@ -55,9 +60,22 @@ const LobbyMain = () => {
         </div>
       </div>
 
-      <IssueEditable title="Issue 542" priority="Low prority" link="https://google.com" id="11111" /> 
       <br />
-      <CreateIssue />
+      <br />
+
+      <div>
+        <h1>Issues:</h1>
+        <div>
+          {
+            issues.map((issue) => (
+              <IssueEditable title={ issue.title } priority={ issue.priority } link={ issue.link } id={ issue.id } key={ issue.id } />
+            ))
+          }
+          <br />
+        </div>
+
+        <CreateIssue onAddIssue={ (issue) => setIssues([issue, ...issues]) } />
+      </div>
     </div>
   );
 };
