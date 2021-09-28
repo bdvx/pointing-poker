@@ -11,11 +11,6 @@ import ServerService from '../../../../serverService/serverService';
 import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
 import { IssueModel } from '../../../../serverService/models/issueModel';
 import { ChoiceModel } from '../../../../serverService/models/choiceModel';
-/* 
-  TODO:
-    Проверить чтобы isScrum менялся для scrum master
-    Пока что вместо будет использоватся переменная scrum, позже ее нужно будет заменить на isScrum
-*/
 
 export const Game: FC = () => {
   const { isScrum,login } = useTypedSelector(store => store.userInfo);
@@ -107,9 +102,7 @@ export const Game: FC = () => {
           {
             issuesInfo.map((issueInfo) => (
               <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""} onClick={() => onIssueClick(issueInfo.issue.id)}>
-                <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority }
-                          link={ issueInfo.issue.link } key={ issueInfo.issue.id } id={ issueInfo.issue.id }/>
-                <h1>Issue Result: {issueInfo.result}</h1>
+                <GameIssue title={ issueInfo.issue.title } priority={ issueInfo.issue.priority } score={ issueInfo.result } isActive={ issueInfo.isSelected } link={ issueInfo.issue.link } key={ issueInfo.issue.id } id={ issueInfo.issue.id } />
               </li>
             ))
           }

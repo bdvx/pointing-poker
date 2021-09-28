@@ -1,26 +1,26 @@
 .GameIssue {
-  width: 270px;
-  height: 70px;
+  max-width: 270px;
+  width: 100%;
+  min-height: 70px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  color: black;
-  text-decoration: none;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.55);
 }
 
 .GameIssue__info {
   width: 140px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
 }
 
 .GameIssue__title {
-  font: 20px Roboto, sans-serif;
+  margin: 0;
+  font-size: 20px;
 }
 
 .GameIssue__priority {
-  font: 12px Roboto, sans-serif;
+  font-size: 12px;
+}
+
+.GameIssue__score {
+  
 }
