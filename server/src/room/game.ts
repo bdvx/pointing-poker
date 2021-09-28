@@ -5,30 +5,7 @@ import { makeWSResponseMessage, transformServerGameToClient } from "../tools/roo
 
 function makeNewGame(room:Room) {
   const gameInfo:GameModel = {
-/*     issuesInfo: room.issues.map((issue) => makeIssueInfo(issue)) || [], */
-    issuesInfo: [{ //!Удалить это как появится добавление issue
-      isSelected: false,
-      isVoting: false,
-      issue: {
-        id:"1",
-        link:"https1",
-        priorety:"low",
-        title:"test 1"
-      },
-      votes: [],
-    },
-    {
-      isSelected: false,
-      isVoting: false,
-      issue: {
-        id:"2",
-        link:"https2",
-        priorety:"hight",
-        title:"test 2"
-      },
-      votes: [],
-    }
-  ],
+    issuesInfo: room.issues.map((issue) => makeIssueInfo(issue)) || [],
     isVoting:false,
     players: room.playersWS,
   }

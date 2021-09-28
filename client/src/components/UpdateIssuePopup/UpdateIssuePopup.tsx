@@ -4,9 +4,10 @@ import { Button, DialogActions, FormControl, MenuItem, Select, TextField } from 
 import { PopUpLinearProgress } from '../Base/PopUpLinearProgress/PopUpLinearProgress';
 import { TIssuePriority } from '../../types/IssuePriority.type';
 import IUpdateIssuePopupProps from '../../types/UpdateIssuePopupProps.type';
+import ServerService from '../../serverService/serverService';
 
 export const UpdateIssuePopup: FC<IUpdateIssuePopupProps> = (props: IUpdateIssuePopupProps) => {
-  const { open, onChangePopupState, issue, onUpdateIssue } = props;
+  const { open, onChangePopupState, issue } = props;
   const [loading, setLoading] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>(issue.title);
@@ -16,7 +17,7 @@ export const UpdateIssuePopup: FC<IUpdateIssuePopupProps> = (props: IUpdateIssue
   const updateIssue = (): void => {
     setLoading(true);
 
-    onUpdateIssue({ ...issue, title, priority, link });
+    ServerService.updateIssue({ ...issue, title, priority, link })
 
     setLoading(false);
     onChangePopupState(false);

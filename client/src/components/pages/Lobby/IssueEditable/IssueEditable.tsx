@@ -16,9 +16,6 @@ export const IssueEditable = (props: IssueModel) => {
     ServerService.deleteIssue(id);
   }
   //!С обновлением скорей всего будет проблема на стороне фронта
-  const onUpdateIssue = () => {
-    ServerService.updateIssue(props)
-  }
 
   return (
     <Issue classes="IssueEditable">
@@ -36,8 +33,7 @@ export const IssueEditable = (props: IssueModel) => {
         </IconButton>
       </div>
 
-      <UpdateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } 
-      issue={ props } onUpdateIssue={ onUpdateIssue } />
+      <UpdateIssuePopup open={ openPopup } onChangePopupState={ (open) => setOpenPopup(open) } issue={ props } />
     </Issue>
   );
 };
