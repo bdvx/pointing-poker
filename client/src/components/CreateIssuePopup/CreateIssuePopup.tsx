@@ -4,9 +4,11 @@ import { Button, DialogActions, FormControl, MenuItem, Select, TextField } from 
 import { PopUpLinearProgress } from '../Base/PopUpLinearProgress/PopUpLinearProgress';
 import ICreateIssuePopupProps from '../../types/CreateIssuePopupProps.type';
 import { TIssuePriority } from '../../types/IssuePriority.type';
+import ServerService from '../../serverService/serverService';
+import { hashCode } from '../../tool/hashFunction';
 
 export const CreateIssuePopup: FC<ICreateIssuePopupProps> = (props: ICreateIssuePopupProps) => {
-  const { open, onChangePopupState, onCreateIssue } = props;
+  const { open, onChangePopupState } = props;
   const [loading, setLoading] = useState<boolean>(false);
 
   const [title, setTitle] = useState<string>('');
@@ -22,7 +24,7 @@ export const CreateIssuePopup: FC<ICreateIssuePopupProps> = (props: ICreateIssue
   const addNewIssue = (): void => {
     setLoading(true);
 
-    onCreateIssue({ title, priority, link, id: title });
+    ServerService.makeIssue({ title, priority, link, id: String(hashCode(title) + Date.now()) });
 
     setLoading(false);
     onChangePopupState(false);

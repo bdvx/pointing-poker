@@ -20,7 +20,7 @@ const Settings = () => {
         <div className="Settings__issues_text">Issues:</div>
         {issues.map((el) => {
           return (
-            <IssueEditable title={el.title} priority={el.priority} link={el.link} id="" onDeleteIssue={ () => false } onUpdateIssue={ () => false } />
+            <IssueEditable {...el} id=""/>
           );
         })}
       </div>

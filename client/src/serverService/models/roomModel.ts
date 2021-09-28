@@ -1,5 +1,6 @@
 import { ChatMessageInfo } from "./chatMessageInfoModel";
 import { UserInfo } from "./userInfoModel";
+import { IssueModel } from "./issueModel";
 
 
 export interface Room {
@@ -11,5 +12,6 @@ export interface Room {
   players: Array<UserInfo>,
   queue: Array<UserInfo>,
   inGame: Array<UserInfo>,
-  amountAgreeWithKick: number
+  amountAgreeWithKick: number,
+  issues: Array<IssueModel>
 }

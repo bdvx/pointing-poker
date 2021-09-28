@@ -10,6 +10,7 @@ const initialState: Room = {
   isPlaying: false,
   isVoting:false,
   amountAgreeWithKick: 1,
+  issues: [],
   scrumInfo: {
     firstName: '',
     isScrum: true,
