@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../store/currentUserSlice';
 import { RegisterSuccessPopup } from '../RegisterSuccessPopup/RegisterSuccessPopup';
 import { RegisterFailPopup } from '../RegisterFailPopup/RegisterFailPopup';
-import { PopUpLinearProgress } from '../PopUpLinearProgress/PopUpLinearProgress';
+import { PopUpLinearProgress } from '../../Base/PopUpLinearProgress/PopUpLinearProgress';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterPopupState }: IRegisterPopupProps) => {
   const [loading, setLoading] = useState<boolean>(false);

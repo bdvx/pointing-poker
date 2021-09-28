@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Issue from "../pages/Lobby/Issue/Issue";
+import { IssueEditable } from "../pages/Lobby/IssueEditable/IssueEditable";
 
 const Settings = () => {
   const [issues, setIssues] = useState([
@@ -20,7 +20,7 @@ const Settings = () => {
         <div className="Settings__issues_text">Issues:</div>
         {issues.map((el) => {
           return (
-            <Issue title={el.title} priority={el.priority} link={el.link} />
+            <IssueEditable title={el.title} priority={el.priority} link={el.link} id="" />
           );
         })}
       </div>

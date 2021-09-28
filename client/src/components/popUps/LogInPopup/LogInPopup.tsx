@@ -7,7 +7,7 @@ import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
 import { LOGIN_POPUP_FIELDS } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { useHistory } from 'react-router';
-import { PopUpLinearProgress } from '../PopUpLinearProgress/PopUpLinearProgress';
+import { PopUpLinearProgress } from '../../Base/PopUpLinearProgress/PopUpLinearProgress';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../store/currentUserSlice';
 

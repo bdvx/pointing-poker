@@ -5,6 +5,8 @@ import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
 import Chat from "../../../Chat/Chat";
+import { CreateIssue } from "../../../CreateIssue/CreateIssue";
+import { IssueEditable } from "../IssueEditable/IssueEditable";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { Queue } from "../Queue/queue";
 import './LobbyMain.scss';
@@ -52,6 +54,10 @@ const LobbyMain = () => {
             })}
         </div>
       </div>
+
+      <IssueEditable title="Issue 542" priority="Low prority" link="https://google.com" id="11111" /> 
+      <br />
+      <CreateIssue />
     </div>
   );
 };

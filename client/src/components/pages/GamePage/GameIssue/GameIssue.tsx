@@ -5,23 +5,24 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import IGameIssueProps from "../../../../types/GameIssueProps.type";
 import ServerService from "../../../../serverService/serverService";
+import { Issue } from "../../../Base/Issue/Issue";
 
 export const GameIssue: FC<IGameIssueProps> = (props: IGameIssueProps) => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
-  const { title, priority, score, isActive } = props;
+  const { title, priority, score, isActive, link } = props;
 
   const onDeleteBtnClick = () => {
     ServerService.deleteIssue(props.id);
   }
 
   return (
-    <div className="GameIssue">
-      <div className="GameIssue__info">
+    <Issue classes="GameIssue">
+      <div className="Issue__info">
         { isActive &&
           <span>Current</span>
         }
-        <h4 className="GameIssue__title">{ title }</h4>
-        <span className="GameIssue__priority">{ priority }</span>
+        <a className="Issue__title" href={ link } target="_blank">{ title }</a>
+        <span className="Issue__priority">{ priority }</span>
       </div>
 
       { score &&
@@ -30,9 +31,9 @@ export const GameIssue: FC<IGameIssueProps> = (props: IGameIssueProps) => {
 
       { isScrum &&
         <IconButton>
-          <CloseIcon onClick={onDeleteBtnClick}/>
+          <CloseIcon onClick={ onDeleteBtnClick } />
         </IconButton>
       }
-    </div>
+    </Issue>
   );
 };
