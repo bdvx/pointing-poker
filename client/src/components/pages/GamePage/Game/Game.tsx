@@ -1,5 +1,5 @@
 
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 import './Game.scss';
 import { useTypedSelector } from '../../../../hooky/useTypedSelector';
 import PlayerCard from '../../Lobby/PlayerCard/PlayerCard';
@@ -8,16 +8,16 @@ import { GameIssue } from '../GameIssue/GameIssue';
 import Chat from '../../../Chat/Chat';
 import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
-import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
-import { IssueModel } from '../../../../serverService/models/issueModel';
-import { ChoiceModel } from '../../../../serverService/models/choiceModel';
+import GameCard, { CardProps } from '../../../GameCard/GameCard';
+import { GameSideBar } from '../GameSideBar/GameSideBar';
+
+const cards:Array<CardProps> = [{value:1,type:"a"},{value:2,type:"a"},{value:3,type:"a"},
+{value:5,type:"a"},{value:8,type:"a"},{value:13,type:"a"},{value:21,type:"a"}]
 
 export const Game: FC = () => {
-  const { isScrum,login } = useTypedSelector(store => store.userInfo);
+  const { isScrum } = useTypedSelector(store => store.userInfo);
   const { scrumInfo } = useTypedSelector(store => store.roomInfo);
-  const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
-
-  const [timeIsStop, setTimeIsStop] = useState<boolean>(true);
+  const { issuesInfo } = useTypedSelector(store => store.game);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -33,7 +33,6 @@ export const Game: FC = () => {
   const onRunIssueBtnClick = () => {
     const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
     if(currentIssueInfo) {
-      setTimeIsStop(false);
       ServerService.startVoteIssue(currentIssueInfo.issue.id);
     } else {
       alert("Сначала выберите issue")
@@ -56,25 +55,13 @@ export const Game: FC = () => {
     }
   }
 
-  const testBtnForVoting = () => { //!Пока нет карточек голосования
-    if(isVoting) {
-      const currentIssueInfo = issuesInfo.find((issue) => issue.isSelected);
-      if(currentIssueInfo) {
-        const choiceInfo:ChoiceModel = {
-          issueId:currentIssueInfo.issue.id,
-          login:login,
-          score:5
-        }
-        ServerService.makeChoice(choiceInfo);
-      }
-    }
-  }
 
 
   return (
     <div className="Game">
       {isScrum?<Queue></Queue>:<></>}
       <Chat></Chat>
+      <GameSideBar></GameSideBar>
       <h2 className="Game__title">Some random game name</h2>
 
       <div className="Game__master">
@@ -88,7 +75,7 @@ export const Game: FC = () => {
             <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
           : 
             <div>
-              <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
+{/*               <RoundTimePlayable /> */}
 
               <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Exit</Button>
             </div>
@@ -97,7 +84,6 @@ export const Game: FC = () => {
       
       <div className="Game__issues">
         <h3>Issues:</h3>
-        <button onClick={testBtnForVoting}>Голосование</button>
         <ul className="Game__issuesContainer">
           {
             issuesInfo.map((issueInfo) => (
@@ -109,9 +95,13 @@ export const Game: FC = () => {
         </ul>
       </div>
 
+        <div className="card__wrapper">
+          {cards.map((card) => <GameCard {...card}></GameCard>)}
+        </div>
+
       { isScrum &&
         <div>
-          <RoundTimePlayable isStop={ timeIsStop } setIsStop={ setTimeIsStop } secondsDefault={ 10 } minutesDefault={ 0 } />
+{/*           <RoundTimePlayable /> */}
 
           <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
           <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>

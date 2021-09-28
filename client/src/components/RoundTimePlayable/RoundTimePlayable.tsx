@@ -2,17 +2,21 @@ import './RoundTimePlayable.scss';
 import { FC, useEffect, useState } from 'react';
 import { RoundTime } from '../Base/RoundTime/RoundTime';
 import IRoundTimePlayableProps from '../../types/RoundTimePlayableProps.type';
+import { useTypedSelector } from '../../hooky/useTypedSelector';
 
-export const RoundTimePlayable: FC<IRoundTimePlayableProps> = (props: IRoundTimePlayableProps) => {
-  const { isStop, setIsStop } = props;
-  let { secondsDefault, minutesDefault } = props;
-
+export const RoundTimePlayable: FC<IRoundTimePlayableProps> = () => {
+/*   let { secondsDefault, minutesDefault } = props; */
+  const {roundTime} = useTypedSelector((store) => store.settings);
+  const {isVoting} = useTypedSelector((store) => store.game);
+/* 
   const [seconds, setSeconds] = useState<number>(secondsDefault);
-  const [minutes, setMinutes] = useState<number>(minutesDefault);
+  const [minutes, setMinutes] = useState<number>(minutesDefault); */
 
-  useEffect(() => {
+
+
+/*   useEffect(() => {
     const update = (): void => {
-      if (isStop) return;
+      if (isVoting) return;
 
       --secondsDefault;
   
@@ -33,17 +37,18 @@ export const RoundTimePlayable: FC<IRoundTimePlayableProps> = (props: IRoundTime
     };
 
     setTimeout(() => update(), 1000);
-  }, [isStop, setIsStop, setSeconds, setMinutes]);
+  }, [isVoting, setIsStop, setSeconds, setMinutes]); */
 
-  const getUpdSeconds = (): string | number => {
+/*   const getUpdSeconds = (): string | number => {
     return (seconds < 10) ? `0${ seconds }` : seconds;
-  };
+  }; */
 
   return (
-    <RoundTime classes="RoundTimePlayable">
+/*     <RoundTime classes="RoundTimePlayable">
       <span className="RoundTime__time">{ minutes }</span>
       :
       <span className="RoundTime__time">{ getUpdSeconds() }</span>
-    </RoundTime>
+    </RoundTime> */
+    <></>
   );
 };
