@@ -121,10 +121,12 @@ function onMoveFromQueue(room:Room, userLogin:string) {
 
 function onStopGame(room:Room, reason:string) {
   room.isPlaying = false;
-  DataService.saveRoom(room);
-  //! Сделать окончание игры
-/*   delete room.game;
-  room.issues = []; */
+  const roomCopy = JSON.parse(JSON.stringify(room)) as Room;
+  console.log(roomCopy)
+  DataService.saveRoom(roomCopy);
+
+  delete room.game;
+  room.issues = [];
 
   const response = makeWSResponseMessage("STOP_GAME", reason);
   room.playersWS.forEach((player) => {
