@@ -122,7 +122,7 @@ function onMoveFromQueue(room:Room, userLogin:string) {
 function onStopGame(room:Room, reason:string) {
   room.isPlaying = false;
   const roomCopy = JSON.parse(JSON.stringify(room)) as Room;
-  console.log(roomCopy)
+
   DataService.saveRoom(roomCopy);
 
   delete room.game;

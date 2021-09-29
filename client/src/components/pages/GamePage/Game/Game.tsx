@@ -10,14 +10,21 @@ import { Queue } from '../../Lobby/Queue/queue';
 import ServerService from '../../../../serverService/serverService';
 import GameCard, { CardProps } from '../../../GameCard/GameCard';
 import { GameSideBar } from '../GameSideBar/GameSideBar';
+import { useDispatch } from 'react-redux';
+import { resetRoomInfo } from '../../../../store/roomSlice';
+import { resetChat } from '../../../../store/chatSlice';
+import { useHistory } from 'react-router';
 
 const cards:Array<CardProps> = [{value:1,type:"a"},{value:2,type:"a"},{value:3,type:"a"},
 {value:5,type:"a"},{value:8,type:"a"},{value:13,type:"a"},{value:21,type:"a"}]
 
 export const Game: FC = () => {
-  const { isScrum } = useTypedSelector(store => store.userInfo);
-  const { scrumInfo } = useTypedSelector(store => store.roomInfo);
+  const userInfo = useTypedSelector(store => store.userInfo);
+  const { scrumInfo, roomId } = useTypedSelector(store => store.roomInfo);
   const { issuesInfo } = useTypedSelector(store => store.game);
+  const dispatch = useDispatch();
+  const router = useHistory();
+  const isScrum = userInfo.isScrum;
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -55,6 +62,13 @@ export const Game: FC = () => {
     }
   }
 
+  const onExitBtnClick = () => {
+    ServerService.disconect(userInfo, roomId, `user ${userInfo.login} disconnect the room`);
+    dispatch(resetRoomInfo());
+    dispatch(resetChat());
+    router.push('/welcomePage');
+  }
+
 
 
   return (
@@ -76,7 +90,7 @@ export const Game: FC = () => {
             <div>
 {/*               <RoundTimePlayable /> */}
 
-              <Button className="Game__stopBtn" onClick={ () => false } variant="outlined" color="primary" size="large">Exit</Button>
+              <Button className="Game__stopBtn" onClick={ onExitBtnClick } variant="outlined" color="primary" size="large">Exit</Button>
             </div>
         }
       </div>
