@@ -124,9 +124,9 @@ function onStopGame(room:Room, reason:string) {
   const roomCopy = JSON.parse(JSON.stringify(room)) as Room;
 
   DataService.saveRoom(roomCopy);
-
-  delete room.game;
-  room.issues = [];
+//! решить где удалять игру
+/*   delete room.game;
+  room.issues = []; */
 
   const response = makeWSResponseMessage("STOP_GAME", reason);
   room.playersWS.forEach((player) => {

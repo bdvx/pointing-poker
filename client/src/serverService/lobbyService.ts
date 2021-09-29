@@ -69,8 +69,9 @@ function RoomMessageHandler(message:string) {
   }
 
   const onStopGame = (reason:string) => {
-    lobbyRouter.push("/lobbyStart");
-    lobbyDispatch(resetGame());
+/*     lobbyRouter.push("/lobbyStart"); */
+    lobbyRouter.push("/statistics");
+/*     lobbyDispatch(resetGame()); */
     alert(reason);
   }
 

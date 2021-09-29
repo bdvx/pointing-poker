@@ -11,6 +11,7 @@ import Lobby from "./components/pages/Lobby/LobbyStart/Lobby";
 import { Game } from "./components/pages/GamePage/Game/Game";
 import { useTypedSelector } from "./hooky/useTypedSelector";
 import AboutPage from "./components/pages/AboutPage/AboutPage";
+import { StatisticsPage } from "./components/pages/StatisticsPage/StatisticsPage";
 
 
 export default function AppRouter() {
@@ -46,6 +47,9 @@ export default function AppRouter() {
         </Route>
         <Route exact path="/">
           <Redirect to="/home"></Redirect>
+        </Route>
+        <Route exact path={"/statistics"}>
+          <StatisticsPage></StatisticsPage>
         </Route>
         <Route exact path="/game">
           <Game></Game>

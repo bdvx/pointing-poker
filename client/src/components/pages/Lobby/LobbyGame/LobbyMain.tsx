@@ -16,7 +16,6 @@ const LobbyMain = () => {
   const userInfo = useTypedSelector(store => store.userInfo);
   const dispatch = useDispatch();
   const router = useHistory();
-  //! ServerService.setDispatch(dispatch); возможно где-то дублируется
   ServerService.setDispatch(dispatch);
   ServerService.setRouter(router);
 
@@ -41,7 +40,6 @@ const LobbyMain = () => {
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
           <button onClick={onStartGameBtnClick}>STart Game</button>
-          <button >Add Issue</button>
           <PlayerCard {...roomInfo.scrumInfo} avatar={roomInfo.scrumInfo.avatar || './logo192.png'}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
         </div>
