@@ -1,5 +1,7 @@
 import { Switch, TextField } from "@material-ui/core";
 import { ChangeEvent, useState } from "react";
+import ServerService from "../../../serverService/serverService";
+import { SettingsModel } from "../../../store/settingsSlice";
 import "./GameSettings.scss";
 
 const GameSettings = () => {
@@ -8,7 +10,7 @@ const GameSettings = () => {
   const [TimerNeeded, SetTimerNeeded] = useState(false);
   const [ScoreType, setScoreType] = useState("Story Points");
   const [ShortScoreType, setShortScoreType] = useState("SP");
-
+  //! сделать как один обьект типа SettingsModel 
   const handleMaster = () => {
     SetMasterAsPlayer(!MasterAsPlayer);
   };
@@ -25,6 +27,18 @@ const GameSettings = () => {
   const handleShortScoreType = (event: ChangeEvent) => {
     setShortScoreType((event.target as HTMLInputElement).value);
   };
+
+  const onSaveBtnClick = () => {
+    const settings:SettingsModel = {
+      autoTurn: AutoTurn,
+      masterAsPlayer: MasterAsPlayer,
+      roundTime: 10000,
+      scoreType: ScoreType,
+      shortScoreType: ShortScoreType,
+      timerNeeded: TimerNeeded
+    }
+    ServerService.setSettings(settings);
+  }
 
   return (
     <div className="GameSettings">
@@ -59,6 +73,7 @@ const GameSettings = () => {
           onChange={handleShortScoreType}
         ></TextField>
       </div>
+      <button onClick={onSaveBtnClick}>save</button>
     </div>
   );
 };

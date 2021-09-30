@@ -124,9 +124,9 @@ function onStopGame(room:Room, reason:string) {
   const roomCopy = JSON.parse(JSON.stringify(room)) as Room;
 
   DataService.saveRoom(roomCopy);
-
-  delete room.game;
-  room.issues = [];
+//! решить где удалять игру
+/*   delete room.game;
+  room.issues = []; */
 
   const response = makeWSResponseMessage("STOP_GAME", reason);
   room.playersWS.forEach((player) => {
@@ -137,6 +137,12 @@ function onStopGame(room:Room, reason:string) {
 
 function onSetSettings(room:Room, settings:SettingsModel) {
   room.settings = settings;
+
+  if(settings.masterAsPlayer) {
+    addScrumAsPlayer(room);
+  } else {
+    deleteScrumAsPlayer(room);
+  }
 
   const response = makeWSResponseMessage("SET_SETTINGS", settings);
   room.playersWS.forEach((player) => {
@@ -158,3 +164,18 @@ const LobbyEventHandler = {
 }
 export default LobbyEventHandler;
 
+function addScrumAsPlayer(room:Room) {
+  const scrumLogin = room.scrumInfo.login;
+  const scrumWsInfo = room.playersWS.find((playerWs) => playerWs.userInfo.login === scrumLogin);
+  if(scrumWsInfo) {
+    room.game?.players.push(scrumWsInfo);
+  }
+}
+
+function deleteScrumAsPlayer(room:Room) {
+  const scrumLogin = room.scrumInfo.login;
+  const index = room.game?.players.findIndex((player) => player.userInfo.login === scrumLogin);
+  if(index && index !== -1) {
+    room.game?.players.splice(index, 1);
+  }
+}
