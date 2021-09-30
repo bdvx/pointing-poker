@@ -1,8 +1,7 @@
 import './RoundTimeEditable.scss';
 import { FC } from 'react';
 import { RoundTime } from '../Base/RoundTime/RoundTime';
-import IRoundTimeEditableChangeTimeParams from '../../types/RoundTimeEditable.type';
-import IRoundTimeEditableProps from '../../types/RoundTimeEditable.type';
+import { IRoundTimeEditableProps, IRoundTimeEditableChangeTimeParams } from '../../types/RoundTimeEditable.type';
 
 export const RoundTimeEditable: FC<IRoundTimeEditableProps> = (props: IRoundTimeEditableProps) => {
   const { seconds, setSeconds, minutes, setMinutes } = props;

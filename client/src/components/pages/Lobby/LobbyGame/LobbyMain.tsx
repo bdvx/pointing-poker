@@ -5,8 +5,6 @@ import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
 import Chat from "../../../Chat/Chat";
-import { CreateIssue } from "../../../CreateIssue/CreateIssue";
-import { IssueEditable } from "../IssueEditable/IssueEditable";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { Queue } from "../Queue/queue";
 import './LobbyMain.scss';
@@ -18,8 +16,6 @@ const LobbyMain = () => {
   const router = useHistory();
   ServerService.setDispatch(dispatch);
   ServerService.setRouter(router);
-
-
 
   const onDisconnectBtnClick = () => {
     ServerService.disconect(userInfo, roomInfo.roomId, `user ${userInfo.login} disconnect the room`);
@@ -51,25 +47,6 @@ const LobbyMain = () => {
               return <PlayerCard {...player} avatar={player.avatar || './logo192.png'} />
             })}
         </div>
-      </div>
-
-      <br />
-      <br />
-
-      <div>
-        <h1>Issues:</h1>
-        <div>
-          {
-            roomInfo.issues.length !==0 ?
-            roomInfo.issues.map((issue) => (
-              <IssueEditable {...issue} />
-            )) :
-            <></>
-          }
-          <br />
-        </div>
-
-        <CreateIssue />
       </div>
     </div>
   );

@@ -1,7 +1,11 @@
 import { Switch, TextField } from "@material-ui/core";
 import { ChangeEvent, useState } from "react";
+import { useTypedSelector } from "../../../hooky/useTypedSelector";
 import ServerService from "../../../serverService/serverService";
 import { SettingsModel } from "../../../store/settingsSlice";
+import { CreateIssue } from "../../CreateIssue/CreateIssue";
+import { IssueEditable } from "../../pages/Lobby/IssueEditable/IssueEditable";
+import { RoundTimeEditable } from "../../RoundTimeEditable/RoundTimeEditable";
 import "./GameSettings.scss";
 
 const GameSettings = () => {
@@ -10,6 +14,11 @@ const GameSettings = () => {
   const [TimerNeeded, SetTimerNeeded] = useState(false);
   const [ScoreType, setScoreType] = useState("Story Points");
   const [ShortScoreType, setShortScoreType] = useState("SP");
+  const [seconds, setSeconds] = useState<number>(20);
+  const [minutes, setMinutes] = useState<number>(2);
+
+  const { issues } = useTypedSelector(store => store.roomInfo);
+
   //! сделать как один обьект типа SettingsModel 
   const handleMaster = () => {
     SetMasterAsPlayer(!MasterAsPlayer);
@@ -32,7 +41,7 @@ const GameSettings = () => {
     const settings:SettingsModel = {
       autoTurn: AutoTurn,
       masterAsPlayer: MasterAsPlayer,
-      roundTime: 10000,
+      roundTime: (minutes + 1) * seconds,
       scoreType: ScoreType,
       shortScoreType: ShortScoreType,
       timerNeeded: TimerNeeded
@@ -42,6 +51,17 @@ const GameSettings = () => {
 
   return (
     <div className="GameSettings">
+      <h3 className="GameSettings__title">Issues:</h3>
+      <div className="GameSettings__issues">
+        { issues.length !== 0 &&
+            issues.map((issue) => (
+              <IssueEditable {...issue} />
+            ))
+        }
+
+        <CreateIssue />
+      </div>
+
       <h3 className="GameSettings__title">Game Settings</h3>
       <div className="GameSettings__element">
         <div className="GameSettings__element_title">
@@ -72,6 +92,10 @@ const GameSettings = () => {
           defaultValue="SP"
           onChange={handleShortScoreType}
         ></TextField>
+      </div>
+      <div className="GameSettings__element">
+        <div className="GameSettings__element_title">Round time:</div>
+        <RoundTimeEditable seconds={ seconds } setSeconds={ setSeconds } minutes={ minutes } setMinutes={ setMinutes } />
       </div>
       <button onClick={onSaveBtnClick}>save</button>
     </div>
