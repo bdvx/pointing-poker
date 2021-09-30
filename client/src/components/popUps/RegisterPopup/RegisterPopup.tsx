@@ -5,7 +5,6 @@ import IRegisterPopupProps from '../../../types/RegisterPopupProps.type';
 import { REGISTER_POPUP_FIELDS, REGISTER_POPUP_FIELDS_DEFAULT_VALUES } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { RegistrationModel } from '../../../serverService/models/registrationModel';
-import { useHistory } from 'react-router';
 import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpPopup';
 import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
 import { useDispatch } from 'react-redux';
@@ -17,7 +16,6 @@ import { PopUpLinearProgress } from '../../Base/PopUpLinearProgress/PopUpLinearP
 export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterPopupState }: IRegisterPopupProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string>('');
-  const router = useHistory();
   const dispatch = useDispatch();
 
   const [fieldsValues, setFieldsValues] = useState<IFieldsValues>(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
@@ -59,25 +57,12 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
     const response = await ServerService.registerNewUser(fieldsValues as RegistrationModel);
 
     if(response.isSuccess) {
-      //попап
-      //alert - временная замена попАпу
-      //история должна пушится после закрытия попапа успешной регистрации
       dispatch(setUserInfo({...fieldsValues, isLogin:true}));
-
-      setFieldsValues(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
-
-      router.push('/welcomePage');
-      alert(response.message);
-
       setLoading(false);
       onChangeRegisterPopupState(false);
-
+      setFieldsValues(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
       setOpenRegisterSuccessPopup(true);
     } else {
-      //ошибка создания
-      //response.message хранит информацию ошибки
-      alert(response.message);
-
       setLoading(false);
       setOpenRegisterFailPopup(true);
     }

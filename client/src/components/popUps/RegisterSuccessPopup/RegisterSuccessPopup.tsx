@@ -2,9 +2,16 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { FC } from 'react';
 import IRegisterSuccessPopupProps from '../../../types/RegisterSuccessPopupProps.type';
 import './RegisterSuccessPopup.scss';
+import { useHistory } from 'react-router';
 
 export const RegisterSuccessPopup: FC<IRegisterSuccessPopupProps> = (props: IRegisterSuccessPopupProps) => {
   const { open, onChangeRegisterSuccessPopupState } = props;
+  const router = useHistory();
+
+  const closePopup = () => {
+    onChangeRegisterSuccessPopupState(false);
+    router.push('/welcomePage');
+  };
 
   return (
     <Dialog className="RegisterSuccessPopup" open={ open } onClose={ () => onChangeRegisterSuccessPopupState(false) }>
@@ -21,7 +28,7 @@ export const RegisterSuccessPopup: FC<IRegisterSuccessPopupProps> = (props: IReg
       <Divider />
 
       <DialogActions>
-        <Button autoFocus onClick={ () => onChangeRegisterSuccessPopupState(false) }>OK</Button>
+        <Button autoFocus onClick={ closePopup }>OK</Button>
       </DialogActions>
     </Dialog>
   );

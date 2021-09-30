@@ -22,13 +22,7 @@ export default function AppRouter() {
     <>
       <Switch location={location}>
         <Route exact path={`/home`}>
-          {() => {
-            if (user.isLogin === false) {
-             return <StartPage classes="App__startPage"></StartPage>;
-            } else {
-              return <Redirect to='/welcomePage'></Redirect>
-            }
-          }}
+          <StartPage classes="App__startPage"></StartPage>;
         </Route>
         <Route exact path={"/about"}>
           <AboutPage></AboutPage>
