@@ -9,8 +9,8 @@ import IFieldsValues, { IFieldProps } from '../../../types/LogInOrSignUpPopup.ty
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../store/currentUserSlice';
 import { RegisterSuccessPopup } from '../RegisterSuccessPopup/RegisterSuccessPopup';
-import { RegisterFailPopup } from '../RegisterFailPopup/RegisterFailPopup';
 import { PopUpLinearProgress } from '../../Base/PopUpLinearProgress/PopUpLinearProgress';
+import { FailPopUp } from '../../Base/FailPopUp/FailPopUp';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterPopupState }: IRegisterPopupProps) => {
   const dispatch = useDispatch();
@@ -20,8 +20,8 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
   const [fieldsValues, setFieldsValues] = useState<IFieldsValues>(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const [openRegisterSuccessPopup, setOpenRegisterSuccessPopup] = useState(false);
-  const [openRegisterFailPopup, setOpenRegisterFailPopup] = useState(false);
+  const [openRegisterSuccessPopup, setOpenRegisterSuccessPopup] = useState<boolean>(false);
+  const [openFailPopup, setOpenFailPopup] = useState<boolean>(false);
 
   const changeStringAvatar = (name: string | undefined): string | null => {
     if (!name) return null;
@@ -60,7 +60,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
       setOpenRegisterSuccessPopup(true);
     } else {
       setLoading(false);
-      setOpenRegisterFailPopup(true);
+      setOpenFailPopup(true);
     }
   }
 
@@ -144,7 +144,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
       </PopUpLinearProgress>
 
       <RegisterSuccessPopup open={ openRegisterSuccessPopup } onChangeRegisterSuccessPopupState={ (open) => setOpenRegisterSuccessPopup(open) } />
-      <RegisterFailPopup open={ openRegisterFailPopup } onChangeRegisterFailPopupState={ (open) => setOpenRegisterFailPopup(open) } />
+      <FailPopUp open={ openFailPopup } onChangeFailPopUpState={ (open) => setOpenFailPopup(open) } title="Fail registration" description="This is an error alert — check it out!" />
     </>
   );
 };
