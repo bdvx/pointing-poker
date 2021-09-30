@@ -1,7 +1,6 @@
 import './LogInPopup.scss';
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { Button, DialogActions, TextField } from '@material-ui/core';
-import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpPopup';
 import ILogInPopupProps from '../../../types/LogInPopupProps.type';
 import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
 import { LOGIN_POPUP_FIELDS } from '../../../constants';
@@ -12,19 +11,14 @@ import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../store/currentUserSlice';
 
 export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState }: ILogInPopupProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const dispatch = useDispatch();
-  const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({
-    login: '',
-    password: ''
-  });
-
-  const fieldsProps = { fieldsValues, setFieldsValues };
-  const { handleFieldChange } = LogInOrSignUpPopup();
   const router = useHistory();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [fieldsValues, setFieldsValues] = useState<IFieldsValues>({ login: '', password: '' });
 
   const HandleConfirmLogin = async () => {
     setLoading(true);
+
     const response = await ServerService.signInUser(fieldsValues);
 
     if(response.isSuccess) {
@@ -33,7 +27,6 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
       console.log(response)
       dispatch(setUserInfo({...response.body, isLogin:true}))
       setFieldsValues({ login: '', password: '' });
-      //история должна пушится после закрытия попапа успешной регистрации
       router.push("/welcomePage");
       onChangeLogInPopupState(false);
     } else {
@@ -41,6 +34,11 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
       alert(response.message);
     }
   }
+
+  const handleFieldChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    const { value, name } = e.target;
+    setFieldsValues({ ...fieldsValues, [name]: value });
+  };
 
   return (
     <PopUpLinearProgress className="LogInPopup" open={ open } onClose={ () => onChangeLogInPopupState(false) } loading={ loading }>
@@ -52,7 +50,7 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
                 <TextField
                   className="LogInPopup__field"
                   defaultValue={ fieldsValues[fieldName as keyof IFieldsValues] }
-                  onChange={ (e) => handleFieldChange({ e, ...fieldsProps }) }
+                  onChange={ handleFieldChange }
                   name={ fieldName }
                   type={ fieldName === 'password' ? 'password' : 'text' }
                   label={ fieldName }

@@ -4,7 +4,7 @@ export const REGISTER_POPUP_FIELDS = [
   {
     name: 'login',
     title: 'login',
-    errorMessage: 'Login can\'t be empty and contain spaces.'
+    errorMessage: 'Login can\'t be shorter than 3 chars and contain spaces.'
   },
   {
     name: 'password',
