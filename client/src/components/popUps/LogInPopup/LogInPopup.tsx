@@ -32,6 +32,7 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
       alert(response.message);
       console.log(response)
       dispatch(setUserInfo({...response.body, isLogin:true}))
+      setFieldsValues({ login: '', password: '' });
       //история должна пушится после закрытия попапа успешной регистрации
       router.push("/welcomePage");
       onChangeLogInPopupState(false);
