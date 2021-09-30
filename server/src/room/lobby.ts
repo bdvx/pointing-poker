@@ -21,7 +21,14 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     votes: [],
     inGame: [],
     queue: [],
-    settings: { roundTime: 8000 } //!Добавить в отправку инфы от скрам мастера + настройки по дефолту
+    settings: { 
+      roundTime: 0,
+      timerNeeded: true,
+      autoTurn: true,
+      masterAsPlayer: false,
+      scoreType: "Story Points",
+      shortScoreType: "SP"
+     } //!Добавить в отправку инфы от скрам мастера + настройки по дефолту
   }
 
   const scramWS = scrumInfo.ws as WebSocket;
@@ -44,7 +51,6 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
   updateLobbyForEveryOne(room);
 }
 
-//то чуть позже перепешу
 function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
   deletePersonFromRoom(room, disconnectInfo.login);
   updateLobbyForEveryOne(room);

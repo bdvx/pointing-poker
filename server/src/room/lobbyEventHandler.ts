@@ -138,6 +138,12 @@ function onStopGame(room:Room, reason:string) {
 function onSetSettings(room:Room, settings:SettingsModel) {
   room.settings = settings;
 
+  if(settings.masterAsPlayer) {
+    addScrumAsPlayer(room);
+  } else {
+    deleteScrumAsPlayer(room);
+  }
+
   const response = makeWSResponseMessage("SET_SETTINGS", settings);
   room.playersWS.forEach((player) => {
     player.ws.send(response);
@@ -158,3 +164,18 @@ const LobbyEventHandler = {
 }
 export default LobbyEventHandler;
 
+function addScrumAsPlayer(room:Room) {
+  const scrumLogin = room.scrumInfo.login;
+  const scrumWsInfo = room.playersWS.find((playerWs) => playerWs.userInfo.login === scrumLogin);
+  if(scrumWsInfo) {
+    room.game?.players.push(scrumWsInfo);
+  }
+}
+
+function deleteScrumAsPlayer(room:Room) {
+  const scrumLogin = room.scrumInfo.login;
+  const index = room.game?.players.findIndex((player) => player.userInfo.login === scrumLogin);
+  if(index && index !== -1) {
+    room.game?.players.splice(index, 1);
+  }
+}

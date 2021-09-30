@@ -3,10 +3,20 @@ import { VotingModel } from "../serverService/models/votingModel";
 
 export interface SettingsModel {
   roundTime:number,
+  timerNeeded: boolean,
+  autoTurn: boolean,
+  masterAsPlayer: boolean,
+  scoreType: string,
+  shortScoreType: string
 }
 
 const initialState:SettingsModel = {
   roundTime: 0,
+  timerNeeded: true,
+  autoTurn: true,
+  masterAsPlayer: false,
+  scoreType: "Story Points",
+  shortScoreType: "SP"
 }
 
 const settingsSlice = createSlice({
