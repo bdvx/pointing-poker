@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { resetRoomInfo } from '../../../../store/roomSlice';
 import { resetChat } from '../../../../store/chatSlice';
 import { useHistory } from 'react-router';
+import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
 
 const cards:Array<CardProps> = [{value:1,type:"a"},{value:2,type:"a"},{value:3,type:"a"},
 {value:5,type:"a"},{value:8,type:"a"},{value:13,type:"a"},{value:21,type:"a"}]
@@ -88,7 +89,7 @@ export const Game: FC = () => {
             <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
           : 
             <div>
-{/*               <RoundTimePlayable /> */}
+              <RoundTimePlayable />
 
               <Button className="Game__stopBtn" onClick={ onExitBtnClick } variant="outlined" color="primary" size="large">Exit</Button>
             </div>
@@ -116,7 +117,7 @@ export const Game: FC = () => {
 
       { isScrum &&
         <div>
-{/*           <RoundTimePlayable /> */}
+          <RoundTimePlayable />
 
           <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
           <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>

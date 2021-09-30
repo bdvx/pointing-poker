@@ -1,35 +1,23 @@
 import './RoundTimePlayable.scss';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { RoundTime } from '../Base/RoundTime/RoundTime';
-import IRoundTimePlayableProps from '../../types/RoundTimePlayableProps.type';
 import { useTypedSelector } from '../../hooky/useTypedSelector';
+import { useDispatch } from 'react-redux';
+import { setGame } from '../../store/gameSlice';
 
-export const RoundTimePlayable: FC<IRoundTimePlayableProps> = () => {
-/*   let { secondsDefault, minutesDefault } = props; */
-  const {roundTime} = useTypedSelector((store) => store.settings);
-  const {isVoting} = useTypedSelector((store) => store.game);
-/* 
-  const [seconds, setSeconds] = useState<number>(secondsDefault);
-  const [minutes, setMinutes] = useState<number>(minutesDefault); */
+export const RoundTimePlayable: FC = () => {
+  const dispatch = useDispatch();
+  const { isVoting } = useTypedSelector((store) => store.game);
+  let { roundTime } = useTypedSelector((store) => store.settings);
 
-
-
-/*   useEffect(() => {
+  useEffect(() => {
     const update = (): void => {
       if (isVoting) return;
 
-      --secondsDefault;
-  
-      if (secondsDefault === -1) {
-        secondsDefault = 59;
-        --minutesDefault;
-      }
+      --roundTime;
 
-      setSeconds(secondsDefault);
-      setMinutes(minutesDefault);
-
-      if (!secondsDefault && !minutesDefault) {
-        setIsStop(true);
+      if (roundTime <= 0) {
+        // dispatch(setGame({ isVoting: false }));
         return;
       }
 
@@ -37,18 +25,22 @@ export const RoundTimePlayable: FC<IRoundTimePlayableProps> = () => {
     };
 
     setTimeout(() => update(), 1000);
-  }, [isVoting, setIsStop, setSeconds, setMinutes]); */
+  }, [isVoting, roundTime]);
 
-/*   const getUpdSeconds = (): string | number => {
-    return (seconds < 10) ? `0${ seconds }` : seconds;
-  }; */
+  const getMinutes = (): number => {
+    return Math.floor(roundTime / 60);
+  };
+
+  const getSeconds = (): string | number => {
+    const exactSeconds = roundTime % 60;
+    return (exactSeconds < 10) ? `0${ exactSeconds }` : exactSeconds;
+  };
 
   return (
-/*     <RoundTime classes="RoundTimePlayable">
-      <span className="RoundTime__time">{ minutes }</span>
+    <RoundTime classes="RoundTimePlayable">
+      <span className="RoundTime__time">{ getMinutes() }</span>
       :
-      <span className="RoundTime__time">{ getUpdSeconds() }</span>
-    </RoundTime> */
-    <></>
+      <span className="RoundTime__time">{ getSeconds() }</span>
+    </RoundTime>
   );
 };
