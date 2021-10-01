@@ -1,54 +1,32 @@
-import {
-  Route,
-  Switch,
-  useLocation,
-  Redirect,
-  BrowserRouter,
-} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { StartPage } from "./components/pages/StartPage/StartPage";
 import { WelcomePage } from "./components/pages/WelcomePage/WelcomePage";
-import Lobby from "./components/pages/Lobby/LobbyStart/Lobby";
 import { Game } from "./components/pages/GamePage/Game/Game";
 import { useTypedSelector } from "./hooky/useTypedSelector";
 import AboutPage from "./components/pages/AboutPage/AboutPage";
 import { StatisticsPage } from "./components/pages/StatisticsPage/StatisticsPage";
+import { PrivateRoute } from "./components/Base/PrivateRoute";
+import Lobby from "./components/pages/Lobby/LobbyStart/Lobby";
 
+const ROUTES = [
+  { path: '/welcomePage', Component: WelcomePage },
+  { path: '/lobbyStart', Component: Lobby },
+  { path: '/game', Component: Game },
+  { path: '/statistics', Component: StatisticsPage }
+];
 
 export default function AppRouter() {
-  let location = useLocation();
-  const user = useTypedSelector((state) => state.userInfo);
+  const { isLogin } = useTypedSelector((state) => state.userInfo);
 
   return (
-    <>
-      <Switch location={location}>
-        <Route exact path={`/home`}>
-          <StartPage classes="App__startPage"></StartPage>;
-        </Route>
-        <Route exact path={"/about"}>
-          <AboutPage></AboutPage>
-        </Route>
-        <Route exact path={"/welcomePage"}>
-        {() => {
-            if (user.isLogin === true) {
-             return <WelcomePage classes="App__welcomePage"></WelcomePage>
-            } else {
-              return <Redirect to='/home'></Redirect>
-            }
-          }}
-        </Route>
-        <Route exact path={"/lobbyStart"}>
-          <Lobby></Lobby>
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home"></Redirect>
-        </Route>
-        <Route exact path={"/statistics"}>
-          <StatisticsPage></StatisticsPage>
-        </Route>
-        <Route exact path="/game">
-          <Game></Game>
-        </Route>
-      </Switch>
-    </>
+    <Switch>
+      <Route path="/" component={ StartPage } exact />
+      <Route path="/about" component={ AboutPage } exact />
+
+      { ROUTES.map(({ path, Component }) => (
+          <PrivateRoute authed={ isLogin || false } path={ path } component={ Component } exact key={ path } />
+        ))
+      }
+    </Switch>
   );
 }

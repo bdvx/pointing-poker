@@ -10,7 +10,7 @@ import { UserInfo } from '../../../serverService/models/userInfoModel';
 import { useDispatch } from 'react-redux';
 
 
-export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
+export const WelcomePage: FC = () => {
   const currentUserInfo = useTypedSelector(store => store.userInfo);
   const currentRoom = useTypedSelector(store => store.roomInfo);
   const [url, setUrl] = useState('');
@@ -37,7 +37,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
   }
 
   return (
-    <div className={`welcome-page ${ classes }`}>
+    <div className="App__welcomePage welcome-page">
       <LargeLogo />
 
       <span className="welcome-page__subtitle">Start your planning:</span>
