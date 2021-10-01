@@ -11,6 +11,7 @@ import Lobby from "./components/pages/Lobby/LobbyStart/Lobby";
 const ROUTES = [
   { path: '/welcomePage', Component: WelcomePage },
   { path: '/lobbyStart', Component: Lobby },
+  { path: '/lobby/settings', Component: Lobby },
   { path: '/game', Component: Game },
   { path: '/statistics', Component: StatisticsPage }
 ];
