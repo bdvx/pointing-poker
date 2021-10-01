@@ -8,6 +8,8 @@ import ChatMessage from "./ChatMessage/ChatMessage";
 import clientService from "../../clientService/clientService";
 import ServerService from "../../serverService/serverService";
 import "./Chat.scss";
+import { TechnicalMessage, TechnicalMessageProps } from "./TechnicalMessage/TechnicalMessage";
+
 
 const Chat = () => {
   const chat = useTypedSelector((store) => store.chat);
@@ -41,9 +43,12 @@ const Chat = () => {
       <div className="Chat draggable" onMouseDown={handleDragAndDrop}>
         <ul className="Chat_messages">
           {chat.map((messageInfo) => {
-            const user = clientService.getUserByLogin(room, messageInfo.login);
-            console.log(user);
-            return <ChatMessage {...user} message={messageInfo.message} />;
+            if((messageInfo as TechnicalMessageProps).isTechnicalMessage) {
+              const user = clientService.getUserByLogin(room, (messageInfo as ChatMessageInfo).login);
+              return <ChatMessage {...user} message={messageInfo.message} />;
+            } else {
+              return <TechnicalMessage isTechnicalMessage={true} message={messageInfo.message}/>
+            }
           })}
         </ul>
 
