@@ -1,7 +1,7 @@
 import { GameModel, IssueInfo } from "../models/socketModels/gameModel";
 import { IssueModel } from "../models/socketModels/issueModel";
 import { Room } from "../models/socketModels/roomModel";
-import { makeWSResponseMessage, transformServerGameToClient } from "../tools/roomFunctions";
+import { makeWSResponseMessage, sendTechnicalMessage, transformServerGameToClient } from "../tools/roomFunctions";
 
 function makeNewGame(room:Room) {
   const gameInfo:GameModel = {
@@ -18,7 +18,9 @@ function makeNewGame(room:Room) {
       const response = makeWSResponseMessage("START_GAME", gameToClient);
       player.ws.send(response);
     }
-  })
+  });
+
+  sendTechnicalMessage(room, "master start the game");
 }
  
 export function makeIssueInfo(issue:IssueModel) {

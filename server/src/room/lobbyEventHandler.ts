@@ -5,7 +5,7 @@ import { SettingsModel } from "../models/socketModels/settingsModel";
 import { VotingModel } from "../models/socketModels/votingModel";
 import { closeConnection } from "../socket";
 import DataService from "../tools/dataService";
-import { deletePersonFromRoom, makeWSResponseMessage, updateGameForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
+import { deletePersonFromRoom, makeWSResponseMessage, sendTechnicalMessage, updateGameForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
 import Game, { makeIssueInfo } from "./game";
 
 function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
@@ -65,11 +65,8 @@ function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
     
     closeConnection(room.playersWS[deletedPlayerIndex].ws);
     deletePersonFromRoom(room, voteInfo.whoKick);
-    //TODO техническое сообщение в чат
-    /*     const kickedPlayer:KickedPlayer = {
-      kickedLogin: kickInfo.whoKick,
-      reason: `user ${kickInfo.whoKick} was kicked by scrum master`
-    } */
+
+    sendTechnicalMessage(room, `user ${playerLogin} kiked by master`);
 
     updateLobbyForEveryOne(room);
   }
@@ -132,7 +129,10 @@ function onStopGame(room:Room, reason:string) {
   room.playersWS.forEach((player) => {
     player.ws.send(response);
   })
+  
   updateLobbyForEveryOne(room);
+
+  sendTechnicalMessage(room, "master stoped the game");
 }
 
 function onSetSettings(room:Room, settings:SettingsModel) {

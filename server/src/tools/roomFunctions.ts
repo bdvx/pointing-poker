@@ -77,3 +77,10 @@ export function updateGameForEveryOne(room:Room) {
     sendUpdatedGame(room, player.ws);
   });
 }
+
+export function sendTechnicalMessage(room:Room, payload:any) {
+  const technikalMessage = makeWSResponseMessage("CHAT_MESSAGE", payload);
+  room.playersWS.forEach((playerWs) => {
+    playerWs.ws.send(technikalMessage);
+  })
+}
