@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useTypedSelector } from "../../hooky/useTypedSelector";
+import { CreateIssue } from "../CreateIssue/CreateIssue";
 import { IssueEditable } from "../pages/Lobby/IssueEditable/IssueEditable";
 
 const Settings = () => {
-  const [issues, setIssues] = useState([
-    { title: "random issue", priority: "low", link: "https://google.com" },
-  ]);
-
+  const issuesInfo = useTypedSelector((store) => store.roomInfo.issues);
+  
   return (
     <div className="Settings">
       <div className="Settings__connect">
@@ -17,10 +17,11 @@ const Settings = () => {
         <button className="Settings__connect_copy">Copy</button>
       </div>
       <div className="Settings__issues">
+        <CreateIssue></CreateIssue>
         <div className="Settings__issues_text">Issues:</div>
-        {issues.map((el) => {
+        {issuesInfo.map((issueInfo) => {
           return (
-            <IssueEditable {...el} id=""/>
+            <IssueEditable {...issueInfo} id=""/>
           );
         })}
       </div>
