@@ -14,7 +14,7 @@ export const RegisterSuccessPopup: FC<IRegisterSuccessPopupProps> = (props: IReg
   };
 
   return (
-    <Dialog className="RegisterSuccessPopup" open={ open } onClose={ () => onChangeRegisterSuccessPopupState(false) }>
+    <Dialog className="RegisterSuccessPopup" open={ open } onClose={ closePopup }>
       <DialogTitle>Success registration</DialogTitle>
       
       <DialogContent>
