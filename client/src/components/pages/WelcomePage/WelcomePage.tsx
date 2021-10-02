@@ -37,7 +37,7 @@ export const WelcomePage: FC = () => {
   }
 
   return (
-    <div className="App__welcomePage welcome-page">
+    <div className="welcome-page page__content">
       <LargeLogo />
 
       <span className="welcome-page__subtitle">Start your planning:</span>

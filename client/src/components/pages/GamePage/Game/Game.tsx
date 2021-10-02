@@ -73,63 +73,76 @@ export const Game: FC = () => {
 
 
   return (
-    <div className="Game">
+    <div className="Game page__content">
       {isScrum?<Queue></Queue>:<></>}
       <Chat></Chat>
       <GameSideBar></GameSideBar>
-      <h2 className="Game__title">Some random game name</h2>
 
-      <div className="Game__master">
-        <span className="Game__masterTitle">Scrum master:</span>
+      <div className="Game__main">
+        <h2 className="Game__title">Some random game name</h2>
 
-        {/* TODO: нужно убрать для карточки мастера кик */}
-        <PlayerCard {...scrumInfo} avatar={ scrumInfo.avatar || './logo192.png' } login="" />
+        <div className="Game__topPanel">
+          <div className="Game__master">
+            <span className="Game__masterTitle">Scrum master:</span>
 
-        { isScrum ?
-            <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
-          : 
-            <div>
-              <RoundTimePlayable />
+            {/* TODO: нужно убрать для карточки мастера кик */}
+            <PlayerCard {...scrumInfo} avatar={ scrumInfo.avatar || './logo192.png' } login="" />
+          </div>
 
-              <Button className="Game__stopBtn" onClick={ onExitBtnClick } variant="outlined" color="primary" size="large">Exit</Button>
-            </div>
-        }
-      </div>
-      
-      <div className="Game__issues">
-        <h3>Issues:</h3>
-        <ul className="Game__issuesContainer">
-          {
-            issuesInfo.map((issueInfo) => (
-              <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""} 
-                               onClick={() => onIssueClick(issueInfo.issue.id)}>
-
-                <GameIssue {...issueInfo.issue} isActive={issueInfo.isSelected} score={issueInfo.result}/>
-              </li>
-            ))
+          { isScrum ?
+              <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
+            :
+              <>
+                <RoundTimePlayable />
+                <Button className="Game__exitBtn" onClick={ onExitBtnClick } variant="outlined" color="primary" size="large">Exit</Button>
+              </>
           }
-        </ul>
-      </div>
-
-        <div className="card__wrapper">
-          {cards.map((card) => <GameCard {...card}></GameCard>)}
         </div>
 
-      { isScrum &&
-        <div>
-          <RoundTimePlayable />
+        <div className="Game__playground">
+          <div className="Game__dashboardLeft">
+            { issuesInfo.length ?
+              <div className="Game__issues">
+                <h3 className="Game__issuesTitle Game__subtitle">Issues:</h3>
+                <ul className="Game__issuesContainer">
+                  { issuesInfo.map((issueInfo) => (
+                      <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""}  onClick={ () => onIssueClick(issueInfo.issue.id) }>
 
-          <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
-          <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>
-          <Button className="Game__nextIssueBtn" onClick={ onStopIssueBtnClick } variant="contained" color="primary" size="large">Stop issue</Button>
+                        <GameIssue { ...issueInfo.issue } isActive={ issueInfo.isSelected } score={ issueInfo.result } />
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div> : null
+            }
 
-          <div className="Game__statistics">
-            <h3>Statistics:</h3>
+            { isScrum &&
+              <div className="Game__statistics">
+                <h3 className="Game__subtitle">Statistics:</h3>
+                <div className="Game__statisticsContainer"></div>
+              </div>
+            }
+          </div>
 
-            <div className="Game__statisticsContainer"></div>
+          <div className="Game__dashboardRight">
+            { isScrum &&
+              <>
+                <RoundTimePlayable />
+
+                <div className="Game__playgroundBtns">
+                  <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
+                  <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>
+                  <Button className="Game__nextIssueBtn" onClick={ onStopIssueBtnClick } variant="contained" color="primary" size="large">Stop round</Button>
+                </div>
+              </>
+            }
           </div>
         </div>
-      }
+
+        <div className="Game__cards">
+          {cards.map((card) => <GameCard {...card}></GameCard>)}
+        </div>
+      </div>
     </div>
   );
 };

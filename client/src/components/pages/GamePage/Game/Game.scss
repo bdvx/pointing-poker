@@ -1,3 +1,88 @@
+@import '../../../../variables.scss';
+
+.Game {
+  max-width: $wrapper;
+}
+
+.Game__main {
+  width: 67.5%;
+  padding: 30px 35px;
+}
+
+.Game__title {
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.Game__title,
+.Game__subtitle {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.Game__topPanel {
+  display: flex;
+  max-width: 800px;
+  margin-bottom: 80px;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.Game__masterTitle {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #646464;
+}
+
+.Game .Game__stopBtn,
+.Game .Game__exitBtn {
+  min-width: 160px;
+  min-height: 47px;
+}
+
+.Game__playground {
+  display: flex;
+  max-width: 800px;
+  margin-bottom: 150px;
+}
+
+.Game__dashboardLeft {
+  max-width: 300px;
+  width: 100%;
+  margin-right: 45px;
+}
+
+.Game__issuesTitle {
+  margin-bottom: 40px;
+  margin-left: 40px;
+}
+
+.Game__dashboardRight {
+  flex: 1;
+
+  .RoundTimePlayable {
+    margin-bottom: 35px;
+  }
+}
+
+.Game__playgroundBtns {
+  display: flex;
+  justify-content: space-between;
+
+  .MuiButtonBase-root {
+    min-width: 190px;
+    min-height: 47px;
+  }
+}
+
+.Game__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 .selected {
   box-shadow: 0 0 8px rgb(219, 243, 0);
   max-width: 300px;
@@ -7,11 +92,6 @@
 .voting {
   box-shadow: 0 0 8px rgb(49, 243, 0);
   max-width: 300px;
-  width: 100%; 
+  width: 100%;
 }
 
-.card__wrapper {
-  display: flex;
-  width: 70%;
-  justify-content: space-between;
-}

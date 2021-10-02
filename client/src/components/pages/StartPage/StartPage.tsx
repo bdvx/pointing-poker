@@ -10,7 +10,7 @@ export const StartPage: FC = () => {
   const [LogInPopupOpen, setLogInPopupOpen] = useState(false);
 
   return (
-    <div className="App__startPage startPage">
+    <div className="startPage page__content">
       <LargeLogo />
 
       <Button onClick={ () => setRegisterPopupOpen(true) } variant="contained" color="primary" size="large">Sign up</Button>
