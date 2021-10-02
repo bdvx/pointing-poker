@@ -1,0 +1,54 @@
+@import '../../breakpoints.scss';
+
+.KickPlayerPopUp .MuiDialog-paper {
+  max-width: 875px;
+  padding: 25px 25px 20px;
+
+  @include at ($max, $phone - 1) {
+    margin: 10px;
+  }
+
+  @include at ($min, $phone) {
+    padding: 30px 35px;
+  }
+}
+
+.KickPlayerPopUp__title {
+  margin: 0 0 30px;
+  font-size: 35px;
+  text-align: center;
+
+  @include at ($min, $phone) {
+    margin-bottom: 100px;
+    font-size: 64px;
+  }
+}
+
+.KickPlayerPopUp__text {
+  margin: 0 0 30px;
+  font-size: 20px;
+  line-height: 1.25;
+
+  @include at ($min, $phone) {
+    margin-bottom: 120px;
+    font-size: 24px;
+  }
+
+  strong {
+    color: #496A81;
+  }
+}
+
+.KickPlayerPopUp .KickPlayerPopUp__btns {
+  margin: 0 -10px;
+  justify-content: space-between;
+
+  .MuiButtonBase-root {
+    min-width: 90px;
+    min-height: 47px;
+
+    @include at ($min, $phone) {
+      min-width: 190px;
+    }
+  }
+}

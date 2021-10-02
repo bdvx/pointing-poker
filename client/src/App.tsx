@@ -9,10 +9,12 @@ import { Footer } from './components/Footer/Footer';
 import { useTypedSelector } from "./hooky/useTypedSelector";
 import { useEffect, useState } from "react";
 import { SuccessSnackBar } from "./components/Base/SuccessSnackBar/SuccessSnackBar";
+import { KickPlayerPopUp } from "./components/KickPlayerPopUp/KickPlayerPopUp";
 
 function App() {
   const user = useTypedSelector((state) => state.userInfo);
   const [openLogInSuccessSnackBar, setOpenLogInSuccessSnackBar] = useState<boolean>(false);
+  const [openKickPlayerPopUp, setOpenKickPlayerPopUp] = useState<boolean>(false);
 
   useEffect(() => {
     if (user.isLogin) {
@@ -27,12 +29,13 @@ function App() {
         <div className="App">
           <Header></Header>
 
-          <main>  
+          <main>
             <AppRouter></AppRouter>
           </main>
           
           <Footer />
 
+          <KickPlayerPopUp open={ openKickPlayerPopUp } onChangePopUpState={ setOpenKickPlayerPopUp } />
           <SuccessSnackBar open={ openLogInSuccessSnackBar } onSetOpen={ setOpenLogInSuccessSnackBar } text="You are successfully logged in!" />
         </div>
       </BrowserRouter>
