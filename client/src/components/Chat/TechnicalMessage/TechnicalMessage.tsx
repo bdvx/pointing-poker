@@ -4,6 +4,7 @@ export interface TechnicalMessageProps {
 }
 
 export function TechnicalMessage(props:TechnicalMessageProps) {
+  console.log(2, props)
   return(
     <li className="technical__message">
       {props.message}

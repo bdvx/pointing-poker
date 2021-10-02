@@ -43,11 +43,12 @@ const Chat = () => {
       <div className="Chat draggable" onMouseDown={handleDragAndDrop}>
         <ul className="Chat_messages">
           {chat.map((messageInfo) => {
-            if((messageInfo as TechnicalMessageProps).isTechnicalMessage) {
+            console.log(messageInfo)
+            if((messageInfo as ChatMessageInfo).login) {
               const user = clientService.getUserByLogin(room, (messageInfo as ChatMessageInfo).login);
               return <ChatMessage {...user} message={messageInfo.message} />;
             } else {
-              return <TechnicalMessage isTechnicalMessage={true} message={messageInfo.message}/>
+              return <TechnicalMessage isTechnicalMessage={true} message={String(messageInfo)}/>
             }
           })}
         </ul>
