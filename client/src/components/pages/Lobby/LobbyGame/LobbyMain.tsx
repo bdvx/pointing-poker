@@ -5,6 +5,7 @@ import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
 import Chat from "../../../Chat/Chat";
+import { GameIssue } from "../../GamePage/GameIssue/GameIssue";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { Queue } from "../Queue/queue";
 import './LobbyMain.scss';
@@ -39,6 +40,13 @@ const LobbyMain = () => {
           <PlayerCard {...roomInfo.scrumInfo} avatar={roomInfo.scrumInfo.avatar || './logo192.png'}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
         </div>
+        {/* <div className="Lobby__issues">
+          { roomInfo.issues.length !== 0 &&
+            roomInfo.issues.map((issue) => (
+              <GameIssue {...issue} />
+            ))
+        }
+        </div> */}
         <h1>{roomInfo.roomUrl}</h1>
       <div className="Lobby__members">
         <div className='Lobby__members_title'>Members:</div>

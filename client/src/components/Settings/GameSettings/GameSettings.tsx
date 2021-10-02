@@ -97,7 +97,7 @@ const GameSettings = () => {
         <div className="GameSettings__element_title">Round time:</div>
         <RoundTimeEditable seconds={ seconds } setSeconds={ setSeconds } minutes={ minutes } setMinutes={ setMinutes } />
       </div>
-      <button onClick={onSaveBtnClick}>save</button>
+      <button className="GameSettings__save" onClick={onSaveBtnClick}>save</button>
     </div>
   );
 };

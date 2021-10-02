@@ -57,6 +57,14 @@
       transform: translateZ(-25px) rotateX(-90deg);
     }
   }
+  &__issues{
+    
+    display: flex;
+    flex-direction: row;
+    &:nth-child(n){
+      margin-right: 10px;
+    }
+  }
   &__members {
     &_title {
       font: 24px Roboto, sans-serif;
