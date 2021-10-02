@@ -43,7 +43,6 @@ const Chat = () => {
       <div className="Chat draggable" onMouseDown={handleDragAndDrop}>
         <ul className="Chat_messages">
           {chat.map((messageInfo) => {
-            console.log(messageInfo)
             if((messageInfo as ChatMessageInfo).login) {
               const user = clientService.getUserByLogin(room, (messageInfo as ChatMessageInfo).login);
               return <ChatMessage {...user} message={messageInfo.message} />;

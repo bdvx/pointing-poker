@@ -1,4 +1,4 @@
-import { newMessage } from "../store/chatSlice";
+import { newMessage, resetChat } from "../store/chatSlice";
 import { setCurrentUserScrumStatus } from "../store/currentUserSlice";
 import { resetGame, setGame } from "../store/gameSlice";
 import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
@@ -129,6 +129,9 @@ function RoomMessageHandler(message:string) {
 
 
 function makeNewRoom(userWss:WebSocket, scrumInfo:UserInfo) {
+  lobbyDispatch(resetChat());
+  lobbyDispatch(resetRoomInfo());
+  lobbyDispatch(resetGame());
   wss = userWss;
   const request = makeWSRequestString("MAKE_NEW_LOBBY", scrumInfo);
   wss.send(request);
@@ -137,6 +140,9 @@ function makeNewRoom(userWss:WebSocket, scrumInfo:UserInfo) {
 }
 
 function connectToRoom(userWss:WebSocket, connectInfo:ConnectUserToWS) {
+  lobbyDispatch(resetChat());
+  lobbyDispatch(resetRoomInfo());
+  lobbyDispatch(resetGame());
   wss = userWss;
   wss.send(makeWSRequestString("CONNECT_TO_ROOM", connectInfo));
 
@@ -154,7 +160,6 @@ function sendChatMessage(messageInfo:ChatMessageInfo) {
 }
 
 function sendIssueToRoom(issue:IssueModel) {
-  console.log(issue);
   const request = makeWSRequestString("NEW_ISSUE", issue);
   wss.send(request);
 }
