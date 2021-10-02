@@ -70,8 +70,6 @@ export const Game: FC = () => {
     router.push('/welcomePage');
   }
 
-
-
   return (
     <div className="Game page__content">
       {isScrum?<Queue></Queue>:<></>}
@@ -101,9 +99,11 @@ export const Game: FC = () => {
 
         <div className="Game__playground">
           <div className="Game__dashboardLeft">
+
             { issuesInfo.length ?
               <div className="Game__issues">
                 <h3 className="Game__issuesTitle Game__subtitle">Issues:</h3>
+
                 <ul className="Game__issuesContainer">
                   { issuesInfo.map((issueInfo) => (
                       <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""}  onClick={ () => onIssueClick(issueInfo.issue.id) }>
@@ -124,8 +124,8 @@ export const Game: FC = () => {
             }
           </div>
 
-          <div className="Game__dashboardRight">
-            { isScrum &&
+          { isScrum &&
+            <div className="Game__dashboardRight">
               <>
                 <RoundTimePlayable />
 
@@ -135,8 +135,8 @@ export const Game: FC = () => {
                   <Button className="Game__nextIssueBtn" onClick={ onStopIssueBtnClick } variant="contained" color="primary" size="large">Stop round</Button>
                 </div>
               </>
-            }
-          </div>
+            </div>
+          }
         </div>
 
         <div className="Game__cards">

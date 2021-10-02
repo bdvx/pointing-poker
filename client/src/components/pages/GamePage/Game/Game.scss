@@ -1,31 +1,54 @@
 @import '../../../../variables.scss';
+@import '../../../../breakpoints.scss';
 
 .Game {
   max-width: $wrapper;
 }
 
 .Game__main {
-  width: 67.5%;
-  padding: 30px 35px;
+  padding: 30px 20px;
+
+  @include at ($min, $phone) {
+    padding: 30px 35px;
+  }
+
+  @include at ($min, $lap) {
+    width: 67.5%;
+  }
 }
 
 .Game__title {
-  margin-bottom: 60px;
+  margin: 0 0 40px;
   text-align: center;
+
+  @include at ($min, $tablet) {
+    margin-bottom: 60px;
+  }
 }
 
 .Game__title,
 .Game__subtitle {
+  margin-top: 0;
   font-size: 24px;
   font-weight: 500;
 }
 
 .Game__topPanel {
-  display: flex;
   max-width: 800px;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
   align-items: flex-end;
   justify-content: space-between;
+
+  @include at ($min, $tablet) {
+    display: flex;
+    margin-bottom: 80px;
+  }
+}
+
+.Game__master {
+  @include at ($max, $tablet - 1) {
+    margin-bottom: 30px;
+  }
 }
 
 .Game__masterTitle {
@@ -42,10 +65,26 @@
   min-height: 47px;
 }
 
+.Game .Game__exitBtn {
+  @include at ('', $lap, $desk - 1) {
+    min-width: auto;
+  }
+}
+
+.Game__topPanel .RoundTimePlayable {
+  @include at ($max, $tablet - 1) {
+    margin-bottom: 30px;
+  }
+}
+
 .Game__playground {
-  display: flex;
   max-width: 800px;
-  margin-bottom: 150px;
+  margin-bottom: 70px;
+
+  @include at ($min, $lap) {
+    display: flex;
+    margin-bottom: 150px;
+  }
 }
 
 .Game__dashboardLeft {
@@ -69,11 +108,27 @@
 
 .Game__playgroundBtns {
   display: flex;
-  justify-content: space-between;
+
+  @include at ($max, $desk - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  @include at ($min, $desk) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
   .MuiButtonBase-root {
     min-width: 190px;
     min-height: 47px;
+    margin-bottom: 10px;
+
+    &:last-child { margin-bottom: 0; }
+
+    @include at ($min, $desk) {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -94,4 +149,3 @@
   max-width: 300px;
   width: 100%;
 }
-
