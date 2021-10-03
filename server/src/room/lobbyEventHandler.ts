@@ -57,7 +57,8 @@ function onDeleteIssue(room:Room, deletedIssueId: string) {
 
 //чуть позже перепешу эту ф-ю
 function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
-
+  voteInfo.amountAgree = 1;
+  
   const deletePlayerFromRoom = (playerLogin: string, message:string) => {
     const deletedPlayerIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
 
