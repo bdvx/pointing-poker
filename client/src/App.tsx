@@ -13,7 +13,12 @@ import { SuccessSnackBar } from "./components/Base/SuccessSnackBar/SuccessSnackB
 function App() {
   const user = useTypedSelector((state) => state.userInfo);
   const [openLogInSuccessSnackBar, setOpenLogInSuccessSnackBar] = useState<boolean>(false);
-
+  useEffect(() => {
+    if (user.isLogin) {
+      setOpenLogInSuccessSnackBar(true);
+    }
+  }, [user.isLogin]);
+  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

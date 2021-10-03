@@ -10,7 +10,6 @@ export const KickPlayerItem = (props: VotingModel) => {
   let canCurrentUserVotin = false;
 
   votes?.forEach((vote) => {
-    console.log(111, vote)
     if(currentUserLogin === vote.login && vote.conclusion === null) {
       canCurrentUserVotin = true;
     }
@@ -22,7 +21,7 @@ export const KickPlayerItem = (props: VotingModel) => {
 
   return (
     <li className="KickPlayerPopUp">
-      <h3 className="KickPlayerPopUp__title">{whoOffer} offers kick player {whoKick}</h3>
+      <p className="KickPlayerPopUp__title">{whoOffer} offers kick player {whoKick}</p>
       <p>amountAgree: {props.amountAgree} / {votes?.length}</p>
       <p className="KickPlayerPopUp__text">{message}</p>
 

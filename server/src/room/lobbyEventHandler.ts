@@ -57,7 +57,8 @@ function onDeleteIssue(room:Room, deletedIssueId: string) {
 
 //чуть позже перепешу эту ф-ю
 function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
-
+  voteInfo.amountAgree = 1;
+  
   const deletePlayerFromRoom = (playerLogin: string, message:string) => {
     const deletedPlayerIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
 
@@ -103,9 +104,9 @@ function onAgreeWithKick(room:Room, voteInfo:KickVoteModel) {
   const index = room.votes.findIndex((vote) => vote.whoKick === voteInfo.kickedPlayerLogin);
   room.votes[index].amountAgree++;
 
-  const a = room.votes[index].votes.find((vote) => vote.login === voteInfo.login)
-  if(a) {
-    a.conclusion = voteInfo.conclusion;
+  const userVote = room.votes[index].votes.find((vote) => vote.login === voteInfo.login)
+  if(userVote) {
+    userVote.conclusion = voteInfo.conclusion;
   }
   updateKickVotesForEveryOne(room, room.votes);
 }
@@ -143,6 +144,7 @@ function onStopGame(room:Room, reason:string) {
 
 function onSetSettings(room:Room, settings:SettingsModel) {
   room.settings = settings;
+  console.log('set',room.settings)
 
   if(settings.masterAsPlayer) {
     addScrumAsPlayer(room);

@@ -30,9 +30,11 @@ function onStartIssueVote(room:Room, issueId:string) {
       const response = makeWSResponseMessage("START_ISSUE_VOTE", gameToClient);
       room.game?.players.forEach((player)=>{ player.ws.send(response) });      
 
-      setTimeout(() => {
-        onStopIssueVote(room, issueId);
-      }, room.settings.roundTime);
+      if(room.settings.timerNeeded) {
+        setTimeout(() => {
+          onStopIssueVote(room, issueId);
+        }, room.settings.roundTime);
+      }
     }
 
   }
