@@ -9,24 +9,28 @@ import { Issue } from "../../../Base/Issue/Issue";
 
 export const GameIssue: FC<IGameIssueProps> = (props: IGameIssueProps) => {
   const { isScrum } = useTypedSelector(store => store.userInfo);
-  const { title, priority, score, isActive, link } = props;
+  const { title, priority, score, isActive, isVoting, link } = props;
 
   const onDeleteBtnClick = () => {
     ServerService.deleteIssue(props.id);
   }
 
+  const getClassName = (): string => {
+    return `GameIssue${ isVoting ? ' GameIssue_voting' : (isActive ? ' GameIssue_active' : '') }`;
+  }
+
   return (
-    <Issue classes="GameIssue">
+    <Issue classes={ getClassName() }>
       <div className="Issue__info">
-        { isActive &&
+        { isVoting &&
           <span>Current</span>
         }
         <a className="Issue__title" href={ link } target="_blank">{ title }</a>
         <span className="Issue__priority">{ priority }</span>
       </div>
 
-      { score &&
-        <span className="GameIssue__score">{ score }</span>
+      { score ?
+        <span className="GameIssue__score">{ score }</span> : null
       }
 
       { isScrum &&

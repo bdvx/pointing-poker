@@ -19,7 +19,7 @@ import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable'
 export const Game: FC = () => {
   const userInfo = useTypedSelector(store => store.userInfo);
   const { scrumInfo, roomId } = useTypedSelector(store => store.roomInfo);
-  const { issuesInfo } = useTypedSelector(store => store.game);
+  const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
   const dispatch = useDispatch();
   const router = useHistory();
   const isScrum = userInfo.isScrum;
@@ -104,9 +104,8 @@ export const Game: FC = () => {
 
                 <ul className="Game__issuesContainer">
                   { issuesInfo.map((issueInfo) => (
-                      <li className={  issueInfo.isVoting ? "voting" : (issueInfo.isSelected) ? "selected" : ""}  onClick={ () => onIssueClick(issueInfo.issue.id) }>
-
-                        <GameIssue { ...issueInfo.issue } isActive={ issueInfo.isSelected } score={ issueInfo.result } />
+                      <li onClick={ () => onIssueClick(issueInfo.issue.id) } key={ issueInfo.issue.id }>
+                        <GameIssue { ...issueInfo.issue } isActive={ issueInfo.isSelected } isVoting={ issueInfo.isVoting } score={ issueInfo.result } />
                       </li>
                     ))
                   }
@@ -128,9 +127,15 @@ export const Game: FC = () => {
                 <RoundTimePlayable />
 
                 <div className="Game__playgroundBtns">
-                  <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
-                  <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>
-                  <Button className="Game__nextIssueBtn" onClick={ onStopIssueBtnClick } variant="contained" color="primary" size="large">Stop round</Button>
+                  { !isVoting &&
+                    <>
+                      <Button className="Game__runRoundBtn" onClick={ onRunIssueBtnClick } variant="contained" color="primary" size="large">Run round</Button>
+                      <Button className="Game__restartRoundBtn" onClick={ onResetIssueBtnClick } variant="contained" color="primary" size="large">Restart round</Button>
+                    </>
+                  }
+                  { isVoting &&
+                    <Button className="Game__nextIssueBtn" onClick={ onStopIssueBtnClick } variant="contained" color="primary" size="large">Stop round</Button>
+                  }
                 </div>
               </>
             </div>

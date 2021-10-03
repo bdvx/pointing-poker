@@ -1,0 +1,15 @@
+
+@import '../../../../variables.scss';
+
+.GameIssue {
+  border: 1px solid transparent;
+  cursor: pointer;
+
+  &.GameIssue_voting {
+    background-color: rgba(96,218,191,.33);
+  }
+  
+  &.GameIssue_active {
+    border-color: $secondary-color;
+  }
+}

@@ -93,9 +93,25 @@
   margin-right: 45px;
 }
 
+.Game__issues {
+  margin-bottom: 40px;
+}
+
 .Game__issuesTitle {
   margin-bottom: 40px;
   margin-left: 40px;
+}
+
+.Game__issuesContainer {
+  list-style: none;
+
+  li {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .Game__dashboardRight {
@@ -136,16 +152,4 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-.selected {
-  box-shadow: 0 0 8px rgb(219, 243, 0);
-  max-width: 300px;
-  width: 100%; 
-}
-
-.voting {
-  box-shadow: 0 0 8px rgb(49, 243, 0);
-  max-width: 300px;
-  width: 100%;
 }
