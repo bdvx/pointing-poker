@@ -22,12 +22,15 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     inGame: [],
     queue: [],
     settings: { 
-      roundTime: 7000,
+      roundTime: 40000,
       timerNeeded: true,
       autoTurn: true,
       masterAsPlayer: false,
       scoreType: "Story Points",
-      shortScoreType: "SP"
+      shortScoreType: "SP",
+      cards: [
+        "1","2","3","5","8","13","21","inf"
+      ]
      } //!Добавить в отправку инфы от скрам мастера + настройки по дефолту
   }
 

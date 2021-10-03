@@ -16,8 +16,8 @@ const GameSettings = () => {
   const [TimerNeeded, SetTimerNeeded] = useState(false);
   const [ScoreType, setScoreType] = useState("Story Points");
   const [ShortScoreType, setShortScoreType] = useState("SP");
-  const [seconds, setSeconds] = useState<number>(20);
-  const [minutes, setMinutes] = useState<number>(2);
+  const [seconds, setSeconds] = useState<number>(40);
+  const [minutes, setMinutes] = useState<number>(0);
   const cards = useTypedSelector((store) => store.settings.cards);
   const dispatch = useDispatch();
 

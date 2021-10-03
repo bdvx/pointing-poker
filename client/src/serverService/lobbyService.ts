@@ -39,6 +39,7 @@ function RoomMessageHandler(message:string) {
   const onSuccessRoomBuild = (roomInfo: Room) => {
     lobbyDispatch(setRoomInfo(roomInfo));
     lobbyDispatch(setCurrentUserScrumStatus());
+    lobbyDispatch(resetVoits());
   }
 
   const onChatMessage = (message:ChatMessageInfo) => {

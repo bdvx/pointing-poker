@@ -12,7 +12,7 @@ export interface SettingsModel {
 }
 
 const initialState:SettingsModel = {
-  roundTime: 140,
+  roundTime: 40,
   timerNeeded: true,
   autoTurn: true,
   masterAsPlayer: false,

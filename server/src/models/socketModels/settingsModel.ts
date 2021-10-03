@@ -4,5 +4,6 @@ export interface SettingsModel {
   autoTurn: boolean,
   masterAsPlayer: boolean,
   scoreType: string,
-  shortScoreType: string
+  shortScoreType: string,
+  cards: Array<string>
 }

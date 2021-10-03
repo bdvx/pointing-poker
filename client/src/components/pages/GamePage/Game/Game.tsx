@@ -24,6 +24,7 @@ export const Game: FC = () => {
   const router = useHistory();
   const isScrum = userInfo.isScrum;
   const cards = useTypedSelector((store) => store.settings.cards);
+  const timerNeeded = useTypedSelector((store) => store.settings.timerNeeded);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -89,7 +90,7 @@ export const Game: FC = () => {
               <Button className="Game__stopBtn" onClick={onStopGameBtnClick} variant="outlined" color="primary" size="large">Stop Game</Button>
             :
               <>
-                <RoundTimePlayable />
+                 {timerNeeded ? <RoundTimePlayable /> : <></>}
                 <Button className="Game__exitBtn" onClick={ onExitBtnClick } variant="outlined" color="primary" size="large">Exit</Button>
               </>
           }
@@ -124,7 +125,7 @@ export const Game: FC = () => {
           { isScrum &&
             <div className="Game__dashboardRight">
               <>
-                <RoundTimePlayable />
+                 {timerNeeded ? <RoundTimePlayable /> : <></>}
 
                 <div className="Game__playgroundBtns">
                   { !isVoting &&

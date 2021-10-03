@@ -33,7 +33,7 @@ function onStartIssueVote(room:Room, issueId:string) {
       if(room.settings.timerNeeded) {
         setTimeout(() => {
           onStopIssueVote(room, issueId);
-        }, room.settings.roundTime);
+        }, room.settings.roundTime * 1000);
       }
     }
 
