@@ -57,22 +57,22 @@ function onDeleteIssue(room:Room, deletedIssueId: string) {
 //чуть позже перепешу эту ф-ю
 function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
 
-  const deletePlayerFromRoom = (playerLogin: string) => {
+  const deletePlayerFromRoom = (playerLogin: string, message:string) => {
     const deletedPlayerIndex = room.playersWS.findIndex(playerWs => playerWs.userInfo.login === playerLogin);
 
-    const response = makeWSResponseMessage("YOU_ARE_KICKED", "you were kicked by the master");
+    const response = makeWSResponseMessage("YOU_ARE_KICKED", message);
     room.playersWS[deletedPlayerIndex].ws.send(response);
     
     closeConnection(room.playersWS[deletedPlayerIndex].ws);
     deletePersonFromRoom(room, voteInfo.whoKick);
 
-    sendTechnicalMessage(room, `user ${playerLogin} kiked by master`);
+    sendTechnicalMessage(room, `user ${playerLogin} kiked`);
 
     updateLobbyForEveryOne(room);
   }
 
   if(voteInfo.whoOffer === room.scrumInfo.login) { //если удаляет масте
-    deletePlayerFromRoom(voteInfo.whoKick);
+    deletePlayerFromRoom(voteInfo.whoKick, "you are kicked by the master");
     updateLobbyForEveryOne(room);
   } else { //голосование
     room.votes.push(voteInfo);
@@ -86,22 +86,24 @@ function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
     });
 
     const stopVoiting = (whoKick: string) => {
-      const currentVoit = room.votes.find((vote) => vote.whoKick !== whoKick);
+      const currentVoit = room.votes.find((vote) => vote.whoKick === whoKick);
 
-      if(currentVoit?.amountAgree && currentVoit?.amountAgree > room.playersWS.length/2 +1) {
-        deletePlayerFromRoom(currentVoit.whoKick);
+      if(currentVoit?.amountAgree && currentVoit?.amountAgree >= Math.floor(room.playersWS.length/2) +1) {
+        deletePlayerFromRoom(currentVoit.whoKick, "you are kicked from room");
+        updateLobbyForEveryOne(room);
       }
     }
 
     setTimeout(() => {
       stopVoiting(voteInfo.whoKick);
-    }, 60000);
+    }, 10000);
   }
 }
 
 function onAgreeWithKick(room:Room, kickedPlayerLogin:string) {
   const index = room.votes.findIndex((vote) => vote.whoKick === kickedPlayerLogin);
   room.votes[index].amountAgree++;
+  console.log(room.votes[index].amountAgree)
 }
 
 function onMakeNewGame(room:Room) {

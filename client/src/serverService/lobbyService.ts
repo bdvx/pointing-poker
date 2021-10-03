@@ -46,11 +46,10 @@ function RoomMessageHandler(message:string) {
   }
 
   const onKickOffer = (voteInfo:VotingModel) => {
-    lobbyDispatch(updateVoits(voteInfo)); //можно сделать ход голосования
+    lobbyDispatch(updateVoits(voteInfo)); 
     setTimeout(() => {
       lobbyDispatch(deleteVoit(voteInfo.whoKick))
     }, 59000)
-    //TODO попап кика
   }
 
   const onGameStart = (gameInfo:GameModel) => {
@@ -260,7 +259,7 @@ const LobbyService = {
   selectIssueInRoom,
   stopGameInRoom,
   resetVoteIssueInRoom,
-  setSettingsInRoom
+  setSettingsInRoom,
 }
 export default LobbyService;
 
