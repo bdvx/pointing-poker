@@ -70,7 +70,6 @@ function RoomMessageHandler(message:string) {
 
   const onStartIssueVote = (gameInfo:GameModel) => {
     lobbyDispatch(setGame(gameInfo));
-    alert("Голосование");
   }
 
   const onSetSettings = (settings:SettingsModel) => {
