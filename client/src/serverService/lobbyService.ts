@@ -84,6 +84,10 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(setSettings(settings));
   }
 
+  const onToggleToGame = () => {
+    lobbyRouter.push("/game");
+  }
+
   switch(type) {
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
@@ -123,6 +127,10 @@ function RoomMessageHandler(message:string) {
     
     case "SET_SETTINGS":
       onSetSettings(payLoad);
+      break;
+
+    case "TOGGLE_TO_GAME":
+      onToggleToGame();
       break;
   }  
 }

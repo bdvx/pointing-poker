@@ -4,7 +4,7 @@ import { hashCode } from "../tools/hashFunction";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
-import { deletePersonFromRoom, makeWSResponseMessage, transformServerRoomToClient, updateLobbyForEveryOne } from "../tools/roomFunctions";
+import { deletePersonFromRoom, makeWSResponseMessage, transformServerGameToClient, transformServerRoomToClient, updateGameForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
 import LobbyEventHandler, {  } from "./lobbyEventHandler";
 import GameEventHandler from "./gameEventHandler";
 
@@ -48,7 +48,14 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
 
   room.playersWS.push(newPlayer);
   room.queue.push(newPlayer);
-  updateLobbyForEveryOne(room);
+
+  if(room.isPlaying) {
+    updateLobbyForEveryOne(room);
+    updateGameForEveryOne(room);
+    newPlayer.ws.send(makeWSResponseMessage("TOGGLE_TO_GAME", ""));
+  } else {
+    updateLobbyForEveryOne(room);
+  }
 }
 
 function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {

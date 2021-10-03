@@ -20,14 +20,14 @@ export const WelcomePage: FC = () => {
   ServerService.setDispatch(dispatch);
 
   const onStartBtnClick = () => {
-    setScrumStatus(true);
+    dispatch(setScrumStatus(true));
     const userInfoCopy = makeUserInfoCopy(currentUserInfo, true);
     ServerService.makeNewRoom(userInfoCopy);
     router.push("/lobbyStart");
   }
 
   const onConnectToLobbyBtnClick = () => {
-    setScrumStatus(false);
+    dispatch(setScrumStatus(false));
     const userInfoCopy = makeUserInfoCopy(currentUserInfo, false);
     //TODO при введении url разу добавлять в стейт
     const roomId = defineIdfromUrl(url);
