@@ -144,6 +144,7 @@ function onStopGame(room:Room, reason:string) {
 
 function onSetSettings(room:Room, settings:SettingsModel) {
   room.settings = settings;
+  console.log('set',room.settings)
 
   if(settings.masterAsPlayer) {
     addScrumAsPlayer(room);

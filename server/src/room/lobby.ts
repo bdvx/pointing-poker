@@ -22,7 +22,7 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     inGame: [],
     queue: [],
     settings: { 
-      roundTime: 0,
+      roundTime: 7000,
       timerNeeded: true,
       autoTurn: true,
       masterAsPlayer: false,
@@ -51,7 +51,6 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
 
   const response = makeWSResponseMessage("SET_SETTINGS", room.settings);
   newPlayer.ws.send(response);
-  
   if(room.isPlaying) {
     updateLobbyForEveryOne(room);
     updateGameForEveryOne(room);

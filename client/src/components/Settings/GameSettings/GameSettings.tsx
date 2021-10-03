@@ -41,7 +41,7 @@ const GameSettings = () => {
     const settings:SettingsModel = {
       autoTurn: AutoTurn,
       masterAsPlayer: MasterAsPlayer,
-      roundTime: (minutes + 1) * seconds,
+      roundTime: (minutes) * 60 + seconds,
       scoreType: ScoreType,
       shortScoreType: ShortScoreType,
       timerNeeded: TimerNeeded
