@@ -104,9 +104,9 @@ function onAgreeWithKick(room:Room, voteInfo:KickVoteModel) {
   const index = room.votes.findIndex((vote) => vote.whoKick === voteInfo.kickedPlayerLogin);
   room.votes[index].amountAgree++;
 
-  const a = room.votes[index].votes.find((vote) => vote.login === voteInfo.login)
-  if(a) {
-    a.conclusion = voteInfo.conclusion;
+  const userVote = room.votes[index].votes.find((vote) => vote.login === voteInfo.login)
+  if(userVote) {
+    userVote.conclusion = voteInfo.conclusion;
   }
   updateKickVotesForEveryOne(room, room.votes);
 }

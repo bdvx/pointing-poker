@@ -49,6 +49,9 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
   room.playersWS.push(newPlayer);
   room.queue.push(newPlayer);
 
+  const response = makeWSResponseMessage("SET_SETTINGS", room.settings);
+  newPlayer.ws.send(response);
+  
   if(room.isPlaying) {
     updateLobbyForEveryOne(room);
     updateGameForEveryOne(room);
