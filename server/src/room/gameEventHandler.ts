@@ -15,7 +15,12 @@ function onUserMakeNewChoice(room:Room, userChoiceInfo:ChoiceModel) {
     } else {
       issueInfo.votes[index] = { login, score };
     }
-    updateGameForEveryOne(room);
+
+    if(room.settings.autoTurn && room.game && issueInfo.votes.length === room.game.players.length) {
+      onStopIssueVote(room, issueInfo.issue.id);
+    } else {
+      updateGameForEveryOne(room);
+    }
   }
 }
 
