@@ -2,11 +2,8 @@ import './RoundTimePlayable.scss';
 import { FC, useEffect, useState } from 'react';
 import { RoundTime } from '../Base/RoundTime/RoundTime';
 import { useTypedSelector } from '../../hooky/useTypedSelector';
-import { useDispatch } from 'react-redux';
-import { setGame } from '../../store/gameSlice';
 
 export const RoundTimePlayable: FC = () => {
-  const dispatch = useDispatch();
   const { isVoting } = useTypedSelector((store) => store.game);
   let { roundTime } = useTypedSelector((store) => store.settings);
   
@@ -28,7 +25,6 @@ export const RoundTimePlayable: FC = () => {
       setSeconds(time);
 
       if (time <= 0) {
-        // dispatch(setGame({ isVoting: false }));
         return;
       }
 
