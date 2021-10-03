@@ -10,7 +10,6 @@ export const KickPlayerItem = (props: VotingModel) => {
   let canCurrentUserVotin = false;
 
   votes?.forEach((vote) => {
-    console.log(111, vote)
     if(currentUserLogin === vote.login && vote.conclusion === null) {
       canCurrentUserVotin = true;
     }

@@ -3,7 +3,7 @@ import { setCurrentUserScrumStatus, setScrumStatus } from "../store/currentUserS
 import { resetGame, setGame } from "../store/gameSlice";
 import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
 import { setSettings, SettingsModel } from "../store/settingsSlice";
-import { deleteVoit, updateVoits } from "../store/votingSlice";
+import { resetVoits, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
@@ -148,6 +148,7 @@ function connectToRoom(userWss:WebSocket, connectInfo:ConnectUserToWS) {
   lobbyDispatch(resetRoomInfo());
   lobbyDispatch(resetGame());
   lobbyDispatch(setScrumStatus(false));
+  lobbyDispatch(resetVoits());
   wss = userWss;
   wss.send(makeWSRequestString("CONNECT_TO_ROOM", connectInfo));
 
