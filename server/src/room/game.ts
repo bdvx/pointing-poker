@@ -4,10 +4,17 @@ import { Room } from "../models/socketModels/roomModel";
 import { makeWSResponseMessage, sendTechnicalMessage, transformServerGameToClient } from "../tools/roomFunctions";
 
 function makeNewGame(room:Room) {
+  const scrumLogin = room.scrumInfo.login;
+  if(room.settings.masterAsPlayer) {
+    const scrumWs = room.playersWS.find((playerWs) => playerWs.userInfo.login === scrumLogin);
+    if(scrumWs) {
+      room.inGame.push(scrumWs);
+    }
+  }
   const gameInfo:GameModel = {
     issuesInfo: room.issues.map((issue) => makeIssueInfo(issue)) || [],
     isVoting:false,
-    players: room.playersWS,
+    players: room.inGame,
   }
   room.game = gameInfo;
   room.isPlaying = true;
