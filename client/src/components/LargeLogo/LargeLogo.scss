@@ -7,42 +7,53 @@
   }
 
   img {
-    @include at ($max, $phone - 1) {
-      display: block;
-      max-width: 80px;
-      margin: auto;
-    }
-  
+    display: block;
+    max-width: 70px;
+    margin: auto;
+
     @include at ($min, $phone) {
+      max-width: 90px;
+      margin: -35px 25px 0 0;
+    }
+
+    @include at ($min, $widescreen) {
+      max-width: 100%;
       margin-top: -60px;
-      margin-right: 25px;
     }
   }
 }
 
 .largeLogo__title {
   position: relative;
-  max-width: 420px;
+  max-width: 340px;
   width: 100%;
+  margin: auto;
 
-  @include at ($max, $phone - 1) {
-    margin: auto;
+  @include at ($min, $phone) {
+    margin: 0;
+  }
+
+  @include at ($min, $widescreen) {
+    max-width: 420px;
   }
 
   &::before {
-    position: absolute;
-    top: 65px;
-    left: 30px;
-    max-width: 350px;
-    width: 100%;
-    height: 10px;
-    transform: rotate(345deg);
-    content: "";
-    background-color: #fff;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    @include at ($min, $phone) {
+      position: absolute;
+      top: 42px;
+      left: 30px;
+      max-width: 280px;
+      width: 100%;
+      height: 10px;
+      transform: rotate(345deg);
+      content: "";
+      background-color: #fff;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    }
 
-    @include at ($max, $phone - 1) {
-      display: none;
+    @include at ($min, $widescreen) {
+      top: 65px;
+      max-width: 350px;
     }
   }
 
@@ -53,6 +64,10 @@
     line-height: 1.17143;
   
     @include at ($min, $phone) {
+      font-size: 50px;
+    }
+
+    @include at ($min, $widescreen) {
       font-size: 70px;
     }
 
