@@ -6,7 +6,7 @@ import { useTypedSelector } from '../../hooky/useTypedSelector';
 export const RoundTimePlayable: FC = () => {
   const { isVoting } = useTypedSelector((store) => store.game);
   let { roundTime } = useTypedSelector((store) => store.settings);
-  
+  console.log(isVoting)
   let time = roundTime;
   const [seconds, setSeconds] = useState<number>(roundTime);
 

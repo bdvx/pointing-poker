@@ -45,7 +45,7 @@ function onStopIssueVote(room:Room, issueId:string) {
 
   if(issueInfo && room.game && issueInfo.isVoting) { //последняя проверка если голосование закончилось досрочно
     issueInfo.isVoting = false;
-    room.game.isVoting = true;
+    room.game.isVoting = false;
 
     issueInfo.result = makeVoteResult(issueInfo);
     updateGameForEveryOne(room);
