@@ -1,8 +1,9 @@
 import { Switch, TextField } from "@material-ui/core";
 import { ChangeEvent, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../hooky/useTypedSelector";
 import ServerService from "../../../serverService/serverService";
-import { SettingsModel } from "../../../store/settingsSlice";
+import { setCardType, SettingsModel } from "../../../store/settingsSlice";
 import { CreateIssue } from "../../CreateIssue/CreateIssue";
 import CardSettings from "../../pages/Lobby/CardSettings/CardSettings";
 import { IssueEditable } from "../../pages/Lobby/IssueEditable/IssueEditable";
@@ -17,6 +18,8 @@ const GameSettings = () => {
   const [ShortScoreType, setShortScoreType] = useState("SP");
   const [seconds, setSeconds] = useState<number>(20);
   const [minutes, setMinutes] = useState<number>(2);
+  const cards = useTypedSelector((store) => store.settings.cards);
+  const dispatch = useDispatch();
 
   const { issues } = useTypedSelector(store => store.roomInfo);
 
@@ -35,7 +38,9 @@ const GameSettings = () => {
   };
 
   const handleShortScoreType = (event: ChangeEvent) => {
-    setShortScoreType((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    dispatch(setCardType(value));
+    setShortScoreType(value);
   };
 
   const onSaveBtnClick = () => {
@@ -45,7 +50,8 @@ const GameSettings = () => {
       roundTime: (minutes) * 60 + seconds,
       scoreType: ScoreType,
       shortScoreType: ShortScoreType,
-      timerNeeded: TimerNeeded
+      timerNeeded: TimerNeeded,
+      cards: cards
     }
     ServerService.setSettings(settings);
   }
@@ -97,7 +103,7 @@ const GameSettings = () => {
         <div className="GameSettings__element_title">Round time:</div>
         <RoundTimeEditable seconds={ seconds } setSeconds={ setSeconds } minutes={ minutes } setMinutes={ setMinutes }/>
       </div>
-      <CardSettings/>
+      <CardSettings cards={cards}/>
       <button className="GameSettings__save" onClick={onSaveBtnClick}>save</button>
     </div>
   );

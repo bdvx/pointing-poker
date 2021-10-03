@@ -16,9 +16,6 @@ import { resetChat } from '../../../../store/chatSlice';
 import { useHistory } from 'react-router';
 import { RoundTimePlayable } from '../../../RoundTimePlayable/RoundTimePlayable';
 
-const cards:Array<CardProps> = [{value:1,type:"a"},{value:2,type:"a"},{value:3,type:"a"},
-{value:5,type:"a"},{value:8,type:"a"},{value:13,type:"a"},{value:21,type:"a"}]
-
 export const Game: FC = () => {
   const userInfo = useTypedSelector(store => store.userInfo);
   const { scrumInfo, roomId } = useTypedSelector(store => store.roomInfo);
@@ -26,6 +23,7 @@ export const Game: FC = () => {
   const dispatch = useDispatch();
   const router = useHistory();
   const isScrum = userInfo.isScrum;
+  const cards = useTypedSelector((store) => store.settings.cards);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -140,7 +138,7 @@ export const Game: FC = () => {
         </div>
 
         <div className="Game__cards">
-          {cards.map((card) => <GameCard {...card}></GameCard>)}
+          {cards.map((card) => <GameCard value={card} ></GameCard>)}
         </div>
       </div>
     </div>

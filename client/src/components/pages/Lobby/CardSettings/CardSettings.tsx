@@ -5,28 +5,26 @@ import CardEditable from "../CardEditable/CardEditable";
 import CardCreator from "./CardCreator/CardCreator";
 import "./CardSettings.scss";
 
-const CardSettings = () => {
+export interface CardSettingsProps {
+  cards: Array<string>,
+}
+
+const CardSettings = (props:CardSettingsProps) => {
+  const { cards } = props;
   const settings = useTypedSelector((store) => store.settings);
-  const [Cards, setCards] = useState([
-    { value: 13 },
-    { value: 10 },
-    { value: 1 },
-  ]);
-  console.log(settings)
+
   return (
     <div className="CardSettings">
       <div className="CardSettings__wrapper">
         <div className="CardSettings__cards">
-          {Cards.map((card) => (
+          {cards.map((card) => (
             <CardEditable
-              value={card.value}
-              type={settings.shortScoreType}
-              changeValue={(value: any) => (card.value = value)}
+              value={card}
             />
           ))}
         </div>
         <div className="CardSettings__add">
-          <CardCreator />
+          <CardCreator/>
         </div>
       </div>
     </div>

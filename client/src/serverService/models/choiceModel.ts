@@ -1,5 +1,5 @@
 export interface ChoiceModel {
   login: string,
-  score: number,
+  score: string,
   issueId: string,
 }

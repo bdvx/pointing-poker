@@ -1,13 +1,16 @@
 import { ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
+import { useTypedSelector } from "../../../../hooky/useTypedSelector";
+import { updateCard } from "../../../../store/settingsSlice";
 import { CardProps } from "../../../GameCard/GameCard";
 import "./CardEditable.scss";
 
-interface EditableCardProps extends CardProps {
-    changeValue:(value:any)=>any
-}
 
-const EditableGameCard = (props: EditableCardProps) => {
-  const { value, type, changeValue } = props;
+const EditableGameCard = (props: CardProps) => {
+  const { value } = props;
+  let currentValue = value;
+  const type = useTypedSelector((store) => store.settings.shortScoreType);
+  const dispatch = useDispatch();
   // const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
   // const { login } = useTypedSelector(store => store.userInfo);
 
@@ -24,9 +27,8 @@ const EditableGameCard = (props: EditableCardProps) => {
   //     }
   //   }
   //
-  const handleValue = (event: ChangeEvent) => {
-      console.log(value)
-      changeValue((event.target as HTMLInputElement).value)
+  const handleValue = () => {
+      dispatch(updateCard({currentValue,value}))
   };
 
   return (

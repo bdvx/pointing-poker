@@ -1,12 +1,14 @@
 import { Button, DialogActions, TextField } from "@material-ui/core";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addCard } from "../../../../store/settingsSlice";
 import { PopUpLinearProgress } from "../../../Base/PopUpLinearProgress/PopUpLinearProgress";
 import { CardPopupProps } from "../CardSettings/CardCreator/CreateCardPopup/CreateCardPopup";
 
 export const CardPopup = (props: CardPopupProps) => {
   const { open, onChangePopupState } = props;
   const [loading, setLoading] = useState<boolean>(false);
-
+  const dispatch = useDispatch();
   const [value, setValue] = useState<string>();
 
   const resetFields = (): void => {
@@ -17,7 +19,7 @@ export const CardPopup = (props: CardPopupProps) => {
     setLoading(true);
     setLoading(false);
     onChangePopupState(false);
-    console.log(open)
+    dispatch(addCard(value))
   };
 
   return (

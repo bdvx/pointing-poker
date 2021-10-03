@@ -4,14 +4,14 @@ import ServerService from "../../serverService/serverService";
 import "./GameCard.scss";
 
 export interface CardProps {
-  value: number,
-  type: string,
+  value: string,
 }
 
 const GameCard = (props: CardProps) => {
-  const { value, type } = props;
+  const { value } = props;
   const { issuesInfo, isVoting } = useTypedSelector(store => store.game);
   const { login } = useTypedSelector(store => store.userInfo);
+  const type = useTypedSelector((store => store.settings.shortScoreType));
 
   const onChooseCard = () => {
     if(isVoting) {

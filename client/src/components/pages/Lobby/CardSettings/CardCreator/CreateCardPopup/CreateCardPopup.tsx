@@ -5,7 +5,6 @@ export interface CardPopupProps {
     onChangePopupState: (open: boolean) => void;
 }
 export const CreateCardPopup = (props: CardPopupProps) => {
-    console.log(props)
     return (
       <CardPopup { ...props } />
     );

@@ -6,6 +6,7 @@ import { CreateCardPopup } from "./CreateCardPopup/CreateCardPopup";
 
 const CardCreator = () => {
   const [openPopup, setOpenPopup] = useState<boolean>(false);
+
   return (
     <div className="card-container">
       <div className="GameCard">

@@ -7,7 +7,8 @@ export interface SettingsModel {
   autoTurn: boolean,
   masterAsPlayer: boolean,
   scoreType: string,
-  shortScoreType: string
+  shortScoreType: string,
+  cards: Array<string>
 }
 
 const initialState:SettingsModel = {
@@ -16,7 +17,10 @@ const initialState:SettingsModel = {
   autoTurn: true,
   masterAsPlayer: false,
   scoreType: "Story Points",
-  shortScoreType: "SP"
+  shortScoreType: "SP",
+  cards: [
+    "1","2","3","5","8","13","21","inf"
+  ]
 }
 
 const settingsSlice = createSlice({
@@ -29,6 +33,18 @@ const settingsSlice = createSlice({
     setTimer(state, action) {
       state.roundTime = action.payload;
     },
+    addCard(state, action) {
+      state.cards.push(action.payload);
+    },
+    updateCard(state, action) {
+      const index = state.cards.findIndex((cardValue) => cardValue === action.payload.currentValue)
+      if(index) {
+        state.cards[index] = action.payload.value;
+      }
+    },
+    setCardType(state, action) {
+      state.shortScoreType = action.payload;
+    },
     deleteSettings() {
       return initialState;
     }
@@ -36,4 +52,4 @@ const settingsSlice = createSlice({
 })
 
 export default settingsSlice.reducer;
-export const {setSettings, deleteSettings, setTimer} = settingsSlice.actions;
+export const {setSettings, deleteSettings, setTimer, addCard, updateCard, setCardType} = settingsSlice.actions;
