@@ -1,5 +1,5 @@
 import './RoundTimePlayable.scss';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { RoundTime } from '../Base/RoundTime/RoundTime';
 import { useTypedSelector } from '../../hooky/useTypedSelector';
 import { useDispatch } from 'react-redux';
@@ -9,14 +9,25 @@ export const RoundTimePlayable: FC = () => {
   const dispatch = useDispatch();
   const { isVoting } = useTypedSelector((store) => store.game);
   let { roundTime } = useTypedSelector((store) => store.settings);
+  
+  let time = roundTime;
+  const [seconds, setSeconds] = useState<number>(roundTime);
+
+  useEffect(() => {
+    if (isVoting) {
+      time = roundTime;
+      setSeconds(roundTime);
+    }
+  }, [isVoting, setSeconds]);
 
   useEffect(() => {
     const update = (): void => {
-      if (isVoting) return;
+      if (!isVoting) return;
 
-      --roundTime;
+      --time;
+      setSeconds(time);
 
-      if (roundTime <= 0) {
+      if (time <= 0) {
         // dispatch(setGame({ isVoting: false }));
         return;
       }
@@ -25,14 +36,14 @@ export const RoundTimePlayable: FC = () => {
     };
 
     setTimeout(() => update(), 1000);
-  }, [isVoting, roundTime]);
+  }, [isVoting, setSeconds]);
 
   const getMinutes = (): number => {
-    return Math.floor(roundTime / 60);
+    return Math.floor(seconds / 60);
   };
 
   const getSeconds = (): string | number => {
-    const exactSeconds = roundTime % 60;
+    const exactSeconds = seconds % 60;
     return (exactSeconds < 10) ? `0${ exactSeconds }` : exactSeconds;
   };
 
