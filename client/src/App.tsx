@@ -9,8 +9,6 @@ import { Footer } from './components/Footer/Footer';
 import { useTypedSelector } from "./hooky/useTypedSelector";
 import { useEffect, useState } from "react";
 import { SuccessSnackBar } from "./components/Base/SuccessSnackBar/SuccessSnackBar";
-import { KickPlayerPopUp } from "./components/popUps/KickPlayerPopUp/KickPlayerPopUp";
-import LobbyService from "./serverService/lobbyService";
 
 function App() {
   const user = useTypedSelector((state) => state.userInfo);

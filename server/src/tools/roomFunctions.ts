@@ -84,3 +84,10 @@ export function sendTechnicalMessage(room:Room, payload:any) {
     playerWs.ws.send(technikalMessage);
   })
 }
+
+export function updateKickVotesForEveryOne(room:Room, payload:any) {
+  const message = makeWSResponseMessage("UPDATE_KICK_VOTES", payload);
+  room.playersWS.forEach((playerWs) => {
+    playerWs.ws.send(message);
+  })
+}

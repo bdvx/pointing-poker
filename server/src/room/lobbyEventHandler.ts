@@ -1,11 +1,12 @@
 import { ChatMessageInfo } from "../models/socketModels/chatMessageInfoModel";
 import { IssueModel } from "../models/socketModels/issueModel";
+import { KickVoteModel } from "../models/socketModels/kickVoteInfo";
 import { Room } from "../models/socketModels/roomModel";
 import { SettingsModel } from "../models/socketModels/settingsModel";
 import { VotingModel } from "../models/socketModels/votingModel";
 import { closeConnection } from "../socket";
 import DataService from "../tools/dataService";
-import { deletePersonFromRoom, makeWSResponseMessage, sendTechnicalMessage, updateGameForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
+import { deletePersonFromRoom, makeWSResponseMessage, sendTechnicalMessage, updateGameForEveryOne, updateKickVotesForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
 import Game, { makeIssueInfo } from "./game";
 
 function onChatMessage(room:Room, messageInfo: ChatMessageInfo) {
@@ -75,35 +76,38 @@ function onOfferKickPlayer(room:Room, voteInfo:VotingModel) {
     deletePlayerFromRoom(voteInfo.whoKick, "you are kicked by the master");
     updateLobbyForEveryOne(room);
   } else { //голосование
+    voteInfo.votes = room.inGame.map((player) => { return {login:player.userInfo.login, conclusion:null} });
     room.votes.push(voteInfo);
-    room.playersWS.forEach((playerWS) => {
-      const response = makeWSResponseMessage("KICK_OFFER", voteInfo);
-
-      if(playerWS.userInfo.login !== voteInfo.whoKick &&
-         playerWS.userInfo.login !== voteInfo.whoOffer) {
-           playerWS.ws.send(response);
-      }
-    });
+    updateKickVotesForEveryOne(room, room.votes);
 
     const stopVoiting = (whoKick: string) => {
       const currentVoit = room.votes.find((vote) => vote.whoKick === whoKick);
 
-      if(currentVoit?.amountAgree && currentVoit?.amountAgree >= Math.floor(room.playersWS.length/2) +1) {
+      if(currentVoit?.amountAgree && currentVoit?.amountAgree >= Math.floor(currentVoit.votes.length/2) +1) {
         deletePlayerFromRoom(currentVoit.whoKick, "you are kicked from room");
         updateLobbyForEveryOne(room);
       }
+
+      const curretnVoteIndex = room.votes.findIndex((vote) => vote.whoKick === whoKick);
+      room.votes.splice(curretnVoteIndex, 1);
+      updateKickVotesForEveryOne(room, room.votes);
     }
 
     setTimeout(() => {
       stopVoiting(voteInfo.whoKick);
-    }, 10000);
+    }, 15000);
   }
 }
 
-function onAgreeWithKick(room:Room, kickedPlayerLogin:string) {
-  const index = room.votes.findIndex((vote) => vote.whoKick === kickedPlayerLogin);
+function onAgreeWithKick(room:Room, voteInfo:KickVoteModel) {
+  const index = room.votes.findIndex((vote) => vote.whoKick === voteInfo.kickedPlayerLogin);
   room.votes[index].amountAgree++;
-  console.log(room.votes[index].amountAgree)
+
+  const a = room.votes[index].votes.find((vote) => vote.login === voteInfo.login)
+  if(a) {
+    a.conclusion = voteInfo.conclusion;
+  }
+  updateKickVotesForEveryOne(room, room.votes);
 }
 
 function onMakeNewGame(room:Room) {

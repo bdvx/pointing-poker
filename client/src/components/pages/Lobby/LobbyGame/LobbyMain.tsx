@@ -5,7 +5,7 @@ import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
 import Chat from "../../../Chat/Chat";
-import { KickPlayerPopUp } from "../../../popUps/KickPlayerPopUp/KickPlayerPopUp";
+import { KickPlayerContainer } from "../../../KickPlayer/KickPlayerContainer";
 import { GameIssue } from "../../GamePage/GameIssue/GameIssue";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { Queue } from "../Queue/queue";
@@ -14,7 +14,6 @@ import './LobbyMain.scss';
 const LobbyMain = () => {
   const roomInfo = useTypedSelector(store => store.roomInfo);
   const userInfo = useTypedSelector(store => store.userInfo);
-  const votes = useTypedSelector((store) => store.voting);
   const dispatch = useDispatch();
   const router = useHistory();
   ServerService.setDispatch(dispatch);
@@ -33,11 +32,10 @@ const LobbyMain = () => {
 
     //TODO на страничку нужно разместить url инвайта roomInfo.roomUrl
   return (
-    <>
-      {votes.map((vote) => <KickPlayerPopUp {...vote}/>)}
     <div className="Lobby__main">
       <Chat />
       <Queue />
+      <KickPlayerContainer></KickPlayerContainer>
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
           <button onClick={onStartGameBtnClick}>STart Game</button>
@@ -61,7 +59,6 @@ const LobbyMain = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };
 

@@ -8,7 +8,7 @@ const votingSlice = createSlice({
   initialState,
   reducers: {
     updateVoits(state, action) {
-      state.push(action.payload);
+      return action.payload;
     },
     deleteVoit(state, action) {
       const index = state.findIndex((vote) => vote.whoKick === action.payload)

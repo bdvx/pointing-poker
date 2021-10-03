@@ -105,8 +105,8 @@ function kickPlayer(kickInfo:VotingModel) {
   LobbyService.sendKickOfferToRoom(kickInfo);
 }
 
-function setKickConclusion(conclusion:boolean, kickedPlayerLogin?:string) {
-  LobbyService.sendKickConclusionToRoom(conclusion, kickedPlayerLogin);
+function setKickConclusion(conclusion:boolean, userLogin:string, kickedPlayerLogin?:string,) {
+  LobbyService.sendKickConclusionToRoom(conclusion, userLogin, kickedPlayerLogin);
 }
 
 function startGame() {

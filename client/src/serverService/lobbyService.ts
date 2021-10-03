@@ -45,13 +45,6 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(newMessage(message));
   }
 
-  const onKickOffer = (voteInfo:VotingModel) => {
-    lobbyDispatch(updateVoits(voteInfo)); 
-    setTimeout(() => {
-      lobbyDispatch(deleteVoit(voteInfo.whoKick))
-    }, 59000)
-  }
-
   const onGameStart = (gameInfo:GameModel) => {
     lobbyDispatch(setGame(gameInfo));
     lobbyRouter.push("/game");
@@ -87,6 +80,10 @@ function RoomMessageHandler(message:string) {
     lobbyRouter.push("/game");
   }
 
+  const onUpdateKickVotes = (votes:Array<VotingModel>) => {
+    lobbyDispatch(updateVoits(votes));
+  }
+
   switch(type) {
     case "UPDATE_ROOM": 
       onUpdateRoomStore(payLoad);
@@ -98,10 +95,6 @@ function RoomMessageHandler(message:string) {
       
     case "CHAT_MESSAGE":
       onChatMessage(payLoad);
-      break;
-
-    case "KICK_OFFER":
-      onKickOffer(payLoad);
       break;
 
     case "START_GAME":
@@ -130,6 +123,10 @@ function RoomMessageHandler(message:string) {
 
     case "TOGGLE_TO_GAME":
       onToggleToGame();
+      break;
+
+    case "UPDATE_KICK_VOTES":
+      onUpdateKickVotes(payLoad);
       break;
   }  
 }
@@ -187,11 +184,9 @@ function sendKickOfferToRoom(kickInfo: VotingModel) {
   wss.send(request);
 }
 
-function sendKickConclusionToRoom(conclusion:boolean, kickedPlayerLogin?:string) {
-  if(conclusion) {
-    const request = makeWSRequestString("AGREE_WITH_KICK", kickedPlayerLogin);
+function sendKickConclusionToRoom(conclusion:boolean, login:string, kickedPlayerLogin?:string) {
+    const request = makeWSRequestString("AGREE_WITH_KICK", {kickedPlayerLogin, login, conclusion});
     wss.send(request);
-  }
 }
 
 function makeGameInRoom() {
