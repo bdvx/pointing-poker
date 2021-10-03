@@ -4,6 +4,7 @@ import { useTypedSelector } from "../../../hooky/useTypedSelector";
 import ServerService from "../../../serverService/serverService";
 import { SettingsModel } from "../../../store/settingsSlice";
 import { CreateIssue } from "../../CreateIssue/CreateIssue";
+import CardSettings from "../../pages/Lobby/CardSettings/CardSettings";
 import { IssueEditable } from "../../pages/Lobby/IssueEditable/IssueEditable";
 import { RoundTimeEditable } from "../../RoundTimeEditable/RoundTimeEditable";
 import "./GameSettings.scss";
@@ -58,7 +59,6 @@ const GameSettings = () => {
               <IssueEditable {...issue} />
             ))
         }
-
         <CreateIssue />
       </div>
 
@@ -95,8 +95,9 @@ const GameSettings = () => {
       </div>
       <div className="GameSettings__element">
         <div className="GameSettings__element_title">Round time:</div>
-        <RoundTimeEditable seconds={ seconds } setSeconds={ setSeconds } minutes={ minutes } setMinutes={ setMinutes } />
+        <RoundTimeEditable seconds={ seconds } setSeconds={ setSeconds } minutes={ minutes } setMinutes={ setMinutes }/>
       </div>
+      <CardSettings/>
       <button className="GameSettings__save" onClick={onSaveBtnClick}>save</button>
     </div>
   );

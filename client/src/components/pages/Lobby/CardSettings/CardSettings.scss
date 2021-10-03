@@ -1,0 +1,11 @@
+.CardSettings {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    &__wrapper{
+        display: flex;
+    }
+    &__cards {
+        display: flex;
+        flex-direction: row;
+    }
+}

@@ -6,7 +6,7 @@ import { resetChat } from "../../../../store/chatSlice";
 import { resetRoomInfo } from "../../../../store/roomSlice";
 import Chat from "../../../Chat/Chat";
 import { KickPlayerContainer } from "../../../KickPlayer/KickPlayerContainer";
-import { GameIssue } from "../../GamePage/GameIssue/GameIssue";
+import IssueNonEdiitable from "../IssueNonEditable/IssueNonEditable";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { Queue } from "../Queue/queue";
 import './LobbyMain.scss';
@@ -38,23 +38,23 @@ const LobbyMain = () => {
       <KickPlayerContainer></KickPlayerContainer>
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
-          <button onClick={onStartGameBtnClick}>STart Game</button>
+          <div onClick={onStartGameBtnClick} className='Lobby__start-btn'><div></div></div>
           <PlayerCard {...roomInfo.scrumInfo} avatar={roomInfo.scrumInfo.avatar || './logo192.png'}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
         </div>
-        {/* <div className="Lobby__issues">
+        <div className="Lobby__issues">
           { roomInfo.issues.length !== 0 &&
             roomInfo.issues.map((issue) => (
-              <GameIssue {...issue} />
+              <IssueNonEdiitable {...issue} />
             ))
         }
-        </div> */}
+        </div>
         <h1>{roomInfo.roomUrl}</h1>
       <div className="Lobby__members">
         <div className='Lobby__members_title'>Members:</div>
           <div className="Lobby__members_cards">
             {roomInfo.inGame.map((player) => {
-              return <PlayerCard {...player} avatar={player.avatar || './logo192.png'} />
+              return <PlayerCard {...player} avatar={player.avatar} />
             })}
         </div>
       </div>

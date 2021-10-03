@@ -1,35 +1,43 @@
 import Avatar from "@material-ui/core/Avatar";
 import Tooltip from "@material-ui/core/Tooltip";
+import clientService from "../../../clientService/clientService";
+import { useTypedSelector } from "../../../hooky/useTypedSelector";
+import { ChatMessageInfo } from "../../../serverService/models/chatMessageInfoModel";
+import { UserInfo } from "../../../serverService/models/userInfoModel";
 
 interface ChatMessageInfoExt {
-  message: string,
-  name?: string,
-  surname?: string,
-  position?: string,
-  src?: string,
-  avatar?: string
+  messageInfo: ChatMessageInfo;
 }
 
 const ChatMessage = (props: ChatMessageInfoExt) => {
-  let { message, name, surname, position, src, avatar } = props;
+  const room = useTypedSelector((store) => store.roomInfo);
+  const user = clientService.getUserByLogin(
+    room,
+    (props.messageInfo as ChatMessageInfo).login
+  );
 
+  const { firstName, lastName, avatar:src, jobPosition} = user as UserInfo;
+
+  let avatar;
   //!это дело сделать понятным
-  if ((src === undefined || src === "") && name !== undefined) {
-    avatar = name[0];
-    if (surname !== undefined && surname !== "") {
-      avatar += surname[0];
+  if ((src === undefined || src === "") && firstName !== undefined) {
+    avatar = firstName[0];
+    if (lastName !== undefined && lastName !== "") {
+      avatar += lastName[0];
     }
   }
 
+  console.log(props);
+
   return (
     <li className="Chat_message">
-      <div className="Chat_message__text">{message}</div>
+      <div className="Chat_message__text">{props.messageInfo.message}</div>
       <Tooltip
-        title = {
+        title={
           <div style={{ textAlign: "center" }}>
-            {name} {surname}
-            <br />
-            {position}
+            {firstName} {lastName}
+            <br/>
+            {jobPosition}
           </div>
         }
       >
