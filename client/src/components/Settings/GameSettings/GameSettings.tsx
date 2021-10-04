@@ -58,16 +58,6 @@ const GameSettings = () => {
 
   return (
     <div className="GameSettings">
-      <h3 className="GameSettings__title">Issues:</h3>
-      <div className="GameSettings__issues">
-        { issues.length !== 0 &&
-            issues.map((issue) => (
-              <IssueEditable {...issue} />
-            ))
-        }
-        <CreateIssue />
-      </div>
-
       <h3 className="GameSettings__title">Game Settings</h3>
       <div className="GameSettings__element">
         <div className="GameSettings__element_title">
