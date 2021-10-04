@@ -42,7 +42,7 @@ const PlayerCard = (props: PlayerCardProps) => {
 
   const createBtn = () => {
     if (isScrum) {
-      return <div style={{ width: "40px", height: "40px" }}></div>;
+      return <div style={{ width: "10px", height: "40px" }}></div>;
     } else {
       return (
         <IconButton>

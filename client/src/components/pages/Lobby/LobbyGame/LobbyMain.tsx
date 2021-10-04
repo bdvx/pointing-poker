@@ -39,7 +39,7 @@ const LobbyMain = () => {
         <div className="Lobby__master">
           <div className="Lobby__master_title">Scrum master:</div>
           <div onClick={onStartGameBtnClick} className='Lobby__start-btn'><div></div></div>
-          <PlayerCard {...roomInfo.scrumInfo} avatar={roomInfo.scrumInfo.avatar || './logo192.png'}/>
+          <PlayerCard {...roomInfo.scrumInfo} avatar={roomInfo.scrumInfo.avatar}/>
           <div className="Lobby__exit-btn"><div onClick={onDisconnectBtnClick}></div></div>
         </div>
         <div className="Lobby__issues">
