@@ -11,7 +11,7 @@ export function StatisticsItem(props:StatisticsItem) {
   return(
     <li className="statistics__item">
       <GameCard value={props.cardInfo.value}/>
-      <span>{determPart(props.currentIssue?.votes.map((vote) => vote.score) || [], props.cardInfo.value)}</span>
+      <span>{determPart(props.currentIssue?.votes.map((vote) => vote.score) || [], props.cardInfo.value)}%</span>
     </li> 
   )
 }
