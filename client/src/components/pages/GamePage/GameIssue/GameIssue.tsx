@@ -30,7 +30,7 @@ export const GameIssue: FC<IGameIssueProps> = (props: IGameIssueProps) => {
       </div>
 
       { score ?
-        <span className="GameIssue__score">{ score }</span> : null
+        <span className="GameIssue__score">{ score ? "✅" : "🛑" }</span> : null
       }
 
       { isScrum &&
