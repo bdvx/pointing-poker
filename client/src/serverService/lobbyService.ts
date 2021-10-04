@@ -2,7 +2,7 @@ import { newMessage, resetChat } from "../store/chatSlice";
 import { setCurrentUserScrumStatus, setScrumStatus } from "../store/currentUserSlice";
 import { resetGame, setGame } from "../store/gameSlice";
 import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
-import { setSettings, SettingsModel } from "../store/settingsSlice";
+import { resetSettings, setSettings, SettingsModel } from "../store/settingsSlice";
 import { resetVoits, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
@@ -40,6 +40,7 @@ function RoomMessageHandler(message:string) {
     lobbyDispatch(setRoomInfo(roomInfo));
     lobbyDispatch(setCurrentUserScrumStatus());
     lobbyDispatch(resetVoits());
+    lobbyDispatch(resetSettings());
   }
 
   const onChatMessage = (message:ChatMessageInfo) => {
@@ -136,6 +137,7 @@ function makeNewRoom(userWss:WebSocket, scrumInfo:UserInfo) {
   lobbyDispatch(resetChat());
   lobbyDispatch(resetRoomInfo());
   lobbyDispatch(resetGame());
+  lobbyDispatch(resetSettings());
   wss = userWss;
   const request = makeWSRequestString("MAKE_NEW_LOBBY", scrumInfo);
   wss.send(request);
@@ -191,6 +193,7 @@ function sendKickConclusionToRoom(conclusion:boolean, login:string, kickedPlayer
 }
 
 function makeGameInRoom() {
+  //!11111
   const request = makeWSRequestString("MAKE_NEW_GAME", 'make new game');
   wss.send(request);
 }
