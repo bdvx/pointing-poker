@@ -22,9 +22,9 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     inGame: [],
     queue: [],
     settings: { 
-      roundTime: 40000,
-      timerNeeded: true,
-      autoTurn: true,
+      roundTime: 40,
+      timerNeeded: false,
+      autoTurn: false,
       masterAsPlayer: false,
       scoreType: "Story Points",
       shortScoreType: "SP",
