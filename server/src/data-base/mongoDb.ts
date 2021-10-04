@@ -81,11 +81,24 @@ async function saveRoom(room:Room) {
   return makeResponse(true, `room ${room.roomId} registered successfully`);
 }
 
+async function getGameById(gameId:string) {
+  const isConnect = await connectToDB(bdUrl);
+  if(!isConnect) return makeResponse(false, "failed to connect to server");
+
+  const game = await RoomModel.findOne({roomId: gameId});
+  if(game) {
+    return game;
+  } else {
+    return ;
+  }
+}
+
 const MongoDB = {
   addNewUser,
   signIn,
   getUserByLogin,
-  saveRoom
+  saveRoom,
+  getGameById
 }
 export default MongoDB;
 

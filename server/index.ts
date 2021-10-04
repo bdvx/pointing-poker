@@ -1,10 +1,11 @@
 import { wsServer, onConnectUserToWebSocket, onMakeNewLobby, onDisconnectUser } from "./src/socket";
-import { app, joinLobbyByUrl, regNewUser, signIn } from "./src/http";
+import { app, joinLobbyByUrl, regNewUser, sendReplayById, signIn } from "./src/http";
 import { QueryModel } from "./src/models/socketModels/WSqueryModel";
 
 
 app.post('/regNewUser', regNewUser);
 app.post('/singIn', signIn);
+app.post('/replay/:id', sendReplayById);
 /* app.get('/joinLobby', joinLobbyByUrl); */
 app.post('/joinLobby', joinLobbyByUrl);
 

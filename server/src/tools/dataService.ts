@@ -22,5 +22,10 @@ export default class DataService {
   static saveRoom(room:Room) {
     MongoDB.saveRoom(room);
   }
+
+  static async getGameById(gameId:string) {
+    const response = await MongoDB.getGameById(gameId);
+    return response;
+  }
   
 }
