@@ -24,7 +24,7 @@ export const Game: FC = () => {
   const router = useHistory();
   const isScrum = userInfo.isScrum;
   const cards = useTypedSelector((store) => store.settings.cards);
-  const timerNeeded = useTypedSelector((store) => store.settings.timerNeeded);
+  const {timerNeeded, masterAsPlayer} = useTypedSelector((store) => store.settings);
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -201,9 +201,12 @@ export const Game: FC = () => {
         </div>
 
         <div className="Game__cards">
-          {cards.map((card) => (
-            <GameCard value={card}></GameCard>
-          ))}
+        {isScrum ? 
+            masterAsPlayer ? 
+            cards.map((card) => <GameCard value={card} ></GameCard>) :
+            <></>:
+            cards.map((card) => <GameCard value={card} ></GameCard>)
+          }
         </div>
       </div>
     </div>
