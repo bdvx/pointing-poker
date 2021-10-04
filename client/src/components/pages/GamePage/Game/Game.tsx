@@ -31,9 +31,11 @@ export const Game: FC = () => {
   }
 
   const onIssueClick = (issueId:string) => {
-    const votingIssue = issuesInfo.find((ussueInfo) => ussueInfo.isVoting);
-    if(!votingIssue) {
-      ServerService.selectIssue(issueId);
+    if(isScrum) {
+      const votingIssue = issuesInfo.find((ussueInfo) => ussueInfo.isVoting);
+      if(!votingIssue) {
+        ServerService.selectIssue(issueId);
+      }
     }
   }
 
@@ -105,7 +107,7 @@ export const Game: FC = () => {
 
                 <ul className="Game__issuesContainer">
                   { issuesInfo.map((issueInfo) => (
-                      <li onClick={ () => onIssueClick(issueInfo.issue.id) } key={ issueInfo.issue.id }>
+                      <li onClick={ () => onIssueClick(issueInfo.issue.id)} key={ issueInfo.issue.id }>
                         <GameIssue { ...issueInfo.issue } isActive={ issueInfo.isSelected } isVoting={ issueInfo.isVoting } score={ issueInfo.result } />
                       </li>
                     ))
