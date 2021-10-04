@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import "./Game.scss";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import PlayerCard from "../../Lobby/PlayerCard/PlayerCard";
@@ -15,16 +15,22 @@ import { resetChat } from "../../../../store/chatSlice";
 import { useHistory } from "react-router";
 import { RoundTimePlayable } from "../../../RoundTimePlayable/RoundTimePlayable";
 import { CreateIssue } from "../../../CreateIssue/CreateIssue";
+import { UserInfo } from "../../../../serverService/models/userInfoModel";
 
 export const Game: FC = () => {
   const userInfo = useTypedSelector((store) => store.userInfo);
-  const { scrumInfo, roomId } = useTypedSelector((store) => store.roomInfo);
+  const { scrumInfo, roomId, queue } = useTypedSelector((store) => store.roomInfo);
   const { issuesInfo, isVoting } = useTypedSelector((store) => store.game);
   const dispatch = useDispatch();
   const router = useHistory();
   const isScrum = userInfo.isScrum;
   const cards = useTypedSelector((store) => store.settings.cards);
   const {timerNeeded, masterAsPlayer} = useTypedSelector((store) => store.settings);
+  const [PlayerInQueue, setPlayerInQueue] = useState(true);
+
+  useEffect(() => {
+    setPlayerInQueue(determIsPlayerInQueue(queue, userInfo.login));
+  }, [queue])
 
   const onStopGameBtnClick = () => {
     ServerService.stopGame();
@@ -80,6 +86,7 @@ export const Game: FC = () => {
       {isScrum ? <Queue></Queue> : <></>}
       <Chat></Chat>
       <GameSideBar></GameSideBar>
+      <h1></h1>
 
       <div className="Game__main">
         <h2 className="Game__title">Some random game name</h2>
@@ -201,14 +208,25 @@ export const Game: FC = () => {
         </div>
 
         <div className="Game__cards">
-        {isScrum ? 
-            masterAsPlayer ? 
+        {!PlayerInQueue ?
+            isScrum ? 
+              masterAsPlayer ? 
+              cards.map((card) => <GameCard value={card} ></GameCard>) :
+              <></>:
             cards.map((card) => <GameCard value={card} ></GameCard>) :
-            <></>:
-            cards.map((card) => <GameCard value={card} ></GameCard>)
-          }
+          <></>
+        }
         </div>
       </div>
     </div>
   );
 };
+
+function determIsPlayerInQueue(queue:Array<UserInfo>, userLogin:string) {
+  for(let i=0; i<queue.length; i++) {
+    if(queue[i].login === userLogin) {
+      return true
+    } 
+  }
+  return false;
+}
