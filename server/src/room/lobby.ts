@@ -66,6 +66,7 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
 function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
   deletePersonFromRoom(room, disconnectInfo.login);
   updateLobbyForEveryOne(room);
+  updateGameForEveryOne(room);
 }
 
 

@@ -33,12 +33,13 @@ function onStartIssueVote(room:Room, issueId:string) {
     if(room.game) {
       const gameToClient = transformServerGameToClient(room.game);
       const response = makeWSResponseMessage("START_ISSUE_VOTE", gameToClient);
-      room.game?.players.forEach((player)=>{ player.ws.send(response) });      
+      room.game?.players.forEach((player)=>{ player.ws.send(response) });
+      updateGameForEveryOne(room);
 
       if(room.settings.timerNeeded) {
         setTimeout(() => {
           onStopIssueVote(room, issueId);
-        }, room.settings.roundTime * 1000);
+        }, (room.settings.roundTime+4) * 1000);
       }
     }
 
