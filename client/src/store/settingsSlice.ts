@@ -13,8 +13,8 @@ export interface SettingsModel {
 
 const initialState:SettingsModel = {
   roundTime: 40,
-  timerNeeded: true,
-  autoTurn: true,
+  timerNeeded: false,
+  autoTurn: false,
   masterAsPlayer: false,
   scoreType: "Story Points",
   shortScoreType: "SP",
@@ -45,11 +45,11 @@ const settingsSlice = createSlice({
     setCardType(state, action) {
       state.shortScoreType = action.payload;
     },
-    deleteSettings() {
+    resetSettings() {
       return initialState;
     }
   }
 })
 
 export default settingsSlice.reducer;
-export const {setSettings, deleteSettings, setTimer, addCard, updateCard, setCardType} = settingsSlice.actions;
+export const {setSettings, resetSettings, setTimer, addCard, updateCard, setCardType} = settingsSlice.actions;

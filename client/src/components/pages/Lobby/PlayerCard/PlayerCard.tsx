@@ -12,6 +12,7 @@ interface PlayerCardProps {
   lastName: string;
   jobPosition: string;
   login: string;
+  isScrum:boolean;
 }
 
 const PlayerCard = (props: PlayerCardProps) => {
@@ -19,7 +20,6 @@ const PlayerCard = (props: PlayerCardProps) => {
   const room = useTypedSelector((store) => store.roomInfo);
   const cardOwner = clientService.getUserByLogin(room, props.login);
   const isScrum = cardOwner?.isScrum;
-  console.log(isScrum)
   const { avatar, firstName, lastName, jobPosition } = props;
   let letterAvatar;
   if (avatar === undefined || avatar === "") {
@@ -41,8 +41,8 @@ const PlayerCard = (props: PlayerCardProps) => {
   };
 
   const createBtn = () => {
-    if (isScrum) {
-      return <div style={{ width: "40px", height: "40px" }}></div>;
+    if (isScrum || props.isScrum) {
+      return <div style={{ width: "10px", height: "40px" }}></div>;
     } else {
       return (
         <IconButton>

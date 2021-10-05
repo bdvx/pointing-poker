@@ -23,5 +23,5 @@ function determPart(votes:Array<string>, currentScore:string) {
       currentVotesAmount++;
      }
    })
-   return (currentVotesAmount/votes.length)*100;
+   return (Math.floor((currentVotesAmount/votes.length)*10000)) / 100;
 }

@@ -39,9 +39,22 @@ function joinLobbyByUrl(req:Request, res:Response) {
   console.log(req.body)
 }
 
+async function sendReplayById(req:Request, res:Response) {
+  const gameId = req.params.id;
+  const response = await DataService.getGameById(gameId);
+  if(response) {
+    res.statusCode = 200;
+    res.send(response);
+  } else {
+    res.statusCode = 404;
+    res.send("няма");
+  }
+}
+
 export {
   app,
   regNewUser,
   signIn,
-  joinLobbyByUrl
+  joinLobbyByUrl,
+  sendReplayById
 }
