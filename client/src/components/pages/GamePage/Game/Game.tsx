@@ -85,8 +85,6 @@ export const Game: FC = () => {
     <div className="Game page__content">
       {isScrum ? <Queue></Queue> : <></>}
       <Chat></Chat>
-      <GameSideBar></GameSideBar>
-      <h1></h1>
 
       <div className="Game__main">
         <h2 className="Game__title">Some random game name</h2>
@@ -95,7 +93,6 @@ export const Game: FC = () => {
           <div className="Game__master">
             <span className="Game__masterTitle">Scrum master:</span>
 
-            {/* TODO: нужно убрать для карточки мастера кик */}
             <PlayerCard
               {...scrumInfo}
               avatar={scrumInfo.avatar || "./logo192.png"}
@@ -136,7 +133,6 @@ export const Game: FC = () => {
                 <h3 className="Game__issuesTitle Game__subtitle">Issues:</h3>
 
                 <ul className="Game__issuesContainer">
-                  {isScrum && <CreateIssue />}
                   {issuesInfo.map((issueInfo) => (
                     <li
                       onClick={() => onIssueClick(issueInfo.issue.id)}
@@ -150,6 +146,7 @@ export const Game: FC = () => {
                       />
                     </li>
                   ))}
+                  {isScrum && <CreateIssue />}
                 </ul>
               </div>
             ) : null}
@@ -218,6 +215,8 @@ export const Game: FC = () => {
         }
         </div>
       </div>
+
+      <GameSideBar></GameSideBar>
     </div>
   );
 };

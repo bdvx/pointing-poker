@@ -22,7 +22,7 @@ export const KickPlayerItem = (props: VotingModel) => {
   return (
     <li className="KickPlayerPopUp">
       <p className="KickPlayerPopUp__title">{whoOffer} offers kick player {whoKick}</p>
-      <p>amountAgree: {props.amountAgree} / {votes?.length}</p>
+      <p className="KickPlayerPopUp__text">amountAgree: {props.amountAgree} / {votes?.length}</p>
       <p className="KickPlayerPopUp__text">{message}</p>
 
       {canCurrentUserVotin ? 

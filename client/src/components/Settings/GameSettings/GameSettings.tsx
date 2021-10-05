@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../hooky/useTypedSelector";
 import ServerService from "../../../serverService/serverService";
 import { setCardType, SettingsModel } from "../../../store/settingsSlice";
+import { SuccessSnackBar } from "../../Base/SuccessSnackBar/SuccessSnackBar";
 import { CreateIssue } from "../../CreateIssue/CreateIssue";
 import CardSettings from "../../pages/Lobby/CardSettings/CardSettings";
 import { IssueEditable } from "../../pages/Lobby/IssueEditable/IssueEditable";
@@ -20,6 +21,8 @@ const GameSettings = () => {
   const [minutes, setMinutes] = useState<number>(0);
   const cards = useTypedSelector((store) => store.settings.cards);
   const dispatch = useDispatch();
+
+  const [openLogInSuccessSnackBar, setOpenLogInSuccessSnackBar] = useState<boolean>(false);
 
   const { issues } = useTypedSelector(store => store.roomInfo);
 
@@ -54,6 +57,8 @@ const GameSettings = () => {
       cards: cards
     }
     ServerService.setSettings(settings);
+
+    setOpenLogInSuccessSnackBar(true);
   }
 
   return (
@@ -95,6 +100,8 @@ const GameSettings = () => {
       </div>
       <CardSettings cards={cards}/>
       <button className="GameSettings__save" onClick={onSaveBtnClick}>save</button>
+
+      <SuccessSnackBar open={ openLogInSuccessSnackBar } onSetOpen={ setOpenLogInSuccessSnackBar } text="Settings successfully saved!" />
     </div>
   );
 };
