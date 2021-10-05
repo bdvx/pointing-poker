@@ -1,5 +1,6 @@
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import { GameSideBarItem } from "./GameSideBarItem";
+import './GameSideBar.scss'
 
 export function GameSideBar() {
   const game = useTypedSelector((store) => store.game);
