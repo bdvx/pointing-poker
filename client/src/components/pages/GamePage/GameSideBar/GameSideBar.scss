@@ -1,12 +1,35 @@
+@import '../../../../breakpoints.scss';
+
 .votes {
   display: flex;
+  padding: 30px 20px;
   flex-direction: column;
-  position: absolute;
-  right: 100px;
-  top: 70px;
+  align-items: flex-start;
+
+  @include at ($min, $lap) {
+    padding: 40px 25px;
+    align-items: flex-end;
+  }
 
   &__item {
-    display: flex;
-    flex-direction: row;
+    list-style: none;
+    margin-bottom: 20px;
+
+    @include at ($min, $widescreen) {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.votes__score {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 700;
+
+  @include at ($min, $widescreen) {
+    margin-bottom: 0;
+    margin-right: 20px;
+    font-size: 20px;
   }
 }
