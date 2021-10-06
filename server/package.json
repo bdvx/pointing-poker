@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build server": "tsc"
+    "build server": "tsc",
+    "start": "tsc && node dist/app.js"
   },
   "dependencies": {
     "typescript": "^4.4.3"
