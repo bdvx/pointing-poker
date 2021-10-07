@@ -3,5 +3,6 @@ export interface VotingModel {
   whoKick: string, //login
   message: string,
   amountAgree: number,
-  isVoiting: boolean
+  isVoiting: boolean,
+  votes?: Array<{login: string, conclusion?:boolean}>
 }

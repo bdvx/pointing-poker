@@ -4,7 +4,7 @@ export const REGISTER_POPUP_FIELDS = [
   {
     name: 'login',
     title: 'login',
-    errorMessage: 'Login can\'t be empty and contain spaces.'
+    errorMessage: 'Login can\'t be shorter than 3 chars and contain spaces.'
   },
   {
     name: 'password',
@@ -32,6 +32,13 @@ export const REGISTER_POPUP_FIELDS_DEFAULT_VALUES = {
   lastName: '',
   jobPosition: '',
   avatar: ''
+};
+
+export const ISSUE_DEFAULT_VALUES = {
+  title: '',
+  priority: 'low',
+  link: '',
+  id: ''
 };
 
 export const APP_AUTHORS_GITHUB_USERNAME = ['WFZ1', 'JxmJuice', 'FURY-PERSON', 'bdvx'];

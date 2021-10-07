@@ -13,5 +13,6 @@ export interface GameModel {
   issuesInfo: Array<IssueInfo>,
   players: Array<WSClientModel>,
  // master
-  isVoting: boolean
+  isVoting: boolean,
+  voteTime?:number
 }

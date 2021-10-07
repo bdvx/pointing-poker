@@ -10,7 +10,7 @@ import { UserInfo } from '../../../serverService/models/userInfoModel';
 import { useDispatch } from 'react-redux';
 
 
-export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string}) => {
+export const WelcomePage: FC = () => {
   const currentUserInfo = useTypedSelector(store => store.userInfo);
   const currentRoom = useTypedSelector(store => store.roomInfo);
   const [url, setUrl] = useState('');
@@ -20,14 +20,14 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
   ServerService.setDispatch(dispatch);
 
   const onStartBtnClick = () => {
-    setScrumStatus(true);
+    dispatch(setScrumStatus(true));
     const userInfoCopy = makeUserInfoCopy(currentUserInfo, true);
     ServerService.makeNewRoom(userInfoCopy);
     router.push("/lobbyStart");
   }
 
   const onConnectToLobbyBtnClick = () => {
-    setScrumStatus(false);
+    dispatch(setScrumStatus(false));
     const userInfoCopy = makeUserInfoCopy(currentUserInfo, false);
     //TODO при введении url разу добавлять в стейт
     const roomId = defineIdfromUrl(url);
@@ -37,7 +37,7 @@ export const WelcomePage: FC<{classes: string}> = ({classes}: {classes: string})
   }
 
   return (
-    <div className={`welcome-page ${ classes }`}>
+    <div className="welcome-page page__content">
       <LargeLogo />
 
       <span className="welcome-page__subtitle">Start your planning:</span>

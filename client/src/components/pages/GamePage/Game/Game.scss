@@ -1,0 +1,171 @@
+@import '../../../../variables.scss';
+@import '../../../../breakpoints.scss';
+
+.Game {
+  max-width: $wrapper;
+
+  @include at ($min, $lap) {
+    display: flex;
+  }
+}
+
+.Game__main {
+  padding: 30px 20px;
+
+  @include at ($min, $phone) {
+    padding: 30px 35px;
+  }
+
+  @include at ($min, $lap) {
+    width: 67.5%;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.Game__title {
+  margin: 0 0 40px;
+  text-align: center;
+
+  @include at ($min, $tablet) {
+    margin-bottom: 60px;
+  }
+}
+
+.Game__title,
+.Game__subtitle {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.Game__topPanel {
+  max-width: 800px;
+  margin-bottom: 40px;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  @include at ($min, $tablet) {
+    display: flex;
+    margin-bottom: 80px;
+  }
+}
+
+.Game__master {
+  @include at ($max, $tablet - 1) {
+    margin-bottom: 30px;
+  }
+}
+
+.Game__masterTitle {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #646464;
+}
+
+.Game .Game__stopBtn,
+.Game .Game__exitBtn {
+  min-width: 160px;
+  min-height: 47px;
+}
+
+.Game .Game__exitBtn {
+  @include at ('', $lap, $desk - 1) {
+    min-width: auto;
+  }
+}
+
+.Game__topPanel .RoundTimePlayable {
+  @include at ($max, $tablet - 1) {
+    margin-bottom: 30px;
+  }
+}
+
+.Game__playground {
+  max-width: 800px;
+  margin-bottom: 70px;
+
+  @include at ($min, $lap) {
+    display: flex;
+    margin-bottom: 150px;
+  }
+}
+
+.Game__dashboardLeft {
+  max-width: 300px;
+  width: 100%;
+  margin-right: 45px;
+}
+
+.Game__issues {
+  margin-bottom: 40px;
+}
+
+.Game__issuesTitle {
+  margin-bottom: 40px;
+  margin-left: 40px;
+}
+
+.Game__issuesContainer {
+  list-style: none;
+
+  li {
+    margin-bottom: 20px;
+  }
+}
+
+.Game__dashboardRight {
+  flex: 1;
+
+  .RoundTimePlayable {
+    margin-bottom: 35px;
+  }
+}
+
+.Game__playgroundBtns {
+  display: flex;
+
+  @include at ($max, $desk - 1) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  @include at ($min, $desk) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .MuiButtonBase-root {
+    min-width: 190px;
+    min-height: 47px;
+    margin-bottom: 10px;
+
+    &:last-child { margin-bottom: 0; }
+
+    @include at ($min, $desk) {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.Game__cards {
+  display: flex;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @include at ($min, $lap) {
+    margin-bottom: 0;
+  }
+}
+
+.Game .votes {
+  @include at ($min, $lap) {
+    width: 33.5%;
+    border-left: 1px solid #a5a5a5;
+  }
+}

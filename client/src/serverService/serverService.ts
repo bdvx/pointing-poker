@@ -10,6 +10,8 @@ import { hashCode } from "../tool/hashFunction";
 import { VotingModel } from "./models/votingModel";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
+import Lobby from "../components/pages/Lobby/LobbyStart/Lobby";
+import { SettingsModel } from "../store/settingsSlice";
 
 const url = "http://localhost:5000/";
 const wsUrl = "ws://localhost:5000/";
@@ -87,7 +89,6 @@ function disconect(userInfo:UserInfo, roomId:string, reason?:string) {
 }
 
 function makeIssue(issue:IssueModel) {
-  //TODO сделать нормальный id
   issue.id = String(hashCode(issue.title));
   LobbyService.sendIssueToRoom(issue);
 }
@@ -104,8 +105,8 @@ function kickPlayer(kickInfo:VotingModel) {
   LobbyService.sendKickOfferToRoom(kickInfo);
 }
 
-function setKickConclusion(conclusion:boolean, kickedPlayerLogin?:string) {
-  LobbyService.sendKickConclusionToRoom(conclusion, kickedPlayerLogin);
+function setKickConclusion(conclusion:boolean, userLogin:string, kickedPlayerLogin?:string,) {
+  LobbyService.sendKickConclusionToRoom(conclusion, userLogin, kickedPlayerLogin);
 }
 
 function startGame() {
@@ -120,20 +121,32 @@ function movePlayerFromQueueToGame(userLogin:string) {
   LobbyService.movePlayerInRoom(userLogin);
 }
 
-function startVote(issueId:string) {
-  LobbyService.startVoteInRoom(issueId);
+function startVoteIssue(issueId:string) {
+  LobbyService.startVoteIssueInRoom(issueId);
 }
 
 function selectIssue(issueId:string) {
   LobbyService.selectIssueInRoom(issueId);
 }
 
-function stopVote(issueId:string) {
-  LobbyService.stopVoteInRoom(issueId);
+function stopVoteIssue(issueId:string) {
+  LobbyService.stopVoteIssueInRoom(issueId);
+}
+
+function resetVoteIssue(issueId:string) {
+  LobbyService.resetVoteIssueInRoom(issueId);
 }
 
 function makeChoice(choiceInfo:ChoiceModel) {
   LobbyService.sendChoiceToGame(choiceInfo);
+}
+
+function stopGame() {
+  LobbyService.stopGameInRoom();
+}
+
+function setSettings(settings:SettingsModel) {
+  LobbyService.setSettingsInRoom(settings);
 }
 
 const ServerService = {
@@ -154,14 +167,18 @@ const ServerService = {
   setKickConclusion,
 
   startGame,
+  stopGame,
 
   sendChatMessage,
 
   movePlayerFromQueueToGame,
 
   makeChoice,
-  startVote,
-  stopVote,
-  selectIssue
+  startVoteIssue,
+  stopVoteIssue,
+  selectIssue,
+  resetVoteIssue,
+
+  setSettings
 }
 export default ServerService;

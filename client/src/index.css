@@ -123,3 +123,12 @@ body {
 main {
   flex: 1;
 }
+
+input {
+  font-family: Roboto, sans-serif;
+}
+
+.page__content {
+  margin-left: auto;
+  margin-right: auto;
+}

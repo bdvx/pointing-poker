@@ -1,0 +1,35 @@
+.statisticsPage {
+  max-width: 1000px;
+  padding: 60px 25px 40px;
+  margin: 0 auto;
+}
+
+.statistics {
+  &__wrapper {
+    flex-direction: column;
+    list-style: none;
+    margin: 0 auto;
+  }
+  &__title {
+    margin: 0 auto;
+    text-align: center;
+    font: 28px Roboto, sans-serif;
+    font-weight: 700;
+  }
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    &:nth-child(1n){
+      margin-right: 10px;
+    }
+  }
+  &__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { TechnicalMessageProps } from "../components/Chat/TechnicalMessage/TechnicalMessage";
 import { ChatMessageInfo } from "../serverService/models/chatMessageInfoModel";
 
-const initialState: Array<ChatMessageInfo> = []
+const initialState: Array<ChatMessageInfo | TechnicalMessageProps> = []
 
 const chatSlice = createSlice({
   name: "chatSlice",

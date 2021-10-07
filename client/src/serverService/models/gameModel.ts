@@ -1,11 +1,11 @@
 import { IssueModel } from "./issueModel";
 import { UserInfo } from "./userInfoModel";
 
-interface IssueInfo {
+export interface IssueInfo {
   issue: IssueModel,
   isVoting: boolean,
   isSelected: boolean,
-  votes: Array<{login:string, score:number}>,
+  votes: Array<{login:string, score:string}>,
   result?: number
 }
 

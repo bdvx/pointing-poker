@@ -36,6 +36,7 @@ export function transformServerGameToClient(serverGame:GameModel) {
     isVoting, issuesInfo,
     players: players.map((player) => player.userInfo),
   }
+
   return clientGame;
 }
 
@@ -63,6 +64,30 @@ export function deletePersonFromRoom(room:Room, login:string) {
   if (roomIndex !== -1) {
     room.playersWS.splice(roomIndex, 1);
   }
-  return roomIndex;
 }
 
+export function updateLobbyForEveryOne(room:Room) {
+  room.playersWS.forEach((player) => {
+    sendUpdatedRoom(room, player.ws);
+  });
+}
+
+export function updateGameForEveryOne(room:Room) {
+  room.playersWS.forEach((player) => {
+    sendUpdatedGame(room, player.ws);
+  });
+}
+
+export function sendTechnicalMessage(room:Room, payload:any) {
+  const technikalMessage = makeWSResponseMessage("CHAT_MESSAGE", payload);
+  room.playersWS.forEach((playerWs) => {
+    playerWs.ws.send(technikalMessage);
+  })
+}
+
+export function updateKickVotesForEveryOne(room:Room, payload:any) {
+  const message = makeWSResponseMessage("UPDATE_KICK_VOTES", payload);
+  room.playersWS.forEach((playerWs) => {
+    playerWs.ws.send(message);
+  })
+}

@@ -16,7 +16,8 @@
       font: 24px Roboto, sans-serif;
     }
   }
-  &__exit-btn {
+  &__exit-btn,
+  &__start-btn {
     position: relative;
     display: inline-flex;
     width: 150px;
@@ -55,6 +56,20 @@
     }
     & div:hover {
       transform: translateZ(-25px) rotateX(-90deg);
+    }
+  }
+  &__start-btn{
+    & div:after,
+    & div:before {
+      content: "Start";
+    }
+  }
+  &__issues{
+    
+    display: flex;
+    flex-direction: row;
+    &:nth-child(n){
+      margin-right: 10px;
     }
   }
   &__members {

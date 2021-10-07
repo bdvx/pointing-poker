@@ -1,8 +1,9 @@
-import { newMessage } from "../store/chatSlice";
-import { setCurrentUserScrumStatus } from "../store/currentUserSlice";
-import { setGame } from "../store/gameSlice";
+import { newMessage, resetChat } from "../store/chatSlice";
+import { setCurrentUserScrumStatus, setScrumStatus } from "../store/currentUserSlice";
+import { resetGame, setGame } from "../store/gameSlice";
 import { resetRoomInfo, setRoomInfo } from "../store/roomSlice";
-import { deleteVoit, updateVoits } from "../store/votingSlice";
+import { resetSettings, setSettings, SettingsModel } from "../store/settingsSlice";
+import { resetVoits, updateVoits } from "../store/votingSlice";
 import { ChatMessageInfo } from "./models/chatMessageInfoModel";
 import { ChoiceModel } from "./models/choiceModel";
 import { ConnectUserToWS } from "./models/connectUserToWSModel";
@@ -38,24 +39,17 @@ function RoomMessageHandler(message:string) {
   const onSuccessRoomBuild = (roomInfo: Room) => {
     lobbyDispatch(setRoomInfo(roomInfo));
     lobbyDispatch(setCurrentUserScrumStatus());
+    lobbyDispatch(resetVoits());
+    lobbyDispatch(resetSettings());
   }
 
   const onChatMessage = (message:ChatMessageInfo) => {
     lobbyDispatch(newMessage(message));
   }
 
-  const onKickOffer = (voteInfo:VotingModel) => {
-    lobbyDispatch(updateVoits(voteInfo)); //можно сделать ход голосования
-    setTimeout(() => {
-      lobbyDispatch(deleteVoit(voteInfo.whoKick))
-    }, 59000)
-    //TODO попап кика
-  }
-
   const onGameStart = (gameInfo:GameModel) => {
     lobbyDispatch(setGame(gameInfo));
     lobbyRouter.push("/game");
-    //! Добавить этот роут в роутинг
   }
 
   const onGameUpdate = (gameInfo:GameModel) => {
@@ -66,6 +60,29 @@ function RoomMessageHandler(message:string) {
     lobbyRouter.push("/welcomePage");
     lobbyDispatch(resetRoomInfo());
     alert(message);
+  }
+
+  const onStopGame = (reason:string) => {
+/*     lobbyRouter.push("/lobbyStart"); */
+    lobbyRouter.push("/statistics");
+/*     lobbyDispatch(resetGame()); */
+    alert(reason);
+  }
+
+  const onStartIssueVote = (gameInfo:GameModel) => {
+    lobbyDispatch(setGame(gameInfo));
+  }
+
+  const onSetSettings = (settings:SettingsModel) => {
+    lobbyDispatch(setSettings(settings));
+  }
+
+  const onToggleToGame = () => {
+    lobbyRouter.push("/game");
+  }
+
+  const onUpdateKickVotes = (votes:Array<VotingModel>) => {
+    lobbyDispatch(updateVoits(votes));
   }
 
   switch(type) {
@@ -81,12 +98,12 @@ function RoomMessageHandler(message:string) {
       onChatMessage(payLoad);
       break;
 
-    case "KICK_OFFER":
-      onKickOffer(payLoad);
-      break;
-
     case "START_GAME":
       onGameStart(payLoad);
+      break;
+    
+    case "STOP_GAME":
+      onStopGame(payLoad);
       break;
 
     case "UPDATE_GAME":
@@ -96,11 +113,31 @@ function RoomMessageHandler(message:string) {
     case "YOU_ARE_KICKED":
       onYouAreKicked(payLoad);
       break;
+    
+    case "START_ISSUE_VOTE":
+      onStartIssueVote(payLoad);
+      break;
+    
+    case "SET_SETTINGS":
+      onSetSettings(payLoad);
+      break;
+
+    case "TOGGLE_TO_GAME":
+      onToggleToGame();
+      break;
+
+    case "UPDATE_KICK_VOTES":
+      onUpdateKickVotes(payLoad);
+      break;
   }  
 }
 
 
 function makeNewRoom(userWss:WebSocket, scrumInfo:UserInfo) {
+  lobbyDispatch(resetChat());
+  lobbyDispatch(resetRoomInfo());
+  lobbyDispatch(resetGame());
+  lobbyDispatch(resetSettings());
   wss = userWss;
   const request = makeWSRequestString("MAKE_NEW_LOBBY", scrumInfo);
   wss.send(request);
@@ -109,6 +146,11 @@ function makeNewRoom(userWss:WebSocket, scrumInfo:UserInfo) {
 }
 
 function connectToRoom(userWss:WebSocket, connectInfo:ConnectUserToWS) {
+  lobbyDispatch(resetChat());
+  lobbyDispatch(resetRoomInfo());
+  lobbyDispatch(resetGame());
+  lobbyDispatch(setScrumStatus(false));
+  lobbyDispatch(resetVoits());
   wss = userWss;
   wss.send(makeWSRequestString("CONNECT_TO_ROOM", connectInfo));
 
@@ -142,18 +184,16 @@ function deleteIssue(issueId:string) {
 
 function sendKickOfferToRoom(kickInfo: VotingModel) {
   const request = makeWSRequestString("KICK_PLAYER_OFFER", kickInfo);
-  console.log(333,request)
   wss.send(request);
 }
 
-function sendKickConclusionToRoom(conclusion:boolean, kickedPlayerLogin?:string) {
-  if(conclusion) {
-    const request = makeWSRequestString("AGREE_WITH_KICK", kickedPlayerLogin);
+function sendKickConclusionToRoom(conclusion:boolean, login:string, kickedPlayerLogin?:string) {
+    const request = makeWSRequestString("AGREE_WITH_KICK", {kickedPlayerLogin, login, conclusion});
     wss.send(request);
-  }
 }
 
 function makeGameInRoom() {
+  //!11111
   const request = makeWSRequestString("MAKE_NEW_GAME", 'make new game');
   wss.send(request);
 }
@@ -173,13 +213,28 @@ function selectIssueInRoom(issueId:string) {
   wss.send(request);
 }
 
-function startVoteInRoom(issueId:string) {
+function startVoteIssueInRoom(issueId:string) {
   const request = makeWSRequestString("START_ISSUE_VOTE", issueId);
   wss.send(request);
 }
 
-function stopVoteInRoom(issueId:string) {
+function stopVoteIssueInRoom(issueId:string) {
   const request = makeWSRequestString("STOP_ISSUE_VOTE", issueId);
+  wss.send(request);
+}
+
+function resetVoteIssueInRoom(issueId:string) {
+  const request = makeWSRequestString("RESET_ISSUE_VOTE", issueId);
+  wss.send(request);
+}
+
+function stopGameInRoom() {
+  const request = makeWSRequestString("STOP_GAME", "master stopped the game");
+  wss.send(request);
+}
+
+function setSettingsInRoom(settings:SettingsModel) {
+  const request = makeWSRequestString("SET_SETTINGS", settings);
   wss.send(request);
 }
 
@@ -198,9 +253,12 @@ const LobbyService = {
   movePlayerInRoom,
   setLobbyRouter,
   sendChoiceToGame,
-  startVoteInRoom,
-  stopVoteInRoom,
-  selectIssueInRoom
+  startVoteIssueInRoom,
+  stopVoteIssueInRoom,
+  selectIssueInRoom,
+  stopGameInRoom,
+  resetVoteIssueInRoom,
+  setSettingsInRoom,
 }
 export default LobbyService;
 

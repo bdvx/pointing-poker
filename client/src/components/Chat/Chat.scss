@@ -2,7 +2,7 @@
   position: absolute;
   z-index: 100;
   right: 0;
-  top: 10px;
+  top: 60px;
   width: 300px;
   height: 500px;
   overflow: hidden;
@@ -15,16 +15,28 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  cursor: grab;
+  &__hide-btn {
+    position: absolute !important;
+    top: 25px;
+    right: 50px;
+    width: 20px;
+    height: 20px;
+  }
+  &__hidden {
+    display: none;
+  }
   &_messages {
-      height: 420px;
-      width: 320px;
-      overflow-y: scroll;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-sizing: border-box;
-      padding-left: 10px;
-      margin-bottom: 10px;
+    height: 420px;
+    width: 320px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    cursor: default;
   }
   &_input {
     width: 280px;
@@ -54,23 +66,8 @@
       }
     }
     // &__button {
-    //   font: 15px Roboto, sans-serif;
-    //   width: 47px;
-    //   height: 47px;
-    //   border-radius: 50%;
-    //   background-color: blueviolet;
-    //   border: none;
-    //   background-image: url(../../assets/images/magnifying-glass.png);
-    //   background-size: 26px 26px;
-    //   background-repeat: no-repeat;
-    //   background-position: center;
-    //   cursor: pointer;
-    //   box-shadow: 0 0 5px rgba(0, 0, 0, 0.474);
-    //   transition: all 0.3s;
-    //   &:hover {
-    //     transform: scale(1.05);
-    //     box-shadow: 0 0 7px rgba(0, 0, 0, 0.781);
-    //   }
+    //   position: relative !important;
+    // }
   }
   &_message {
     display: flex;
@@ -94,7 +91,7 @@
   }
 }
 
-ul{
-    margin: 0;
-    padding: 0;
+ul {
+  margin: 0;
+  padding: 0;
 }

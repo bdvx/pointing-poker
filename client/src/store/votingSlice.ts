@@ -8,15 +8,13 @@ const votingSlice = createSlice({
   initialState,
   reducers: {
     updateVoits(state, action) {
-      state.push(action.payload);
+      return action.payload;
     },
-    deleteVoit(state, action) {
-      const index = state.findIndex((vote) => vote.whoKick === action.payload)
-      state.splice(index, 1);
-      //! Проверить на работоспособность
+    resetVoits() {
+      return initialState;
     }
   }
 })
 
 export default votingSlice.reducer;
-export const {updateVoits, deleteVoit} = votingSlice.actions;
+export const {updateVoits, resetVoits} = votingSlice.actions;

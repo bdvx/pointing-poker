@@ -1,33 +1,27 @@
 import './RegisterPopup.scss';
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import { Avatar, Button, DialogActions, Input, TextField } from '@material-ui/core';
 import IRegisterPopupProps from '../../../types/RegisterPopupProps.type';
 import { REGISTER_POPUP_FIELDS, REGISTER_POPUP_FIELDS_DEFAULT_VALUES } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { RegistrationModel } from '../../../serverService/models/registrationModel';
-import { useHistory } from 'react-router';
-import { LogInOrSignUpPopup } from '../../Base/LogInOrSignUpPopup/LogInOrSignUpPopup';
-import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
+import IFieldsValues, { IFieldProps } from '../../../types/LogInOrSignUpPopup.type';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../../../store/currentUserSlice';
 import { RegisterSuccessPopup } from '../RegisterSuccessPopup/RegisterSuccessPopup';
-import { RegisterFailPopup } from '../RegisterFailPopup/RegisterFailPopup';
-import { PopUpLinearProgress } from '../PopUpLinearProgress/PopUpLinearProgress';
+import { PopUpLinearProgress } from '../../Base/PopUpLinearProgress/PopUpLinearProgress';
+import { FailPopUp } from '../../Base/FailPopUp/FailPopUp';
 
 export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterPopupState }: IRegisterPopupProps) => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string>('');
-  const router = useHistory();
-  const dispatch = useDispatch();
 
   const [fieldsValues, setFieldsValues] = useState<IFieldsValues>(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const fieldsProps = { fieldsValues, setFieldsValues, errors, setErrors };
-  const { handleFieldChange, addFieldErrorMessage } = LogInOrSignUpPopup();
-
-  const [openRegisterSuccessPopup, setOpenRegisterSuccessPopup] = useState(false);
-  const [openRegisterFailPopup, setOpenRegisterFailPopup] = useState(false);
+  const [openRegisterSuccessPopup, setOpenRegisterSuccessPopup] = useState<boolean>(false);
+  const [openFailPopup, setOpenFailPopup] = useState<boolean>(false);
 
   const changeStringAvatar = (name: string | undefined): string | null => {
     if (!name) return null;
@@ -59,29 +53,49 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
     const response = await ServerService.registerNewUser(fieldsValues as RegistrationModel);
 
     if(response.isSuccess) {
-      //попап
-      //alert - временная замена попАпу
-      //история должна пушится после закрытия попапа успешной регистрации
       dispatch(setUserInfo({...fieldsValues, isLogin:true}));
-
-      setFieldsValues(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
-
-      router.push('/welcomePage');
-      alert(response.message);
-
       setLoading(false);
       onChangeRegisterPopupState(false);
-
+      setFieldsValues(REGISTER_POPUP_FIELDS_DEFAULT_VALUES);
       setOpenRegisterSuccessPopup(true);
     } else {
-      //ошибка создания
-      //response.message хранит информацию ошибки
-      alert(response.message);
-
       setLoading(false);
-      setOpenRegisterFailPopup(true);
+      setOpenFailPopup(true);
     }
   }
+
+  const addFieldErrorMessage = (fieldProps: IFieldProps): string => {
+    const { name, title, errorMessage } = fieldProps;
+  
+    if (!errors.includes(name)) return '';
+  
+    return errorMessage ? errorMessage : `${ title } can't be shorter than 3 chars.`;
+  }
+
+  const checkValidation = (name: string, value: string): void => {
+    if (!errors || !setErrors) return;
+  
+    let regex = /.{3,}/;
+  
+    if (name === 'login') {
+      regex = /^[^\s]{3,}$/;
+    }
+  
+    if (!regex.test(value)) {
+      if (!errors.includes(name)) {
+        setErrors([...errors, name]);
+      }
+    } else if (errors.includes(name)) {
+      const newErrors = errors.filter((error) => error !== name);
+      setErrors(newErrors);
+    }
+  };
+
+  const updateFieldValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value, name } = e.target;
+    setFieldsValues({ ...fieldsValues, [name]: value });
+    checkValidation(name, value);
+  };
 
   return (
     <>
@@ -97,10 +111,10 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
                   <TextField
                     className="RegisterPopup__field"
                     defaultValue={ fieldsValues[field.name as keyof IFieldsValues] }
-                    onChange={ (e) => handleFieldChange({ e, ...fieldsProps }) }
+                    onChange={ updateFieldValue }
                     name={ field.name }
                     error={ errors.includes(field.name) }
-                    helperText={ addFieldErrorMessage(field, errors) }
+                    helperText={ addFieldErrorMessage(field) }
                     type={ field.type ? field.type : 'text' }
                     variant="outlined"
                     size="small"
@@ -130,7 +144,7 @@ export const RegisterPopup: FC<IRegisterPopupProps> = ({ open, onChangeRegisterP
       </PopUpLinearProgress>
 
       <RegisterSuccessPopup open={ openRegisterSuccessPopup } onChangeRegisterSuccessPopupState={ (open) => setOpenRegisterSuccessPopup(open) } />
-      <RegisterFailPopup open={ openRegisterFailPopup } onChangeRegisterFailPopupState={ (open) => setOpenRegisterFailPopup(open) } />
+      <FailPopUp open={ openFailPopup } onChangeFailPopUpState={ (open) => setOpenFailPopup(open) } title="Fail registration" description="This is an error alert — check it out!" />
     </>
   );
 };

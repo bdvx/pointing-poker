@@ -1,0 +1,43 @@
+.RoundTime {
+  max-width: 200px;
+  width: 100%;
+  padding: 5px;
+  background-color: #fff;
+  box-shadow: 0 4px 4px rgba(0,0,0,.25);
+  border-radius: 4px;
+}
+
+.RoundTime__header {
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    width: 48.5%;
+    font-size: 12px;
+    font-weight: 700;
+    color: #7f7f7f;
+  }
+}
+
+.RoundTime__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 36px;
+  font-weight: 500;
+  color: #000;
+}
+
+.RoundTime__time {
+  width: 48.5%;
+  font-size: 64px;
+  line-height: 1;
+
+  &:first-child {
+    text-align: center;
+  }
+
+  &:last-child {
+    text-align: right;
+  }
+}

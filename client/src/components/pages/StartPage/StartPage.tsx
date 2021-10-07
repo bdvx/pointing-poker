@@ -5,12 +5,12 @@ import { LargeLogo } from '../../LargeLogo/LargeLogo';
 import { RegisterPopup } from '../../popUps/RegisterPopup/RegisterPopup';
 import { LoginPopup } from '../../popUps/LogInPopup/LogInPopup';
 
-export const StartPage: FC<{classes: string}> = ({classes}: {classes: string}) => {
+export const StartPage: FC = () => {
   const [registerPopupOpen, setRegisterPopupOpen] = useState(false);
   const [LogInPopupOpen, setLogInPopupOpen] = useState(false);
 
   return (
-    <div className={`startPage ${ classes }`}>
+    <div className="startPage page__content">
       <LargeLogo />
 
       <Button onClick={ () => setRegisterPopupOpen(true) } variant="contained" color="primary" size="large">Sign up</Button>

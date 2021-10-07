@@ -4,8 +4,8 @@ import { hashCode } from "../tools/hashFunction";
 import { QueryModel } from "../models/socketModels/WSqueryModel";
 import { UserInfoModel } from "../models/socketModels/userInfoModel";
 import { DisconectModel } from "../../../client/src/serverService/models/disconnectModel";
-import { deletePersonFromRoom, makeWSResponseMessage, sendUpdatedRoom, transformServerRoomToClient } from "../tools/roomunctions";
-import LobbyEventHandler, { updateLobbyForEveryOne } from "./lobbyEventHandler";
+import { deletePersonFromRoom, makeWSResponseMessage, transformServerGameToClient, transformServerRoomToClient, updateGameForEveryOne, updateLobbyForEveryOne } from "../tools/roomFunctions";
+import LobbyEventHandler, {  } from "./lobbyEventHandler";
 import GameEventHandler from "./gameEventHandler";
 
 function makeNewRoom(scrumInfo:WSClientModel) {
@@ -20,7 +20,18 @@ function makeNewRoom(scrumInfo:WSClientModel) {
     issues: [],
     votes: [],
     inGame: [],
-    queue: []
+    queue: [],
+    settings: { 
+      roundTime: 40,
+      timerNeeded: false,
+      autoTurn: false,
+      masterAsPlayer: false,
+      scoreType: "Story Points",
+      shortScoreType: "SP",
+      cards: [
+        "1","2","3","5","8","13","21","inf"
+      ]
+     } //!Добавить в отправку инфы от скрам мастера + настройки по дефолту
   }
 
   const scramWS = scrumInfo.ws as WebSocket;
@@ -40,13 +51,22 @@ function connectUserToRoom(room:Room, userInfo:UserInfoModel, userWS:WebSocket) 
 
   room.playersWS.push(newPlayer);
   room.queue.push(newPlayer);
-  updateLobbyForEveryOne(room);
+
+  const response = makeWSResponseMessage("SET_SETTINGS", room.settings);
+  newPlayer.ws.send(response);
+  if(room.isPlaying) {
+    updateLobbyForEveryOne(room);
+    updateGameForEveryOne(room);
+    newPlayer.ws.send(makeWSResponseMessage("TOGGLE_TO_GAME", ""));
+  } else {
+    updateLobbyForEveryOne(room);
+  }
 }
 
-//то чуть позже перепешу
 function disconnectUserFromRoom(room:Room, disconnectInfo:DisconectModel) {
   deletePersonFromRoom(room, disconnectInfo.login);
   updateLobbyForEveryOne(room);
+  updateGameForEveryOne(room);
 }
 
 
@@ -76,8 +96,14 @@ function lobbyMessageHandler(room:Room, message:string) {
     case "MAKE_NEW_GAME":
       LobbyEventHandler.onMakeNewGame(room);
       break;
+    case "STOP_GAME":
+      LobbyEventHandler.onStopGame(room, payLoad);
+      break;
     case "MOVE_FROM_QUEUE":
       LobbyEventHandler.onMoveFromQueue(room, payLoad);
+      break;
+    case "SET_SETTINGS":
+      LobbyEventHandler.onSetSettings(room, payLoad);
       break;
     
     case "USER_MAKE_CHOICE":
@@ -88,6 +114,9 @@ function lobbyMessageHandler(room:Room, message:string) {
       break;
     case "STOP_ISSUE_VOTE":
       GameEventHandler.onStopIssueVote(room, payLoad);
+      break;
+    case "RESET_ISSUE_VOTE":
+      GameEventHandler.onResetIssueVote(room, payLoad);
       break;
     case "SELECT_ISSUE":
       GameEventHandler.onSelectIssue(room, payLoad);
