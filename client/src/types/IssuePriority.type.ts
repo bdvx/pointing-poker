@@ -1,0 +1,1 @@
+export type TIssuePriority = 'low' | 'middle' | 'hight';

@@ -1,0 +1,31 @@
+.PlayerCard {
+  display: flex;
+  flex-direction: row;
+  width: 270px;
+  height: 70px;
+  border-radius: 3px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.55);
+  justify-content: space-around;
+  align-items: center;
+  &_avatar {
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.418);
+    border-radius: 50%;
+  }
+  &_info {
+    display: flex;
+    flex-direction: column;
+    width: 130px;
+    height: 40px;
+    align-items: center;
+    justify-content: space-around;
+    &__name {
+      font: 22px Roboto, sans-serif;
+      font-weight: 500;
+    }
+    &__position {
+      font: 8px Roboto, sans-serif;
+    }
+  }
+}

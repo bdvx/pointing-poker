@@ -1,0 +1,108 @@
+@import '../../../breakpoints.scss';
+@import '../../../variables.scss';
+
+.RegisterPopup {
+  .MuiPaper-root {
+    max-width: 600px;
+    width: 100%;
+    margin: 10px;
+    padding: 20px 15px 15px;
+
+    @include at ($min, $phone) {
+      margin: 0;
+      padding: 25px 40px 15px;
+    }
+  }
+}
+
+.RegisterPopup__title {
+  margin: 0 0 25px;
+  font-size: 25px;
+  line-height: 1.17188;
+
+  @include at ($min, $phone) {
+    margin-bottom: 30px;
+    font-size: 40px;
+  }
+}
+
+.RegisterPopup__box {
+  margin-bottom: 20px;
+}
+
+.RegisterPopup__boxTitle {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.16667;
+
+  @include at ($min, $phone) {
+    font-size: 20px;
+  }
+}
+
+.RegisterPopup__field {
+  max-width: 470px;
+  width: 100%;
+
+  .MuiFormHelperText-root::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.RegisterPopup__avatar {
+  margin-bottom: 30px;
+
+  @include at ($min, $phone) {
+    margin-bottom: 50px;
+  }
+}
+
+.RegisterPopup__avatarBtns {
+  display: flex;
+  align-items: flex-start;
+}
+
+.RegisterPopup__avatarUpload {
+  .MuiInputBase-root {
+    display: none;
+  }
+
+  .MuiAvatar-root {
+    width: 75px;
+    height: 75px;
+    background-color: #60dabf;
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 48px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+
+    @include at ($min, $phone) {
+      width: 100px;
+      height: 100px;
+    }
+  }
+}
+
+.RegisterPopup__avatarReset {
+  padding: 0 5px;
+  background-color: transparent;
+  color: $primary-color;
+  border: 0;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.RegisterPopup .RegisterPopup__btns {
+  padding: 0;
+  justify-content: space-between;
+
+  @include at ($min, $phone) {
+    margin: 0 -20px;
+  }
+}

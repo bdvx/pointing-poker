@@ -1,0 +1,84 @@
+.card-container {
+  width: 140px;
+  height: 220px;
+}
+
+.GameCard {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.61);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform-origin: right;
+  transition: all 0.5s linear;
+  position: relative;
+  &.flipped {
+    transform: rotateY(180deg) translateX(-100%);
+    transform-origin: left;
+  }
+  &_front,
+  &_back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    object-fit: cover;
+  }
+  &_front {
+    width: 140px;
+    height: 220px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    box-sizing: border-box;
+    padding: 10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(212, 229, 255, 0.877);
+  }
+  &_type {
+    width: 120px;
+    display: flex;
+    align-items: flex-start;
+    &__reverse {
+      transform: rotate(180deg);
+    }
+  }
+  &_value {
+    width: 80px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 48px Roboto, sans-serif;
+    font-weight: 500;
+    &-input {
+      width: 80px;
+      height: 250px;
+      font: 48px Roboto, sans-serif;
+      line-height: 60px;
+      font-weight: 500;
+      text-align: center;
+      background: none;
+      border: none;
+      outline: none;
+    }
+  }
+  &_back {
+    background-image: url(../../assets/images/cover2.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform-style: preserve-3d;
+    transform: rotateY(180deg);
+  }
+}
