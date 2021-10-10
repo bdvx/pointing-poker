@@ -3,7 +3,7 @@ import { ChangeEvent, FC, useState } from 'react';
 import { Button, DialogActions, TextField } from '@material-ui/core';
 import ILogInPopupProps from '../../../types/LogInPopupProps.type';
 import IFieldsValues from '../../../types/LogInOrSignUpPopup.type';
-import { LOGIN_POPUP_FIELDS } from '../../../constants';
+import { BASE_URL, LOGIN_POPUP_FIELDS } from '../../../constants';
 import ServerService from '../../../serverService/serverService';
 import { useHistory } from 'react-router';
 import { PopUpLinearProgress } from '../../Base/PopUpLinearProgress/PopUpLinearProgress';
@@ -29,7 +29,7 @@ export const LoginPopup: FC<ILogInPopupProps> = ({ open, onChangeLogInPopupState
       setLoading(false);
       dispatch(setUserInfo({...response.body, isLogin:true}))
       setFieldsValues({ login: '', password: '' });
-      router.push('/welcomePage');
+      router.push(`${BASE_URL}/welcomePage`);
       onChangeLogInPopupState(false);
     } else {
       setLoading(false);

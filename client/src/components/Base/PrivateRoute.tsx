@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Redirect, Route, RouteComponentProps } from 'react-router';
+import { BASE_URL } from '../../constants';
 import IPrivateRouteProps from '../../types/PrivateRouteProps.type';
 
 export const PrivateRoute: FC<IPrivateRouteProps> = (props: IPrivateRouteProps) => {
@@ -13,7 +14,7 @@ export const PrivateRoute: FC<IPrivateRouteProps> = (props: IPrivateRouteProps) 
       render={
         (routeProps) => authed === true
           ? <Component { ...routeProps } />
-          : <Redirect to={{ pathname: '/', state: { from: routeProps.location } }} />
+          : <Redirect to={{ pathname: BASE_URL, state: { from: routeProps.location } }} />
       }
     />
   );

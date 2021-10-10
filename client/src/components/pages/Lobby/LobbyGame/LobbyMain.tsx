@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { BASE_URL } from "../../../../constants";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import ServerService from "../../../../serverService/serverService";
 import { resetChat } from "../../../../store/chatSlice";
@@ -28,7 +29,7 @@ const LobbyMain = () => {
     );
     dispatch(resetRoomInfo());
     dispatch(resetChat());
-    router.push("/welcomePage");
+    router.push(`${BASE_URL}/welcomePage`);
   };
 
   const onStartGameBtnClick = () => {

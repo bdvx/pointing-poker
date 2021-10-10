@@ -1,3 +1,4 @@
+import { BASE_URL } from "../constants";
 import { newMessage, resetChat } from "../store/chatSlice";
 import { setCurrentUserScrumStatus, setScrumStatus } from "../store/currentUserSlice";
 import { resetGame, setGame } from "../store/gameSlice";
@@ -49,7 +50,7 @@ function RoomMessageHandler(message:string) {
 
   const onGameStart = (gameInfo:GameModel) => {
     lobbyDispatch(setGame(gameInfo));
-    lobbyRouter.push("/game");
+    lobbyRouter.push(`${BASE_URL}/game`);
   }
 
   const onGameUpdate = (gameInfo:GameModel) => {
@@ -57,14 +58,14 @@ function RoomMessageHandler(message:string) {
   }
 
   const onYouAreKicked = (message:string) => {
-    lobbyRouter.push("/welcomePage");
+    lobbyRouter.push(`${BASE_URL}/welcomePage`);
     lobbyDispatch(resetRoomInfo());
     alert(message);
   }
 
   const onStopGame = (reason:string) => {
 /*     lobbyRouter.push("/lobbyStart"); */
-    lobbyRouter.push("/statistics");
+    lobbyRouter.push(`${BASE_URL}/statistics`);
 /*     lobbyDispatch(resetGame()); */
     alert(reason);
   }
@@ -78,7 +79,7 @@ function RoomMessageHandler(message:string) {
   }
 
   const onToggleToGame = () => {
-    lobbyRouter.push("/game");
+    lobbyRouter.push(`${BASE_URL}/game`);
   }
 
   const onUpdateKickVotes = (votes:Array<VotingModel>) => {

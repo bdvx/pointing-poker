@@ -8,6 +8,7 @@ import { useHistory } from 'react-router';
 import { setScrumStatus } from '../../../store/currentUserSlice';
 import { UserInfo } from '../../../serverService/models/userInfoModel';
 import { useDispatch } from 'react-redux';
+import { BASE_URL } from '../../../constants';
 
 
 export const WelcomePage: FC = () => {
@@ -23,7 +24,7 @@ export const WelcomePage: FC = () => {
     dispatch(setScrumStatus(true));
     const userInfoCopy = makeUserInfoCopy(currentUserInfo, true);
     ServerService.makeNewRoom(userInfoCopy);
-    router.push("/lobbyStart");
+    router.push(`${BASE_URL}/lobbyStart`);
   }
 
   const onConnectToLobbyBtnClick = () => {
@@ -33,7 +34,7 @@ export const WelcomePage: FC = () => {
     const roomId = defineIdfromUrl(url);
     ServerService.connectToRoom(userInfoCopy, roomId);
     //TODO коннект уже в саму игру (нужно в Room хранить поле isInGame)
-    router.push("/lobbyStart");
+    router.push(`${BASE_URL}/lobbyStart`);
   }
 
   return (

@@ -16,6 +16,7 @@ import { useHistory } from "react-router";
 import { RoundTimePlayable } from "../../../RoundTimePlayable/RoundTimePlayable";
 import { CreateIssue } from "../../../CreateIssue/CreateIssue";
 import { UserInfo } from "../../../../serverService/models/userInfoModel";
+import { BASE_URL } from "../../../../constants";
 
 export const Game: FC = () => {
   const userInfo = useTypedSelector((store) => store.userInfo);
@@ -78,7 +79,7 @@ export const Game: FC = () => {
     );
     dispatch(resetRoomInfo());
     dispatch(resetChat());
-    router.push("/welcomePage");
+    router.push(`${BASE_URL}/welcomePage`);
   };
 
   return (

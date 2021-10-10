@@ -7,13 +7,14 @@ import AboutPage from "./components/pages/AboutPage/AboutPage";
 import { StatisticsPage } from "./components/pages/StatisticsPage/StatisticsPage";
 import { PrivateRoute } from "./components/Base/PrivateRoute";
 import Lobby from "./components/pages/Lobby/LobbyStart/Lobby";
+import { BASE_URL } from "./constants";
 
 const ROUTES = [
-  { path: '/welcomePage', Component: WelcomePage },
-  { path: '/lobbyStart', Component: Lobby },
-  { path: '/lobby/settings', Component: Lobby },
-  { path: '/game', Component: Game },
-  { path: '/statistics', Component: StatisticsPage }
+  { path: `${BASE_URL}/welcomePage`, Component: WelcomePage },
+  { path: `${BASE_URL}/planning-poker/lobbyStart`, Component: Lobby },
+  { path: `${BASE_URL}/planning-poker/lobby/settings`, Component: Lobby },
+  { path: `${BASE_URL}/planning-poker/game`, Component: Game },
+  { path: `${BASE_URL}/planning-poker/statistics`, Component: StatisticsPage }
 ];
 
 export default function AppRouter() {
@@ -21,8 +22,8 @@ export default function AppRouter() {
 
   return (
     <Switch>
-      <Route path="/" component={ StartPage } exact />
-      <Route path="/about" component={ AboutPage } exact />
+      <Route path={ BASE_URL } component={ StartPage } exact />
+      <Route path={ `${BASE_URL}/about` } component={ AboutPage } exact />
 
       { ROUTES.map(({ path, Component }) => (
           <PrivateRoute authed={ isLogin || false } path={ path } component={ Component } exact key={ path } />

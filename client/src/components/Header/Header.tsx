@@ -1,5 +1,6 @@
 import { Avatar } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
+import { BASE_URL } from "../../constants";
 import { useTypedSelector } from "../../hooky/useTypedSelector";
 import "./Header.scss";
 
@@ -17,10 +18,10 @@ const Header = () => {
       <header className="Header">
         <div className="Header_wrapper">
           <div className="Header_logo"></div>
-          <NavLink to="/welcomePage" className="Header_link">
+          <NavLink to={ `${BASE_URL}/welcomePage` } className="Header_link">
             Home
           </NavLink>
-          <NavLink to="/about" className="Header_link">
+          <NavLink to={ `${BASE_URL}/about` } className="Header_link">
             About
           </NavLink>
 

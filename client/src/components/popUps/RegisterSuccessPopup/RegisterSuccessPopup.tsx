@@ -3,6 +3,7 @@ import { FC } from 'react';
 import IRegisterSuccessPopupProps from '../../../types/RegisterSuccessPopupProps.type';
 import './RegisterSuccessPopup.scss';
 import { useHistory } from 'react-router';
+import { BASE_URL } from '../../../constants';
 
 export const RegisterSuccessPopup: FC<IRegisterSuccessPopupProps> = (props: IRegisterSuccessPopupProps) => {
   const { open, onChangeRegisterSuccessPopupState } = props;
@@ -10,7 +11,7 @@ export const RegisterSuccessPopup: FC<IRegisterSuccessPopupProps> = (props: IReg
 
   const closePopup = () => {
     onChangeRegisterSuccessPopupState(false);
-    router.push('/welcomePage');
+    router.push(`${BASE_URL}/welcomePage`);
   };
 
   return (
