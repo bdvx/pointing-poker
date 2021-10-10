@@ -11,10 +11,10 @@ import { BASE_URL } from "./constants";
 
 const ROUTES = [
   { path: `${BASE_URL}/welcomePage`, Component: WelcomePage },
-  { path: `${BASE_URL}/planning-poker/lobbyStart`, Component: Lobby },
-  { path: `${BASE_URL}/planning-poker/lobby/settings`, Component: Lobby },
-  { path: `${BASE_URL}/planning-poker/game`, Component: Game },
-  { path: `${BASE_URL}/planning-poker/statistics`, Component: StatisticsPage }
+  { path: `${BASE_URL}/lobbyStart`, Component: Lobby },
+  { path: `${BASE_URL}/lobby/settings`, Component: Lobby },
+  { path: `${BASE_URL}/game`, Component: Game },
+  { path: `${BASE_URL}/statistics`, Component: StatisticsPage }
 ];
 
 export default function AppRouter() {
