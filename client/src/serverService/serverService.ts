@@ -13,8 +13,8 @@ import { ChoiceModel } from "./models/choiceModel";
 import Lobby from "../components/pages/Lobby/LobbyStart/Lobby";
 import { SettingsModel } from "../store/settingsSlice";
 
-const url = "http://localhost:5000/";
-const wsUrl = "ws://localhost:5000/";
+const url = "https://planing-poker-fury.herokuapp.com/";
+const wsUrl = "wss://planing-poker-fury.herokuapp.com/";
 let wss:WebSocket;
 let isConnect = false;
 let serverDispatch:any;
@@ -46,7 +46,7 @@ async function registerNewUser(regInfo:RegistrationModel) {
 
 async function signInUser(signInInfo:SignInModel) {
   const request = JSON.stringify(signInInfo);
-
+  console.log(111, url + "singIn")
   const response = await fetch(url + "singIn", {
     body: request,
     headers: { 'Content-Type': 'application/json' },
