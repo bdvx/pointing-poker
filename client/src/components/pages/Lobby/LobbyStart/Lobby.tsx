@@ -4,6 +4,7 @@ import Settings from "../../../Settings/Settings";
 import "./Lobby.scss";
 import { useTypedSelector } from "../../../../hooky/useTypedSelector";
 import { CSSProperties } from "@mui/system";
+import { BASE_URL } from "../../../../constants";
 
 const Lobby = () => {
   //! Убрать имя лобби (чья компонента напишите Мише)
@@ -13,7 +14,7 @@ const Lobby = () => {
   let style;
   if (isScrum) {
     link = (
-      <Link to={`/lobby/settings`} className="Lobby__link">
+      <Link to={`${BASE_URL}/lobby/settings`} className="Lobby__link">
         Settings
       </Link>
     );
@@ -27,15 +28,15 @@ const Lobby = () => {
     <div className="Lobby">
       <div className="Lobby__wrapper">
         <div className="Lobby__routing" style={style}>
-          <Link to={`/lobbyStart`} className="Lobby__link">
+          <Link to={`${BASE_URL}/lobbyStart`} className="Lobby__link">
             Lobby
           </Link>
           {link}
         </div>
-        <Route exact path={`/lobbyStart`}>
+        <Route exact path={`${BASE_URL}/lobbyStart`}>
           <LobbyMain />
         </Route>
-        <Route exact path={`/lobby/settings`}>
+        <Route exact path={`${BASE_URL}/lobby/settings`}>
           <Settings />
         </Route>
       </div>
