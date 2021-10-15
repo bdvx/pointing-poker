@@ -180,7 +180,7 @@ https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D0%BA%D0%B5%D1%80_%D0%BF%D0%BB%D0%B0%
 
 ## Презентация проекта
 
-https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/rslang.md#презентация
+https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rslang/rslang.md#презентация  
 
 
 ## Полезные ресурсы
@@ -190,4 +190,15 @@ Soket.io https://socket.io/docs/v3/rooms/index.html
 
 ## Документ для вопросов
 - документ для вопросов, связанных с выполнением задания: https://docs.google.com/spreadsheets/d/1E7ZloNty9aKMuOZVFTgy1weLSJALZv1Y6AMBQXnxREo/edit?usp=sharing
+
+## технологии:  
+- scss 
+- ts  
+- redux  
+- socket  
+
+## Библиотеки:  
+- material ui  
+- redux toolkit  
+- express  
 
